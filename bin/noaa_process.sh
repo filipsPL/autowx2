@@ -13,9 +13,8 @@ enchancements=('MCIR-precip' 'HVC' 'MSA' 'therm' 'HVCT-precip')
 
 #-------------------------------#
 # to test:
-# ./noaa_process.sh 20180118-1504_NOAA-19.wav 20180118-1504_NOAA-19 NOAA-19 1516284265 926
+# ./noaa_process.sh tests/20180118-1504_NOAA-19.wav tests/20180118-1504_NOAA-19 NOAA-19 1516284265 926
 #-------------------------------#
-
 
 
 input_file_wav="$1"

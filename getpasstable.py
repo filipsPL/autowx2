@@ -16,6 +16,11 @@ from noaa_conf import *
 satellites = list(satellitesData)
 qth = (stationLat, stationLon, stationAlt)
 
+def mkdir_p(outdir):
+    ''' bash "mkdir -p" analog'''
+    if not os.path.exists(outdir):
+        os.makedirs(outdir)
+
 
 
 class bc:
@@ -72,15 +77,17 @@ def genPassTable():
     return passTableSorted
 
 
-def printPass(satellite, start, duration, peak, freq, decode    ):
-    return "** " + satellite + " " +strftime('%d-%m-%Y %H:%M:%S', time.localtime(start))+" ("+str(int(start))+") to "+strftime('%d-%m-%Y %H:%M:%S', time.localtime(start+int(duration)))+" ("+str(int(start+int(duration)))+")"+", dur: "+str(int(duration))+" sec ("+str(time.strftime("%M:%S", time.gmtime(duration)))+"), max el. "+str(int(peak))+" deg." + " f=" + str(freq) + "Hz, Decoding: " + str(decode)
+def printPass(satellite, start, duration, peak, freq, decodeWith):
+    return "** " + satellite + " " +strftime('%d-%m-%Y %H:%M:%S', time.localtime(start))+" ("+str(int(start))+") to "+strftime('%d-%m-%Y %H:%M:%S', time.localtime(start+int(duration)))+" ("+str(int(start+int(duration)))+")"+", dur: "+str(int(duration))+" sec ("+str(time.strftime("%M:%S", time.gmtime(duration)))+"), max el. "+str(int(peak))+" deg." + " f=" + str(freq) + "Hz, Decoding: " + str(decodeWith)
 
 def listNextPases(passTable, howmany):
+    i=1
     for satelitePass in passTable[0:howmany]:
         satellite, start, duration, peak = satelitePass
         freq   = satellitesData[satellite]['freq']
-        decode = satellitesData[satellite]['decode']
-        log(printPass(satellite, start, duration, peak, freq, decode))
+        decodeWith = satellitesData[satellite]['decodeWith']
+        log(str(i) + ") " + printPass(satellite, start, duration, peak, freq, decodeWith))
+        i+=1
 
 
 def runForDuration(cmdline, duration):
@@ -121,8 +128,7 @@ def getDefaultDongleShift():
 
 def calibrate():
     '''calculate the ppm for the device'''
-    print bcolors.GRAY + "Calibration of the dongle..." + bcolors.ENDC
-    cmdline = [systemDir + 'kalibruj.sh']
+    cmdline = [systemDir + 'bin/kalibruj.sh']
     dongleShift = justRun(cmdline)
     if dongleShift != '':
         return str(float(dongleShift))
@@ -156,16 +162,13 @@ def transcode(fname, fnameWav):
     os.remove(fname)
 
 
-def log(string):
-    print bc.BOLD + datetime.datetime.fromtimestamp(time.time()).strftime('%Y/%m/%d %H:%M'), bc.ENDC, bc.HEADER, str(string), bc.ENDC
+def log(string, style=bc.HEADER):
+    print bc.BOLD + datetime.datetime.fromtimestamp(time.time()).strftime('%Y/%m/%d %H:%M'), bc.ENDC, style, str(string), bc.ENDC
 
 
 ### DECODING
 
 dongleShift = getDefaultDongleShift()
-
-
-
 
 while True:
     
@@ -182,37 +185,47 @@ while True:
     satellite, start, duration, peak = satelitePass
     
     freq   = satellitesData[satellite]['freq']
-    decode = satellitesData[satellite]['decode']
     decodeWith = satellitesData[satellite]['decodeWith']
     
     fileNameCore = datetime.datetime.fromtimestamp(start).strftime('%Y%m%d-%H%M') + "_" + satellite
     
     log("Next pass:")
-    log(printPass(satellite, start, duration, peak, freq, decode))
+    log(printPass(satellite, start, duration, peak, freq, decodeWith))
 
     now = time.time()
-    towait = start-now
-    
-    ### tests ###
-    
-    #recordFM(freq, recdir + fileNameCore + ".raw", 3)
-    #transcode(recdir + fileNameCore + ".raw", recdir + fileNameCore + ".wav")
-    #exit(1)
-    
-    ### tests ends here ###
+    towait = int(start-now)
 
-    if towait < 1:
-        ## here the recording happens
-        recordFM(freq, recdir + fileNameCore + ".raw", duration)
+    if towait > 300:
+        log("Recalibrating the dongle...")
+        newdongleShift = calibrate() # replace the global value
+        if newdongleShift != False:
+            dongleShift = newdongleShift
+            log("Recalculated dongle shift is: " + str(dongleShift) + " ppm")
+        else:
+            log("Using the good old dongle shift: " + str(dongleShift) + " ppm")
         
-        if decode == True:
+        now = time.time()
+        towait = int(start-now)
+
+    elif towait < 1:
+        ## here the recording happens
+        log("!! Recording " + printPass(satellite, start, duration, peak, freq, decodeWith), style=bc.OKGREEN)
+        
+        fullimgdir = "%s/%s/" % (imgdir, time.strftime("%Y/%m/%d"))
+        mkdir_p(fullimgdir)
+        
+        recordFM(freq, recdir + fileNameCore + ".raw", duration)
+        transcode(recdir + fileNameCore + ".raw", recdir + fileNameCore + ".wav")
+        
+        if decodeWith != False:
             # decode here
-            transcode(recdir + fileNameCore + ".raw", recdir + fileNameCore + ".wav")
-            decodeCmdline = [ decodeWith, recdir + fileNameCore + ".wav", imgdir + fileNameCore, satellite, start, duration, peak, freq ]
+            decodeCmdline = [ decodeWith, recdir + fileNameCore + ".wav", fullimgdir + fileNameCore, satellite, start, duration, peak, freq ]
             justRun(decodeCmdline)
         
-        #time.sleep(duration)
     else:
+        # recalculating waiting time
+        now = time.time()
+        towait = int(start-now)
         log("Sleeping for: " + str(towait) + "s")
         time.sleep(towait)
 
