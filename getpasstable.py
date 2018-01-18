@@ -195,21 +195,9 @@ while True:
     now = time.time()
     towait = int(start-now)
 
-    if towait > 300:
-        log("Recalibrating the dongle...")
-        newdongleShift = calibrate() # replace the global value
-        if newdongleShift != False:
-            dongleShift = newdongleShift
-            log("Recalculated dongle shift is: " + str(dongleShift) + " ppm")
-        else:
-            log("Using the good old dongle shift: " + str(dongleShift) + " ppm")
-        
-        now = time.time()
-        towait = int(start-now)
-
-    elif towait < 1:
+    if towait < 1:
         ## here the recording happens
-        log("!! Recording " + printPass(satellite, start, duration, peak, freq, decodeWith), style=bc.OKGREEN)
+        log("!! Recording " + printPass(satellite, start, duration+towait, peak, freq, decodeWith), style=bc.WARNING)
         
         fullimgdir = "%s/%s/" % (imgdir, time.strftime("%Y/%m/%d"))
         mkdir_p(fullimgdir)
@@ -224,6 +212,16 @@ while True:
         
     else:
         # recalculating waiting time
+
+        if towait > 120:
+                log("Recalibrating the dongle...")
+                newdongleShift = calibrate() # replace the global value
+                if newdongleShift != False:
+                    dongleShift = newdongleShift
+                    log("Recalculated dongle shift is: " + str(dongleShift) + " ppm")
+                else:
+                    log("Using the good old dongle shift: " + str(dongleShift) + " ppm")
+                
         now = time.time()
         towait = int(start-now)
         log("Sleeping for: " + str(towait) + "s")

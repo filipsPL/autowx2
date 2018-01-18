@@ -49,4 +49,5 @@ dongleShiftFile=systemDir + "var/dongleshift.txt"
 #
 # Output image directory
 #
-imgdir='/home/dane/nasluch/sat/img'
+imgdir='/home/dane/nasluch/sat/img/'
+recdir='/home/dane/nasluch/sat/rec/'
