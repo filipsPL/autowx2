@@ -13,7 +13,7 @@ enchancements=('MCIR-precip' 'HVC' 'MSA' 'therm' 'HVCT-precip')
 
 #-------------------------------#
 # to test:
-# noaa_process.sh 20180118-1504_NOAA-19.wav 20180118-1504_NOAA-19 NOAA-19 1516284265 926
+# ./noaa_process.sh 20180118-1504_NOAA-19.wav 20180118-1504_NOAA-19 NOAA-19 1516284265 926
 #-------------------------------#
 
 
@@ -32,6 +32,8 @@ for enchancement in "${enchancements[@]}"
 do
     echo $enchancement
     echo $wxtoimgbin -e $enchancement $input_file_wav ${output_file}-${enchancement}.png
-#     $wxtoimgbin -e $enchancement $input_file_wav ${output_file}-${enchancement}.png
+    $wxtoimgbin -e $enchancement $input_file_wav ${output_file}-${enchancement}.png
     $wxtoimgbin -e $enchancement -m ${output_file}-mapa.png $input_file_wav ${output_file}-${enchancement}+map.png
 done
+
+rm $start ${output_file}-mapa.png
