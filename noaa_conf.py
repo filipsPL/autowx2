@@ -11,7 +11,6 @@ satellitesData = {
     'NOAA-15':      {'freq': '137620000', 'decodeWith': 'bin/noaa_process.sh' },
     'NOAA-19':      {'freq': '137100000', 'decodeWith': 'bin/noaa_process.sh' },
     'LILACSAT-1':   {'freq': '436510000', 'decodeWith': False },
-    'ISS':          {'freq': '104416000', 'decodeWith': False },
 }
     
 # minimal elevation

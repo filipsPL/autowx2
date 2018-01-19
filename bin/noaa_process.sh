@@ -25,14 +25,24 @@ duration="$4"
 peak="$5"
 freq="$6"
 
-$wxmapbin -T $satellite -a -H $tlefilename -o -O $duration -L "$latlonalt" $start ${output_file}-mapa.png
+mkdir -p `dirname ${output_file}`
+
+date > ${output_file}.log
+echo $input_file_wav >> ${output_file}.log
+echo $output_file >> ${output_file}.log
+echo $satellite >> ${output_file}.log
+echo $start >> ${output_file}.log
+echo $duration >> ${output_file}.log
+echo $peak >> ${output_file}.log
+echo $freq >> ${output_file}.log
+
+$wxmapbin -T $satellite -a -H $tlefilename -o -O $duration -L "$latlonalt" $start ${output_file}-mapa.png | tee -a ${output_file}.log
 
 for enchancement in "${enchancements[@]}"    
 do
-    echo $enchancement
-    echo $wxtoimgbin -e $enchancement $input_file_wav ${output_file}-${enchancement}.png
-    $wxtoimgbin -e $enchancement $input_file_wav ${output_file}-${enchancement}.png
-    $wxtoimgbin -e $enchancement -m ${output_file}-mapa.png $input_file_wav ${output_file}-${enchancement}+map.png
+    echo "**** $enchancement"
+    $wxtoimgbin -e $enchancement $input_file_wav ${output_file}-${enchancement}.png | tee -a ${output_file}.log
+    $wxtoimgbin -e $enchancement -m ${output_file}-mapa.png $input_file_wav ${output_file}-${enchancement}+map.png | tee -a ${output_file}.log
 done
 
-rm $start ${output_file}-mapa.png
+rm ${output_file}-mapa.png
