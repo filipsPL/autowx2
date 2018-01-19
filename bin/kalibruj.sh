@@ -2,7 +2,7 @@
 
 ## calibrating of the dongle 
 
-channel=115
+channel=117
 shiftFile="/home/filips/github/autowx2/var/dongleshift.txt"
 shiftHistory="/home/dane/nasluch/sat/logs/shifthistory.csv"
 
@@ -18,7 +18,7 @@ fi
 
 #kal -s GSM900 -e 61
 
-newShift=`timeout 110s kal -c $channel -g 49.6 -e $recentShift 2> /dev/null | tail -1 | cut -d " " -f 4`
+newShift=`kal -c $channel -g 49.6 -e $recentShift 2> /dev/null | tail -1 | cut -d " " -f 4`
 echo $newShift | tee $shiftFile
 
 echo `date +"%Y%m%d_%H:%M:%S"` `date +"%s"`    $newShift >> $shiftHistory

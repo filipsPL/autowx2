@@ -116,7 +116,7 @@ def getDefaultDongleShift():
         f = open(dongleShiftFile, "r")
         newdongleShift = f.read()
         f.close()
-        if newdongleShift != '':
+        if newdongleShift != '': # WARNING and newdongleShift is numeric:
             newdongleShift = str(float(newdongleShift))
 
         if newdongleShift != False:
