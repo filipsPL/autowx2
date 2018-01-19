@@ -22,6 +22,11 @@ stationAlt='110'
 
 rtl_fm_path='/usr/bin/rtl_fm'
 
+# script tha will be used whle waiting for the next pass; set False if we just want to sleep
+# by default, this script will get the parameter of duration of the time to be run and the recent dongleShift
+#scriptToRunInFreeTime = False
+scriptToRunInFreeTime = "/home/filips/github/autowx2/bin/aprs.sh"
+
 # Dongle gain
 dongleGain='49.8'
 #

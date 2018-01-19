@@ -91,6 +91,7 @@ def listNextPases(passTable, howmany):
 
 
 def runForDuration(cmdline, duration):
+    cmdline = [str(x) for x in cmdline]
     try:
         child = subprocess.Popen(cmdline)
         time.sleep(duration)
@@ -192,8 +193,7 @@ while True:
     log("Next pass:")
     log(printPass(satellite, start, duration, peak, freq, decodeWith))
 
-    now = time.time()
-    towait = int(start-now)
+    towait = int(start-time.time())
 
     if towait < 1:
         ## here the recording happens
@@ -221,9 +221,16 @@ while True:
                     log("Recalculated dongle shift is: " + str(dongleShift) + " ppm")
                 else:
                     log("Using the good old dongle shift: " + str(dongleShift) + " ppm")
-                
-        now = time.time()
-        towait = int(start-now)
+        
+        towait = int(start-time.time())
+        
+        if scriptToRunInFreeTime != False:
+            if towait >= 300: # if we have more than five minutes spare time, let's do something useful
+                log("We have still %ss free time to the next pass. Let's do something useful!" % (towait) )
+                runForDuration([scriptToRunInFreeTime, towait-1, dongleShift], towait-1)
+
+        towait = int(start-time.time())
+
         log("Sleeping for: " + str(towait) + "s")
         time.sleep(towait)
 
