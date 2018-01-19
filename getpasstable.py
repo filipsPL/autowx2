@@ -202,12 +202,12 @@ while True:
         fullimgdir = "%s/%s/" % (imgdir, time.strftime("%Y/%m/%d"))
         mkdir_p(fullimgdir)
         
-        recordFM(freq, recdir + fileNameCore + ".raw", duration)
+        recordFM(freq, recdir + fileNameCore + ".raw", duration+towait)
         transcode(recdir + fileNameCore + ".raw", recdir + fileNameCore + ".wav")
         
         if decodeWith != False:
             # decode here
-            decodeCmdline = [ decodeWith, recdir + fileNameCore + ".wav", fullimgdir + fileNameCore, satellite, start, duration, peak, freq ]
+            decodeCmdline = [ decodeWith, recdir + fileNameCore + ".wav", fullimgdir + fileNameCore, satellite, start, duration+towait, peak, freq ]
             justRun(decodeCmdline)
         
     else:

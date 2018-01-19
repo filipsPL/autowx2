@@ -21,9 +21,9 @@ input_file_wav="$1"
 output_file="$2"
 satellite="$3"
 start="$4"
-duration="$4"
-peak="$5"
-freq="$6"
+duration="$5"
+peak="$6"
+freq="$7"
 
 mkdir -p `dirname ${output_file}`
 
