@@ -11,7 +11,8 @@ satellite="$2"
 start="$3"
 duration="$4"
 peak="$5"
-freq="$6"
+azimuth="$6"
+freq="$7"
 
 
 timeout $duration $rtlfmbin -M wbfm -f $freq | lame -r $recdir/$fileNameCore.mp3

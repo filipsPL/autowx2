@@ -12,9 +12,8 @@ import datetime
 from time import gmtime, strftime
 import subprocess
 import os
-#import shutil
-#import re
 import sys
+import numbers
 
 from autowx2_conf import *
 
@@ -72,26 +71,26 @@ def genPassTable():
             transit = p.next()
 
             if int(transit.peak()['elevation'])>=minElev:
-                passTable[transit.start] = [satellite, transit.start, transit.duration(), transit.peak()['elevation'] ]
+                passTable[transit.start] = [satellite, transit.start, transit.duration(), transit.peak()['elevation'], transit.peak()['azimuth'] ]
     
     passTableSorted=[]
     for start in sorted(passTable):
-        satellite, start, duration, peak = passTable[start]
-        passTableSorted.append([satellite, int(start), int(duration), int(peak)])
+        satellite, start, duration, peak, azimuth = passTable[start]
+        passTableSorted.append([satellite, int(start), int(duration), int(peak), int(azimuth)])
     
     return passTableSorted
 
 
-def printPass(satellite, start, duration, peak, freq, processWith):
-    return "** " + satellite + " " +strftime('%d-%m-%Y %H:%M:%S', time.localtime(start))+" ("+str(int(start))+") to "+strftime('%d-%m-%Y %H:%M:%S', time.localtime(start+int(duration)))+" ("+str(int(start+int(duration)))+")"+", dur: "+str(int(duration))+" sec ("+str(time.strftime("%M:%S", time.gmtime(duration)))+"), max el. "+str(int(peak))+" deg." + " f=" + str(freq) + "Hz, Decoding: " + str(processWith)
+def printPass(satellite, start, duration, peak, azimuth, freq,  processWith):
+    return "** " + satellite + " " +strftime('%d-%m-%Y %H:%M:%S', time.localtime(start))+" ("+str(int(start))+") to "+strftime('%d-%m-%Y %H:%M:%S', time.localtime(start+int(duration)))+" ("+str(int(start+int(duration)))+")"+", dur: "+str(int(duration))+" sec ("+str(time.strftime("%M:%S", time.gmtime(duration)))+"), max el. "+str(int(peak))+"°" + " Azimuth: "+ str(int(azimuth))+"°" + " f=" + str(freq) + "Hz, Decoding: " + str(processWith)
 
 def listNextPases(passTable, howmany):
     i=1
     for satelitePass in passTable[0:howmany]:
-        satellite, start, duration, peak = satelitePass
+        satellite, start, duration, peak, azimuth = satelitePass
         freq   = satellitesData[satellite]['freq']
         processWith = satellitesData[satellite]['processWith']
-        log(str(i) + ") " + printPass(satellite, start, duration, peak, freq, processWith))
+        log(str(i) + ") " + printPass(satellite, start, duration, peak, azimuth, freq, processWith))
         i+=1
 
 
@@ -116,30 +115,31 @@ def justRun(cmdline):
         print "OS Error during command: "+" ".join(cmdline)
         print "OS Error: "+e.strerror
 
-def getDefaultDongleShift():
+def getDefaultDongleShift(dongleShift=dongleShift):
     log("Reading the default dongle shift")
     if os.path.exists(dongleShiftFile):
         f = open(dongleShiftFile, "r")
         newdongleShift = f.read()
         f.close()
-        if newdongleShift != '': # WARNING and newdongleShift is numeric:
-            newdongleShift = str(float(newdongleShift))
-
-        if newdongleShift != False:
-            dongleShift = newdongleShift
+        
+        if newdongleShift != '' and isinstance(newdongleShift, numbers.Number): # WARNING and newdongleShift is numeric:
+            dongleShift = str(float(newdongleShift))
             log("Recently used dongle shift is: " + str(dongleShift) + " ppm")
-        else:
+        else:  
             log("Using the default dongle shift: " + str(dongleShift) + " ppm")
-        return newdongleShift
 
-def calibrate():
+        return dongleShift
+
+def calibrate(dongleShift=dongleShift):
     '''calculate the ppm for the device'''
     cmdline = [systemDir + 'bin/kalibruj.sh']
-    dongleShift = justRun(cmdline)
-    if dongleShift != '':
-        return str(float(dongleShift))
+    newdongleShift = justRun(cmdline)
+    if newdongleShift != '' and isinstance(newdongleShift, numbers.Number):
+        log("Recalculated dongle shift is: " + str(dongleShift) + " ppm")
+        return str(float(newdongleShift))
     else:
-        return False
+        log("Using the good old dongle shift: " + str(dongleShift) + " ppm")
+        return dongleShift
 
 
 def log(string, style=bc.HEADER):
@@ -162,7 +162,7 @@ while True:
     # get the very next pass
     satelitePass = passTable[0]
     
-    satellite, start, duration, peak = satelitePass
+    satellite, start, duration, peak, azimuth = satelitePass
     
     freq   = satellitesData[satellite]['freq']
     processWith = satellitesData[satellite]['processWith']
@@ -170,15 +170,15 @@ while True:
     fileNameCore = datetime.datetime.fromtimestamp(start).strftime('%Y%m%d-%H%M') + "_" + satellite
     
     log("Next pass:")
-    log(printPass(satellite, start, duration, peak, freq, processWith))
+    log(printPass(satellite, start, duration, peak, azimuth, freq, processWith))
 
     towait = int(start-time.time())
 
     if towait < 1:
         ## here the recording happens
-        log("!! Recording " + printPass(satellite, start, duration+towait, peak, freq, processWith), style=bc.WARNING)
+        log("!! Recording " + printPass(satellite, start, duration+towait, peak, azimuth, freq, processWith), style=bc.WARNING)
                 
-        processCmdline = [ processWith, fileNameCore, satellite, start, duration+towait, peak, freq ]
+        processCmdline = [ processWith, fileNameCore, satellite, start, duration+towait, peak, azimuth, freq ]
         justRun(processCmdline)
         
     else:
@@ -186,12 +186,7 @@ while True:
 
         if towait > 120:
                 log("Recalibrating the dongle...")
-                newdongleShift = calibrate() # replace the global value
-                if newdongleShift != False:
-                    dongleShift = newdongleShift
-                    log("Recalculated dongle shift is: " + str(dongleShift) + " ppm")
-                else:
-                    log("Using the good old dongle shift: " + str(dongleShift) + " ppm")
+                dongleShift = calibrate() # replace the global value
         
         towait = int(start-time.time())
         

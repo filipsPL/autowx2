@@ -2,7 +2,8 @@
 
 ## calibrating of the dongle 
 
-channel=117
+channel=23
+
 shiftFile="/home/filips/github/autowx2/var/dongleshift.txt"
 shiftHistory="/home/dane/nasluch/sat/logs/shifthistory.csv"
 
