@@ -6,7 +6,6 @@
 ###
 
 
-
 import predict
 import time
 import datetime
@@ -17,7 +16,7 @@ import os
 #import re
 import sys
 
-from noaa_conf import *
+from autowx2_conf import *
 
 satellites = list(satellitesData)
 qth = (stationLat, stationLon, stationAlt)

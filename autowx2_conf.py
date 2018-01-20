@@ -1,12 +1,16 @@
 ###
 ### autowx2 - config file
+### used by both - python and bash scripts
 ###
 
 
+
+# main system dir, wher autowx is installed
+
 systemDir='/home/filips/github/autowx2/'
 
-# satellites to record
 
+# satellites to record
 satellitesData = {
     'NOAA-18':      {'freq': '137912500', 'decodeWith': 'bin/noaa_process.sh' },
     'NOAA-15':      {'freq': '137620000', 'decodeWith': 'bin/noaa_process.sh' },
@@ -14,13 +18,16 @@ satellitesData = {
     'LILACSAT-1':   {'freq': '436510000', 'decodeWith': False },
 }
     
-# minimal elevation
+# minimal elevation of pass to capture satellite
 minElev = 20
 
+
+# sttaion information
 stationLat='52.34'
 stationLon='-21.06'
 stationAlt='110'
 
+# rtl_fm paths
 rtl_fm_path='/usr/bin/rtl_fm'
 
 # script tha will be used whle waiting for the next pass; set False if we just want to sleep
@@ -30,7 +37,7 @@ scriptToRunInFreeTime = False
 
 # Dongle gain
 dongleGain='49.8'
-#
+
 # Dongle PPM shift, hopefully this will change to reflect different PPM on freq
 dongleShift='1'
 #
@@ -43,7 +50,6 @@ sample ='48000'
 wavrate='11025'
 #
 tleDir=systemDir+'/var/tle/'
-#tleFile='weather.txt'
 tleFile='all.txt'
 
 tleFileName = tleDir+tleFile
@@ -55,4 +61,6 @@ dongleShiftFile=systemDir + "var/dongleshift.txt"
 # Output image directory
 #
 imgdir='/home/dane/nasluch/sat/img/'
+
+# directory for recorded raw and wav files
 recdir='/home/dane/nasluch/sat/rec/'
