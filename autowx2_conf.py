@@ -1,6 +1,6 @@
 ###
 ### autowx2 - config file
-### used by both - python and bash scripts
+### used by both - python and bash scripts ?
 ###
 
 
