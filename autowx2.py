@@ -82,16 +82,16 @@ def genPassTable():
     return passTableSorted
 
 
-def printPass(satellite, start, duration, peak, freq, decodeWith):
-    return "** " + satellite + " " +strftime('%d-%m-%Y %H:%M:%S', time.localtime(start))+" ("+str(int(start))+") to "+strftime('%d-%m-%Y %H:%M:%S', time.localtime(start+int(duration)))+" ("+str(int(start+int(duration)))+")"+", dur: "+str(int(duration))+" sec ("+str(time.strftime("%M:%S", time.gmtime(duration)))+"), max el. "+str(int(peak))+" deg." + " f=" + str(freq) + "Hz, Decoding: " + str(decodeWith)
+def printPass(satellite, start, duration, peak, freq, processWith):
+    return "** " + satellite + " " +strftime('%d-%m-%Y %H:%M:%S', time.localtime(start))+" ("+str(int(start))+") to "+strftime('%d-%m-%Y %H:%M:%S', time.localtime(start+int(duration)))+" ("+str(int(start+int(duration)))+")"+", dur: "+str(int(duration))+" sec ("+str(time.strftime("%M:%S", time.gmtime(duration)))+"), max el. "+str(int(peak))+" deg." + " f=" + str(freq) + "Hz, Decoding: " + str(processWith)
 
 def listNextPases(passTable, howmany):
     i=1
     for satelitePass in passTable[0:howmany]:
         satellite, start, duration, peak = satelitePass
         freq   = satellitesData[satellite]['freq']
-        decodeWith = satellitesData[satellite]['decodeWith']
-        log(str(i) + ") " + printPass(satellite, start, duration, peak, freq, decodeWith))
+        processWith = satellitesData[satellite]['processWith']
+        log(str(i) + ") " + printPass(satellite, start, duration, peak, freq, processWith))
         i+=1
 
 
@@ -141,32 +141,6 @@ def calibrate():
     else:
         return False
 
-def recordFM(freq, fname, duration):
-    '''Record audio via rtl_fm to fname'''
-    log("Recording f=%s to file %s for %ss" % (freq, fname, duration) )
-    cmdline = [rtl_fm_path,\
-		'-f',str(freq),\
-		'-s',sample,\
-		'-g',dongleGain,\
-		'-F','9',\
-		'-l','0',\
-		'-t','900',\
-		'-A','fast',\
-		'-E','offset',\
-#		'-E','pad',\
-		'-p',dongleShift,\
-		fname]
-    runForDuration(cmdline, duration)
-
-def transcode(fname, fnameWav):
-    '''Transcode raw to wav'''
-    log("Transcoding %s" % (fname) )
-    cmdlinesox = ['sox','-t','raw','-r',sample,'-es','-b','16','-c','1','-V1',fname,fnameWav,'rate',wavrate]
-    subprocess.call(cmdlinesox)
-    cmdlinetouch = ['touch','-r', fname, fnameWav]
-    subprocess.call(cmdlinetouch)
-    os.remove(fname)
-
 
 def log(string, style=bc.HEADER):
     print bc.BOLD + datetime.datetime.fromtimestamp(time.time()).strftime('%Y/%m/%d %H:%M'), bc.ENDC, style, str(string), bc.ENDC
@@ -191,29 +165,21 @@ while True:
     satellite, start, duration, peak = satelitePass
     
     freq   = satellitesData[satellite]['freq']
-    decodeWith = satellitesData[satellite]['decodeWith']
+    processWith = satellitesData[satellite]['processWith']
     
     fileNameCore = datetime.datetime.fromtimestamp(start).strftime('%Y%m%d-%H%M') + "_" + satellite
     
     log("Next pass:")
-    log(printPass(satellite, start, duration, peak, freq, decodeWith))
+    log(printPass(satellite, start, duration, peak, freq, processWith))
 
     towait = int(start-time.time())
 
     if towait < 1:
         ## here the recording happens
-        log("!! Recording " + printPass(satellite, start, duration+towait, peak, freq, decodeWith), style=bc.WARNING)
-        
-        fullimgdir = "%s/%s/" % (imgdir, time.strftime("%Y/%m/%d"))
-        mkdir_p(fullimgdir)
-        
-        recordFM(freq, recdir + fileNameCore + ".raw", duration+towait)
-        transcode(recdir + fileNameCore + ".raw", recdir + fileNameCore + ".wav")
-        
-        if decodeWith != False:
-            # decode here
-            decodeCmdline = [ decodeWith, recdir + fileNameCore + ".wav", fullimgdir + fileNameCore, satellite, start, duration+towait, peak, freq ]
-            justRun(decodeCmdline)
+        log("!! Recording " + printPass(satellite, start, duration+towait, peak, freq, processWith), style=bc.WARNING)
+                
+        processCmdline = [ processWith, fileNameCore, satellite, start, duration+towait, peak, freq ]
+        justRun(processCmdline)
         
     else:
         # recalculating waiting time

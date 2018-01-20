@@ -5,6 +5,14 @@
 - recording options
 - bash scripts global config file
 - move all recordings to the bash file
+
+- noaa.sh
+  - noaa_record.sh
+  - noaa_process.sh
+  
+  - average dongle shifts from the last n measurements 
+
+
 - if newdongleShift != '' # WARNING and newdongleShift is numeric:
 
 - coś lepszego niż `kal`, żeby było bardziej idioten proof i error proof
