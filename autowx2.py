@@ -13,7 +13,6 @@ from time import gmtime, strftime
 import subprocess
 import os
 import sys
-import numbers
 
 from autowx2_conf import *
 
@@ -40,6 +39,13 @@ class bc:
     BOLD = '\033[1m'
     GRAY = '\033[37m'
     UNDERLINE = '\033[4m'
+
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
 
 def getTleData(satellite):
     '''Open tle file and return a TLE record for the given sat'''
@@ -119,13 +125,14 @@ def getDefaultDongleShift(dongleShift=dongleShift):
     log("Reading the default dongle shift")
     if os.path.exists(dongleShiftFile):
         f = open(dongleShiftFile, "r")
-        newdongleShift = f.read()
+        newdongleShift = f.read().strip()
         f.close()
         
-        if newdongleShift != '' and isinstance(newdongleShift, numbers.Number): # WARNING and newdongleShift is numeric:
+        if newdongleShift != '' and is_number(newdongleShift): # WARNING and newdongleShift is numeric:
             dongleShift = str(float(newdongleShift))
             log("Recently used dongle shift is: " + str(dongleShift) + " ppm")
         else:  
+            print "else"
             log("Using the default dongle shift: " + str(dongleShift) + " ppm")
 
         return dongleShift
@@ -133,9 +140,9 @@ def getDefaultDongleShift(dongleShift=dongleShift):
 def calibrate(dongleShift=dongleShift):
     '''calculate the ppm for the device'''
     cmdline = [systemDir + 'bin/kalibruj.sh']
-    newdongleShift = justRun(cmdline)
-    if newdongleShift != '' and isinstance(newdongleShift, numbers.Number):
-        log("Recalculated dongle shift is: " + str(dongleShift) + " ppm")
+    newdongleShift = justRun(cmdline).strip()
+    if newdongleShift != '' and is_number(newdongleShift):
+        log("Recalculated dongle shift is: " + str(newdongleShift) + " ppm")
         return str(float(newdongleShift))
     else:
         log("Using the good old dongle shift: " + str(dongleShift) + " ppm")
