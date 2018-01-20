@@ -1,7 +1,8 @@
-##
-## Config header, sorry
-## TODO: Better config system
-##
+###
+### autowx2 - config file
+###
+
+
 systemDir='/home/filips/github/autowx2/'
 
 # satellites to record
