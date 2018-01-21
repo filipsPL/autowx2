@@ -47,7 +47,7 @@ mkdir -p $recdir
 #
 # logs are very important!
 #
-
+logFile=$imgdir/$fileNameCore.log
 
 date > $logFile   # initialize log file
 echo $fileNameCore >> $logFile
