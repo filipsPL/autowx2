@@ -88,7 +88,7 @@ def genPassTable():
 
 
 def printPass(satellite, start, duration, peak, azimuth, freq,  processWith):
-    return "** " + satellite + " " +strftime('%d-%m-%Y %H:%M:%S', time.localtime(start))+" ("+str(int(start))+") to "+strftime('%d-%m-%Y %H:%M:%S', time.localtime(start+int(duration)))+" ("+str(int(start+int(duration)))+")"+", dur: "+str(int(duration))+" sec ("+str(time.strftime("%M:%S", time.gmtime(duration)))+"), max el. "+str(int(peak))+"°" + " Azimuth: "+ str(int(azimuth))+"°" + " f=" + str(freq) + "Hz, Decoding: " + str(processWith)
+    return "** " + satellite + " " +strftime('%d-%m-%Y %H:%M:%S', time.localtime(start))+" ("+str(int(start))+") to "+strftime('%d-%m-%Y %H:%M:%S', time.localtime(start+int(duration)))+" ("+str(int(start+int(duration)))+")"+", dur: "+str(int(duration))+" sec ("+str(time.strftime("%M:%S", time.gmtime(duration)))+"), max el. "+str(int(peak))+"°" + " Azimuth: "+ str(int(azimuth))+"° (" + azimuth2dir(azimuth) + ") f=" + str(freq) + "Hz, Decoding: " + str(processWith)
 
 def listNextPases(passTable, howmany):
     i=1
@@ -98,7 +98,6 @@ def listNextPases(passTable, howmany):
         processWith = satellitesData[satellite]['processWith']
         log(str(i) + ") " + printPass(satellite, start, duration, peak, azimuth, freq, processWith))
         i+=1
-
 
 def runForDuration(cmdline, duration):
     cmdline = [str(x) for x in cmdline]
@@ -149,7 +148,18 @@ def calibrate(dongleShift=dongleShift):
         return dongleShift
 
 
-def log(string, style=bc.HEADER):
+def azimuth2dir(azimuth):
+    ''' convert azimuth in degrees to wind rose directions (16 wings)'''
+    dirs = ["N", "NNE", "NE", "ENE",
+            "E", "ESE", "SE", "SSE", 
+            "S", "SSW", "SW", "WSW", 
+            "W", "WNW", "NW", "NNW", ]
+
+    part = int( float(azimuth)/360*16 )
+    return dirs[part]
+    
+
+def log(string, style=bc.CYAN):
     print bc.BOLD + datetime.datetime.fromtimestamp(time.time()).strftime('%Y/%m/%d %H:%M'), bc.ENDC, style, str(string), bc.ENDC
 
 
