@@ -1,6 +1,6 @@
 # autowx2
 
-![image](NOAA19-HVCT.jpg)
+![image](NOAA19-HVCT.jpg) ![image](NOAA19-therm.jpg) 
 
 This is a rewritten and fine-tuned version of tools for the automatic weather satellite images capturing. Most directly it bases on cyber-atomus' [autowx](https://github.com/cyber-atomus/autowx) and my fork of autowx. The main differences between this project **autowx2** and previously created tools:
 - high modularity - all recording and processing are done by separate scripts (modules? plugins?), which can be easily configured to meet one's needs. The main module is devoted to the capture of weather data from the NOAA satellites.
