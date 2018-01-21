@@ -15,7 +15,7 @@ satellitesData = {
     'NOAA-18':      {'freq': '137912500', 'processWith': 'bin/noaa.sh' },
     'NOAA-15':      {'freq': '137620000', 'processWith': 'bin/noaa.sh' },
     'NOAA-19':      {'freq': '137100000', 'processWith': 'bin/noaa.sh' },
-    'LILACSAT-1':   {'freq': '436510000', 'processWith': False },
+    #'LILACSAT-1':   {'freq': '436510000', 'processWith': False },
 }
     
 # minimal elevation of pass to capture satellite
