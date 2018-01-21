@@ -9,7 +9,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 # hardware requirements
 
-- usb dvbt dongle
+- usb dvbt dongle, like RTL2832 DVB-T tuner
 - antenna good enough to capture the signal of your interest. For antenna dedicated for capturing NOAAs telemetry, see a [simple 137 MHz V-Dipole](https://www.rtl-sdr.com/simple-noaameteor-weather-satellite-antenna-137-mhz-v-dipole/), for example. When you want to use the script _also_ for other applications (capturing APRS signals, using `dump1090` for tracking airplanes), any broadband antenna should be good.
 
 # system requirements
@@ -19,7 +19,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 - `rtl-sdr` - can be found in many distributions (`aptitude install rtl-sdr`)
 - `kal` from `kalibrate-rtl` (or [any of its forks](https://github.com/steve-m/kalibrate-rtl/network)) - if you want to calibrate your dongle periodically; may not be necesarry for good dongles with a stable drift.
 
-# how to operate
+# how to use
 
 To be written.
 

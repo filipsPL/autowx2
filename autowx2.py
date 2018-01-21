@@ -25,7 +25,6 @@ def mkdir_p(outdir):
         os.makedirs(outdir)
 
 
-
 class bc:
     HEADER = '\033[95m'
     CYAN = '\033[96m'
@@ -163,58 +162,61 @@ def log(string, style=bc.CYAN):
     print bc.BOLD + datetime.datetime.fromtimestamp(time.time()).strftime('%Y/%m/%d %H:%M'), bc.ENDC, style, str(string), bc.ENDC
 
 
-### DECODING
+# ------------------------------------------------------------------------------------------------------ #
 
-dongleShift = getDefaultDongleShift()
+if __name__ == "__main__":
 
-while True:
-    
-    # recalculate table of next passes
-    passTable = genPassTable()
-    
-    log("Next five passes:")
-    listNextPases(passTable, 5)
-    
-    
-    # get the very next pass
-    satelitePass = passTable[0]
-    
-    satellite, start, duration, peak, azimuth = satelitePass
-    
-    freq   = satellitesData[satellite]['freq']
-    processWith = satellitesData[satellite]['processWith']
-    
-    fileNameCore = datetime.datetime.fromtimestamp(start).strftime('%Y%m%d-%H%M') + "_" + satellite
-    
-    log("Next pass:")
-    log(printPass(satellite, start, duration, peak, azimuth, freq, processWith))
+    dongleShift = getDefaultDongleShift()
 
-    towait = int(start-time.time())
-
-    if towait < 1:
-        ## here the recording happens
-        log("!! Recording " + printPass(satellite, start, duration+towait, peak, azimuth, freq, processWith), style=bc.WARNING)
-                
-        processCmdline = [ processWith, fileNameCore, satellite, start, duration+towait, peak, azimuth, freq ]
-        justRun(processCmdline)
+    while True:
         
-    else:
-        # recalculating waiting time
-
-        if towait > 120:
-                log("Recalibrating the dongle...")
-                dongleShift = calibrate() # replace the global value
+        # recalculate table of next passes
+        passTable = genPassTable()
         
-        towait = int(start-time.time())
+        log("Next five passes:")
+        listNextPases(passTable, 5)
         
-        if scriptToRunInFreeTime != False:
-            if towait >= 300: # if we have more than five minutes spare time, let's do something useful
-                log("We have still %ss free time to the next pass. Let's do something useful!" % (towait) )
-                runForDuration([scriptToRunInFreeTime, towait-1, dongleShift], towait-1)
+        
+        # get the very next pass
+        satelitePass = passTable[0]
+        
+        satellite, start, duration, peak, azimuth = satelitePass
+        
+        freq   = satellitesData[satellite]['freq']
+        processWith = satellitesData[satellite]['processWith']
+        
+        fileNameCore = datetime.datetime.fromtimestamp(start).strftime('%Y%m%d-%H%M') + "_" + satellite
+        
+        log("Next pass:")
+        log(printPass(satellite, start, duration, peak, azimuth, freq, processWith))
 
         towait = int(start-time.time())
 
-        log("Sleeping for: " + str(towait) + "s")
-        time.sleep(towait)
+        if towait < 1:
+            ## here the recording happens
+            log("!! Recording " + printPass(satellite, start, duration+towait, peak, azimuth, freq, processWith), style=bc.WARNING)
+                    
+            processCmdline = [ processWith, fileNameCore, satellite, start, duration+towait, peak, azimuth, freq ]
+            justRun(processCmdline)
+            
+        else:
+            # recalculating waiting time
+
+            if towait > 120:
+                    log("Recalibrating the dongle...")
+                    dongleShift = calibrate() # replace the global value
+            
+            towait = int(start-time.time())
+            
+            if scriptToRunInFreeTime != False:
+                if towait >= 300: # if we have more than five minutes spare time, let's do something useful
+                    log("We have still %ss free time to the next pass. Let's do something useful!" % (towait-1) )
+                    log("Running: %s for %ss" % (scriptToRunInFreeTime, towait-1) )
+                    runForDuration([scriptToRunInFreeTime, towait-1, dongleShift], towait-1)    # scrript with runt ime and dongle shift as arguments
+
+            towait = int(start-time.time())
+
+            log("Sleeping for: " + str(towait) + "s")
+            time.sleep(towait)
 
 

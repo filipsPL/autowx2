@@ -1,3 +1,4 @@
 *.pyc
 bin/tests/*.png
 wyslij-github.sh
+*.md.kate-swp
