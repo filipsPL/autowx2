@@ -20,4 +20,6 @@ do
     $wxtoimgbin -e $enchancement -m $imgdir/$fileNameCore-mapa.png $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}+map.png | tee -a $logFile
 done
 
-rm $imgdir/$fileNameCore-mapa.png 
+sox $recdir/$fileNameCore.wav -n spectrogram -o $imgdir/$fileNameCore-spectrogram.png
+
+rm $imgdir/$fileNameCore-mapa.png
