@@ -8,13 +8,14 @@
 
 import predict
 import time
-import datetime
+from datetime import datetime
 from time import gmtime, strftime
 import subprocess
 import os
 import sys
+from _crontab import *
 
-from autowx2_conf import *
+from autowx2_conf import *  # configuration
 
 satellites = list(satellitesData)
 qth = (stationLat, stationLon, stationAlt)
@@ -58,8 +59,26 @@ def getTleData(satellite):
         if satellite in line: 
             for n in tledata[i:i+3]: tleData.append(n.strip('\r\n').rstrip()),
             break
-    return tleData  
+    if len(tleData) > 0:
+        return tleData  
+    else:
+        return False
 
+
+### WARNING - musimy dodać parsowanie które powie nam jakie jest NASTĘPNE wystąpienie danej daty!
+
+def parseCron(cron):
+    entry = CronTab(cron).next(default_utc=False)
+    return entry + time.time()  # timestamp of the next occurence
+
+def getFixedRecordingTime(satellite):
+    '''Reads from the config the fixed recording time'''
+    try:
+        fixedTime = satellitesData[satellite]["fixedTime"]
+        fixedDuration = satellitesData[satellite]["fixedDuration"]
+        return {"fixedTime": parseCron(fixedTime), "fixedDuration": fixedDuration }
+    except KeyError:
+        return False
 
 def genPassTable():
     '''generate a table with pass list, sorted'''
@@ -68,15 +87,24 @@ def genPassTable():
     for satellite in satellites:
         
         tleData = getTleData(satellite)
-        czasStart=time.time()
+        
+        if tleData != False:    # if tle data was there in the file
+        
+            czasStart=time.time()
 
-        p = predict.transits(tleData, qth, czasStart)
+            p = predict.transits(tleData, qth, czasStart)
 
-        for i in range(1,20):
-            transit = p.next()
+            for i in range(1,20):
+                transit = p.next()
 
-            if int(transit.peak()['elevation'])>=minElev:
-                passTable[transit.start] = [satellite, transit.start, transit.duration(), transit.peak()['elevation'], transit.peak()['azimuth'] ]
+                if int(transit.peak()['elevation'])>=minElev:
+                    passTable[transit.start] = [satellite, transit.start, transit.duration(), transit.peak()['elevation'], transit.peak()['azimuth'] ]
+                    # transit.start - unix timestamp
+        else:
+            start = getFixedRecordingTime(satellite)["fixedTime"]
+            duration = getFixedRecordingTime(satellite)["fixedDuration"]
+            passTable[start] = [satellite, start, duration, '0', '0']
+            
     
     passTableSorted=[]
     for start in sorted(passTable):
@@ -159,7 +187,8 @@ def azimuth2dir(azimuth):
     
 
 def log(string, style=bc.CYAN):
-    print bc.BOLD + datetime.datetime.fromtimestamp(time.time()).strftime('%Y/%m/%d %H:%M'), bc.ENDC, style, str(string), bc.ENDC
+    print bc.BOLD + datetime.fromtimestamp(time.time()).strftime('%Y/%m/%d %H:%M'), bc.ENDC, style, str(string), bc.ENDC
+
 
 
 # ------------------------------------------------------------------------------------------------------ #
@@ -175,8 +204,7 @@ if __name__ == "__main__":
         
         log("Next five passes:")
         listNextPases(passTable, 5)
-        
-        
+
         # get the very next pass
         satelitePass = passTable[0]
         
@@ -185,7 +213,7 @@ if __name__ == "__main__":
         freq   = satellitesData[satellite]['freq']
         processWith = satellitesData[satellite]['processWith']
         
-        fileNameCore = datetime.datetime.fromtimestamp(start).strftime('%Y%m%d-%H%M') + "_" + satellite
+        fileNameCore = datetime.fromtimestamp(start).strftime('%Y%m%d-%H%M') + "_" + satellite
         
         log("Next pass:")
         log(printPass(satellite, start, duration, peak, azimuth, freq, processWith))

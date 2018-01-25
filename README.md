@@ -7,6 +7,11 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 - configurability - most (all?) variables can be set up in the config file. For both: the main program and the NOAA module.
 - simplicity (not sure if this is true). List of observed satellites is defined in one place only (the config file) and can be easily modified.
 
+## used libraries and acknowledgements
+
+- [autowx](https://github.com/cyber-atomus/autowx)
+- [parse-crontab](https://github.com/josiahcarlson/parse-crontab) - the python crontab parser
+
 # hardware requirements
 
 - usb dvbt dongle, like RTL2832 DVB-T tuner
@@ -17,6 +22,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 - python 2.7 and bash (sh, csh will be also OK)
 - [pypredict](https://github.com/nsat/pypredict) for prediction of satellite passes
 - `rtl-sdr` - can be found in many distributions (`aptitude install rtl-sdr`)
+- python - dateutils (`aptitude install python-dateutil`)
 - `kal` from `kalibrate-rtl` (or [any of its forks](https://github.com/steve-m/kalibrate-rtl/network)) - if you want to calibrate your dongle periodically; may not be necesarry for good dongles with a stable drift.
 
 # how to use
@@ -90,6 +96,7 @@ tle                 - directory with tle data
 - [ ] run recordings on the specified fixed time (for weather fax, for example)
 - [ ] ISS / rtl_fm parameters for recording
 - [ ] any other cool satellites to record and process?
+- [ ] switch off dongle calibration and move it to a separate external file
 
 ## to test
 

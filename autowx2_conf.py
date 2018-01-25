@@ -15,10 +15,13 @@ satellitesData = {
     'NOAA-18':      {'freq': '137912500', 'processWith': 'modules/noaa/noaa.sh' },
     'NOAA-15':      {'freq': '137620000', 'processWith': 'modules/noaa/noaa.sh' },
     'NOAA-19':      {'freq': '137100000', 'processWith': 'modules/noaa/noaa.sh' },
+    'ISS':   {'freq': '145800000', 'processWith': 'modules/iss/iss_voice.sh' },   # voice channel
+    'PR3_NEWS': {'freq': '98988000', 'processWith': 'modules/fm/fm.sh', 'fixedTime': '0 7-23 * * *', 'fixedDuration': '300' },
+}
     #'LILACSAT-1':   {'freq': '436510000', 'processWith': False },
     #'ISS':   {'freq': '145825000', 'processWith': 'modules/iss/iss.sh' },   # APRS - not active, not tested
-    'ISS':   {'freq': '145800000', 'processWith': 'modules/iss/iss_voice.sh' },   # voice channel
-}
+
+
     
 # minimal elevation of pass to capture satellite
 minElev = 20
