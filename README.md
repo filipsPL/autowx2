@@ -27,7 +27,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 # how to use
 
-## files and subprograms
+## files, subprograms and configs
 
 ### autowx.py
 
@@ -36,6 +36,35 @@ The main program to do all calculation, pass predictions and launch modules.
 ```
 autowx2.py          - the main program, the governor of all other programs and scripts
 autowx2_conf.py     - the config file
+```
+
+### autowx2_conf.py
+
+The config file of the main program.
+
+**satellitesData** - the dictionary (in the python style) of satellites to be observed and processed (eg., weather satellites) OR fixed times for recordings (eg., listening to the WeatherFax transmissions).
+- for the *satellites*, three values must be set:
+  - the satellite name (eg., 'NOAA-18'), must be the same as one found in TLE file
+  - `freq` - the frequency to listen at
+  - `processWith` - the path to the script/module to run during the transit
+- for the fixed time recordings:
+  - the id of the entry (any arbitrary string is ok)
+  - `freq` - the frequency to listen at
+  - `processWith` - the path to the script/module to run
+  - `fixedTime` - the fixed time of recording in the [cron](https://en.wikipedia.org/wiki/Cron#Overview) style.
+  - `fixedDuration` - the duration of the recording
+
+
+Sample `satellitesData` dictionary:
+
+```
+satellitesData = {
+    'NOAA-18':      {'freq': '137912500', 'processWith': 'modules/noaa/noaa.sh' },
+    'NOAA-15':      {'freq': '137620000', 'processWith': 'modules/noaa/noaa.sh' },
+    'NOAA-19':      {'freq': '137100000', 'processWith': 'modules/noaa/noaa.sh' },
+    'ISS':   {'freq': '145800000', 'processWith': 'modules/iss/iss_voice.sh' },   # voice channel
+    'PR3_NEWS': {'freq': '98988000', 'processWith': 'modules/fm/fm.sh', 'fixedTime': '0 7-23 * * *', 'fixedDuration': '300' },
+}
 ```
 
 

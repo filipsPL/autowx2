@@ -17,9 +17,9 @@ azimuth="$6"
 freq="$7"
 
 # fixed values for tests
-freq="98988000"
-duration="10s"
-fileNameCore="trojka"
+#freq="98988000"
+#duration="10s"
+#fileNameCore="trojka"
 
 
 timeout $duration rtl_fm -f $freq -M wbfm -g 49.6 | lame -r -s 32 -m m - $recdir/$fileNameCore.mp3

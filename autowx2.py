@@ -88,7 +88,7 @@ def genPassTable():
         
         tleData = getTleData(satellite)
         
-        if tleData != False:    # if tle data was there in the file
+        if tleData != False:    # if tle data was there in the file :: SATELLITES
         
             czasStart=time.time()
 
@@ -100,7 +100,8 @@ def genPassTable():
                 if int(transit.peak()['elevation'])>=minElev:
                     passTable[transit.start] = [satellite, transit.start, transit.duration(), transit.peak()['elevation'], transit.peak()['azimuth'] ]
                     # transit.start - unix timestamp
-        else:
+        
+        else:                   # fixed time recording
             start = getFixedRecordingTime(satellite)["fixedTime"]
             duration = getFixedRecordingTime(satellite)["fixedDuration"]
             passTable[start] = [satellite, start, duration, '0', '0']
@@ -220,7 +221,7 @@ if __name__ == "__main__":
 
         towait = int(start-time.time())
 
-        if towait < 1:
+        if towait <= 1:
             ## here the recording happens
             log("!! Recording " + printPass(satellite, start, duration+towait, peak, azimuth, freq, processWith), style=bc.WARNING)
                     
@@ -237,14 +238,16 @@ if __name__ == "__main__":
             towait = int(start-time.time())
             
             if scriptToRunInFreeTime != False:
-                if towait >= 300: # if we have more than five minutes spare time, let's do something useful
+                if towait >= 60: # if we have more than five minutes spare time, let's do something useful
                     log("We have still %ss free time to the next pass. Let's do something useful!" % (towait-1) )
                     log("Running: %s for %ss" % (scriptToRunInFreeTime, towait-1) )
                     runForDuration([scriptToRunInFreeTime, towait-1, dongleShift], towait-1)    # scrript with runt ime and dongle shift as arguments
-
-            towait = int(start-time.time())
-
-            log("Sleeping for: " + str(towait) + "s")
-            time.sleep(towait)
+                else:
+                    log("Sleeping for: " + str(towait-1) + "s")
+                    time.sleep(towait-1)
+            else:
+                towait = int(start-time.time())
+                log("Sleeping for: " + str(towait-1) + "s")
+                time.sleep(towait-1)
 
 
