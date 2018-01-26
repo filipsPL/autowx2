@@ -1,5 +1,7 @@
 # autowx2
 
+The set of scripts for automatic processing of the satellite data (like capturing of the weather APT images from NOAA satellites) and fixed time recordings (like WeatherFaxes).
+
 ![image](docs/NOAA19-HVCT.jpg) ![image](docs/NOAA19-therm.jpg) 
 
 This is a rewritten and fine-tuned version of tools for the automatic weather satellite images capturing. Most directly it bases on cyber-atomus' [autowx](https://github.com/cyber-atomus/autowx) and my fork of autowx. The main differences between this project **autowx2** and previously created tools:
@@ -115,7 +117,7 @@ tle                 - directory with tle data
 
 ## to do
 
-- [ ] good README.md file
+- [ ] good README.md file :running: in progress
 - [ ] logs to file, not only to screen
 - [ ] plots of the dongle shift drift
 - [ ] average dongle shifts from the last n measurements 
@@ -126,6 +128,7 @@ tle                 - directory with tle data
 - [ ] ISS / rtl_fm parameters for recording
 - [ ] any other cool satellites to record and process?
 - [ ] switch off dongle calibration and move it to a separate external file
+- [ ] gallery from images + descriptions
 
 ## to test
 
