@@ -29,7 +29,6 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 - python 2.7 and bash (sh, csh will be also OK)
 - [pypredict](https://github.com/nsat/pypredict) for prediction of satellite passes
 - `rtl-sdr` - can be found in many distributions (`aptitude install rtl-sdr`)
-- python - dateutils (`aptitude install python-dateutil`)
 - `kal` from `kalibrate-rtl` (or [any of its forks](https://github.com/steve-m/kalibrate-rtl/network)) - if you want to calibrate your dongle periodically; may not be necesarry for good dongles with a stable drift.
 
 # how to use
