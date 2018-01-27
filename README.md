@@ -9,6 +9,11 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 - configurability - most (all?) variables can be set up in the config file. For both: the main program and the NOAA module.
 - simplicity (not sure if this is true). List of observed satellites is defined in one place only (the config file) and can be easily modified.
 
+<!--- [![ghit.me](https://ghit.me/badge.svg?repo=filipsPL/autowx2)](https://ghit.me/repo/filipsPL/autowx2) -->
+
+![badge-email](docs/badge-email.png)
+
+
 ## used libraries and acknowledgements
 
 - [autowx](https://github.com/cyber-atomus/autowx)
@@ -129,6 +134,7 @@ tle                 - directory with tle data
 - [ ] any other cool satellites to record and process?
 - [ ] switch off dongle calibration and move it to a separate external file
 - [ ] gallery from images + descriptions
+- [ ] priorities of recordings if the time of recording overlap :questionmark:
 
 ## to test
 
