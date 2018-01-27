@@ -6,3 +6,6 @@ python:
 install:
  - sudo apt-get install rtl-sdr
  - pip install -r requirements.txt
+ 
+script:
+ - autowx2.py
