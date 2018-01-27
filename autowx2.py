@@ -20,6 +20,7 @@ from autowx2_conf import *  # configuration
 satellites = list(satellitesData)
 qth = (stationLat, stationLon, stationAlt)
 
+
 def mkdir_p(outdir):
     ''' bash "mkdir -p" analog'''
     if not os.path.exists(outdir):
@@ -249,5 +250,6 @@ if __name__ == "__main__":
                 towait = int(start-time.time())
                 log("Sleeping for: " + str(towait-1) + "s")
                 time.sleep(towait-1)
+
 
 
