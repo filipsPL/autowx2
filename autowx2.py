@@ -17,9 +17,11 @@ from _crontab import *
 
 from autowx2_conf import *  # configuration
 
+import pprint   # to remove after debugging
+pp = pprint.PrettyPrinter(indent=4)
+
 satellites = list(satellitesData)
 qth = (stationLat, stationLon, stationAlt)
-
 
 def mkdir_p(outdir):
     ''' bash "mkdir -p" analog'''
@@ -88,6 +90,7 @@ def genPassTable():
     for satellite in satellites:
         
         tleData = getTleData(satellite)
+        priority =  satellitesData[satellite]['priority']
         
         if tleData != False:    # if tle data was there in the file :: SATELLITES
         
@@ -99,25 +102,62 @@ def genPassTable():
                 transit = p.next()
 
                 if int(transit.peak()['elevation'])>=minElev:
-                    passTable[transit.start] = [satellite, transit.start, transit.duration(), transit.peak()['elevation'], transit.peak()['azimuth'] ]
+                    passTable[transit.start] = [satellite, int(transit.start + skipFirst), int(transit.duration() - skipFirst - skipLast), int(transit.peak()['elevation']), int(transit.peak()['azimuth']), priority]
                     # transit.start - unix timestamp
         
         else:                   # fixed time recording
             start = getFixedRecordingTime(satellite)["fixedTime"]
             duration = getFixedRecordingTime(satellite)["fixedDuration"]
-            passTable[start] = [satellite, start, duration, '0', '0']
+            passTable[start] = [satellite, int(start), int(duration), '0', '0', priority]
             
-    
+    ## Sort pass table
     passTableSorted=[]
     for start in sorted(passTable):
-        satellite, start, duration, peak, azimuth = passTable[start]
-        passTableSorted.append([satellite, int(start), int(duration), int(peak), int(azimuth)])
+        passTableSorted.append(passTable[start])
     
-    return passTableSorted
+    ## Clean the pass table according to the priority. If any pass overlaps, remove one with less priority (lower priority number).
+    passTableSortedPrioritized = passTableSorted[:]
+    passCount = len(passTableSorted)
+    for i in range(0, passCount - 1):   # -1 or -2 :BUG?
+        satelliteI, startI, durationI, peakI, azimuthI, priorityI = passTableSorted[i]
+        satelliteJ, startJ, durationJ, peakJ, azimuthJ, priorityJ = passTableSorted[i+1]
+        endTimeI = startI + durationI
+
+        if priorityI != priorityJ:
+            if (startJ + priorityTimeMargin < endTimeI):
+                print "End pass:", satelliteI, t2human(endTimeI), "--- Start time:", satelliteJ, t2human(startJ)
+                if priorityJ < priorityI:
+                    #print " 1. discard %s, keep %s" % (satelliteI, satelliteJ)
+                    passTableSortedPrioritized[i] = ''
+                elif priorityJ > priorityI:
+                    #print " 2. discard %s, keep %s" % (satelliteJ, satelliteI)
+                    passTableSortedPrioritized[i+1] = ''
+    
+    
+    # let's clean the table and remove empty (removed) records 
+    # and remove the priority record, it will not be useful later -- x[:5]
+    passTableSortedPrioritized = [ x[:5] for x in passTableSortedPrioritized if x != '']
+    
+    #pp.pprint(passTableSortedPrioritized)
+
+    return passTableSortedPrioritized
+
+def t2human(timestamp):
+    '''converts unix timestamp to human readable format'''
+    return strftime('%Y-%m-%d %H:%M', time.localtime(timestamp))
+
+def t2humanHM(seconds):
+    '''converts unix timestamp to human readable format MM:SS'''
+    mm = int(seconds/60)
+    ss = seconds % 60
+    return "%02i:%02i" % (mm, ss)
 
 
 def printPass(satellite, start, duration, peak, azimuth, freq,  processWith):
-    return "** " + satellite + " " +strftime('%d-%m-%Y %H:%M:%S', time.localtime(start))+" ("+str(int(start))+") to "+strftime('%d-%m-%Y %H:%M:%S', time.localtime(start+int(duration)))+" ("+str(int(start+int(duration)))+")"+", dur: "+str(int(duration))+" sec ("+str(time.strftime("%M:%S", time.gmtime(duration)))+"), max el. "+str(int(peak))+"°" + " Azimuth: "+ str(int(azimuth))+"° (" + azimuth2dir(azimuth) + ") f=" + str(freq) + "Hz, Decoding: " + str(processWith)
+    return "● " + bc.OKGREEN + "%10s" % (satellite) + bc.ENDC + " :: " \
+    + bc.OKGREEN + t2human(start) + bc.ENDC + " to " + bc.OKGREEN  + t2human(start+int(duration)) + bc.ENDC \
+    + ", dur: " + t2humanHM(duration) \
+    + ", max el. " +str(int(peak)) + "°" + "; azimuth: "+ str(int(azimuth))+"° (" + azimuth2dir(azimuth) + ") f=" + str(freq) + "Hz; Decoding: " + str(processWith)
 
 def listNextPases(passTable, howmany):
     i=1
@@ -125,7 +165,7 @@ def listNextPases(passTable, howmany):
         satellite, start, duration, peak, azimuth = satelitePass
         freq   = satellitesData[satellite]['freq']
         processWith = satellitesData[satellite]['processWith']
-        log(str(i) + ") " + printPass(satellite, start, duration, peak, azimuth, freq, processWith))
+        log(printPass(satellite, start, duration, peak, azimuth, freq, processWith))
         i+=1
 
 def runForDuration(cmdline, duration):
@@ -189,7 +229,7 @@ def azimuth2dir(azimuth):
     
 
 def log(string, style=bc.CYAN):
-    print bc.BOLD + datetime.fromtimestamp(time.time()).strftime('%Y/%m/%d %H:%M'), bc.ENDC, style, str(string), bc.ENDC
+    print bc.BOLD + datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M'), bc.ENDC, style, str(string), bc.ENDC
 
 
 
@@ -240,15 +280,15 @@ if __name__ == "__main__":
             
             if scriptToRunInFreeTime != False:
                 if towait >= 60: # if we have more than five minutes spare time, let's do something useful
-                    log("We have still %ss free time to the next pass. Let's do something useful!" % (towait-1) )
-                    log("Running: %s for %ss" % (scriptToRunInFreeTime, towait-1) )
+                    log("We have still %ss free time to the next pass. Let's do something useful!" % ( t2humanHM(towait-1) ) )
+                    log("Running: %s for %ss" % (scriptToRunInFreeTime, t2humanHM(towait-1)) )
                     runForDuration([scriptToRunInFreeTime, towait-1, dongleShift], towait-1)    # scrript with runt ime and dongle shift as arguments
                 else:
-                    log("Sleeping for: " + str(towait-1) + "s")
+                    log("Sleeping for: " + t2humanHM(towait-1) + "s")
                     time.sleep(towait-1)
             else:
                 towait = int(start-time.time())
-                log("Sleeping for: " + str(towait-1) + "s")
+                log("Sleeping for: " + t2humanHM(towait-1) + "s")
                 time.sleep(towait-1)
 
 
