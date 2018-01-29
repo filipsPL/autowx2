@@ -41,7 +41,8 @@ def CreateGanttChart(listNextPasesListList):
     i=1
     for tx in listNextPasesListList:
         ylabel,startdate,enddate=tx
-        ylabels.append("%s (%1i)" % (ylabel, i) )
+        #ylabels.append("%s (%1i)" % (ylabel, i) )
+        ylabels.append("(%1i)" % (i) )
         #ylabels.append("%s" % (ylabel) )
         customDates.append([_create_date(startdate),_create_date(enddate)])
         i+=1

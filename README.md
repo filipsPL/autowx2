@@ -143,15 +143,11 @@ tle                 - directory with tle data
 - [ ] any other cool satellites to record and process?
 - [ ] switch off dongle calibration and move it to a separate external file
 - [ ] gallery from images + descriptions
-- [ ] pass list generator with a Gantt plot
+- [ ] dynamic priority calculation basing on the transit features, like azimuth or altitude.
 
 ## to test
 
-- [ ] move all recordings to the bash file
-- [ ] noaa.sh
-  - [ ] noaa_record.sh
-  - [ ] noaa_process.sh
-  
+ 
 
 ## done!
 
@@ -160,3 +156,8 @@ tle                 - directory with tle data
 - [x] if newdongleShift != '' # WARNING and newdongleShift is numeric:
 - [x] priorities of recordings if the time of recording overlap
 - [x] run recordings on the specified fixed time (for weather fax, for example)
+- [x] pass list generator with a Gantt plot
+- [x] move all recordings to the bash file
+- [x] noaa.sh
+  - [x] noaa_record.sh
+  - [x] noaa_process.sh
