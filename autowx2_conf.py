@@ -44,7 +44,17 @@ skipLast=20
 stationLat='52.34'
 stationLon='-21.06'
 stationAlt='110'
+stationName='Warsaw'
 
+#
+# location of the HTML file with a list of next passes
+#
+htmlNextPassList=systemDir+'/var/nextpass.html'
+
+#
+# location of the Gantt chart file with a plot of next passes; PNG or SVG file extension possible
+#
+ganttNextPassList=systemDir+'/var/nextpass.png'
 
 # script tha will be used whle waiting for the next pass; set False if we just want to sleep
 # by default, this script will get the parameter of duration of the time to be run and the recent dongleShift

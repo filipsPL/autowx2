@@ -387,9 +387,9 @@ class CronTab(object):
             default_utc = False
 
         now = now or (datetime.utcnow() if default_utc and default_utc is not WARN_CHANGE else datetime.now())
+        
         if isinstance(now, _number_types):
             now = datetime.utcfromtimestamp(now) if default_utc else datetime.fromtimestamp(now)
-
         # handle timezones if the datetime object has a timezone and get a
         # reasonable future/past start time
         onow, now = now, now.replace(tzinfo=None)

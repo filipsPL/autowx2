@@ -53,6 +53,7 @@ The config file of the main program.
   - the satellite name (eg., 'NOAA-18'), must be the same as one found in TLE file
   - `freq` - the frequency to listen at
   - `processWith` - the path to the script/module to run during the transit
+  - `priority` - priority of the recording (if two or more overlaps); the lower number - the higher priority
 - for the fixed time recordings:
   - the id of the entry (any arbitrary string is ok)
   - `freq` - the frequency to listen at
@@ -65,11 +66,11 @@ Sample `satellitesData` dictionary:
 
 ```
 satellitesData = {
-    'NOAA-18':      {'freq': '137912500', 'processWith': 'modules/noaa/noaa.sh' },
-    'NOAA-15':      {'freq': '137620000', 'processWith': 'modules/noaa/noaa.sh' },
-    'NOAA-19':      {'freq': '137100000', 'processWith': 'modules/noaa/noaa.sh' },
-    'ISS':   {'freq': '145800000', 'processWith': 'modules/iss/iss_voice.sh' },   # voice channel
-    'PR3_NEWS': {'freq': '98988000', 'processWith': 'modules/fm/fm.sh', 'fixedTime': '0 7-23 * * *', 'fixedDuration': '300' },
+    'NOAA-18':      {'freq': '137912500', 'processWith': 'modules/noaa/noaa.sh', 'priority': 1 },
+    'NOAA-15':      {'freq': '137620000', 'processWith': 'modules/noaa/noaa.sh', 'priority': 1 },
+    'NOAA-19':      {'freq': '137100000', 'processWith': 'modules/noaa/noaa.sh', 'priority': 1 },
+    'ISS':   {'freq': '145800000', 'processWith': 'modules/iss/iss_voice.sh', 'priority': 3 },   # voice channel
+    'PR3_NEWS': {'freq': '98988000', 'processWith': 'modules/fm/fm.sh', 'fixedTime': '0 7-23 * * *', 'fixedDuration': '300', 'priority': 1 },
 }
 ```
 
@@ -128,12 +129,11 @@ tle                 - directory with tle data
 - [ ] coś lepszego niż `kal`, żeby było bardziej idioten proof i error proof
 - [ ] coś do robienia w wolnej chwili
 - [ ] efficiently kill aprs or other app from the python - [ ] now it remains running in te background... (multimon)
-- [ ] run recordings on the specified fixed time (for weather fax, for example)
 - [ ] ISS / rtl_fm parameters for recording
 - [ ] any other cool satellites to record and process?
 - [ ] switch off dongle calibration and move it to a separate external file
 - [ ] gallery from images + descriptions
-- [ ] priorities of recordings if the time of recording overlap :questionmark:
+- [ ] pass list generator with a Gantt plot
 
 ## to test
 
@@ -148,3 +148,5 @@ tle                 - directory with tle data
 - [x] recording options
 - [x] bash scripts global config file
 - [x] if newdongleShift != '' # WARNING and newdongleShift is numeric:
+- [x] priorities of recordings if the time of recording overlap
+- [x] run recordings on the specified fixed time (for weather fax, for example)

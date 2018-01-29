@@ -17,8 +17,8 @@ from _crontab import *
 
 from autowx2_conf import *  # configuration
 
-import pprint   # to remove after debugging
-pp = pprint.PrettyPrinter(indent=4)
+#import pprint   # to remove after debugging
+#pp = pprint.PrettyPrinter(indent=4)
 
 satellites = list(satellitesData)
 qth = (stationLat, stationLon, stationAlt)
@@ -68,11 +68,11 @@ def getTleData(satellite):
         return False
 
 
-### WARNING - musimy dodać parsowanie które powie nam jakie jest NASTĘPNE wystąpienie danej daty!
 
 def parseCron(cron):
     entry = CronTab(cron).next(default_utc=False)
     return entry + time.time()  # timestamp of the next occurence
+
 
 def getFixedRecordingTime(satellite):
     '''Reads from the config the fixed recording time'''
@@ -83,7 +83,7 @@ def getFixedRecordingTime(satellite):
     except KeyError:
         return False
 
-def genPassTable():
+def genPassTable(howmany=20):
     '''generate a table with pass list, sorted'''
     
     passTable = {}
@@ -98,7 +98,7 @@ def genPassTable():
 
             p = predict.transits(tleData, qth, czasStart)
 
-            for i in range(1,20):
+            for i in range(1,howmany):
                 transit = p.next()
 
                 if int(transit.peak()['elevation'])>=minElev:
@@ -106,10 +106,17 @@ def genPassTable():
                     # transit.start - unix timestamp
         
         else:                   # fixed time recording
-            start = getFixedRecordingTime(satellite)["fixedTime"]
+            #cron = getFixedRecordingTime(satellite)["fixedTime"]
+            cron = satellitesData[satellite]['fixedTime']
             duration = getFixedRecordingTime(satellite)["fixedDuration"]
-            passTable[start] = [satellite, int(start), int(duration), '0', '0', priority]
             
+            delta=0
+            for i in range(0, howmany):
+                entry = CronTab(cron).next(now=time.time() + delta, default_utc=False)
+                delta+=entry
+                start = delta + time.time()
+                passTable[start] = [satellite, int(start), int(duration), '0', '0', priority]
+
     ## Sort pass table
     passTableSorted=[]
     for start in sorted(passTable):
@@ -125,7 +132,7 @@ def genPassTable():
 
         if priorityI != priorityJ:
             if (startJ + priorityTimeMargin < endTimeI):
-                print "End pass:", satelliteI, t2human(endTimeI), "--- Start time:", satelliteJ, t2human(startJ)
+                #print "End pass:", satelliteI, t2human(endTimeI), "--- Start time:", satelliteJ, t2human(startJ)
                 if priorityJ < priorityI:
                     #print " 1. discard %s, keep %s" % (satelliteI, satelliteJ)
                     passTableSortedPrioritized[i] = ''
@@ -146,7 +153,7 @@ def t2human(timestamp):
     '''converts unix timestamp to human readable format'''
     return strftime('%Y-%m-%d %H:%M', time.localtime(timestamp))
 
-def t2humanHM(seconds):
+def t2humanMS(seconds):
     '''converts unix timestamp to human readable format MM:SS'''
     mm = int(seconds/60)
     ss = seconds % 60
@@ -156,7 +163,7 @@ def t2humanHM(seconds):
 def printPass(satellite, start, duration, peak, azimuth, freq,  processWith):
     return "● " + bc.OKGREEN + "%10s" % (satellite) + bc.ENDC + " :: " \
     + bc.OKGREEN + t2human(start) + bc.ENDC + " to " + bc.OKGREEN  + t2human(start+int(duration)) + bc.ENDC \
-    + ", dur: " + t2humanHM(duration) \
+    + ", dur: " + t2humanMS(duration) \
     + ", max el. " +str(int(peak)) + "°" + "; azimuth: "+ str(int(azimuth))+"° (" + azimuth2dir(azimuth) + ") f=" + str(freq) + "Hz; Decoding: " + str(processWith)
 
 def listNextPases(passTable, howmany):
@@ -232,7 +239,6 @@ def log(string, style=bc.CYAN):
     print bc.BOLD + datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M'), bc.ENDC, style, str(string), bc.ENDC
 
 
-
 # ------------------------------------------------------------------------------------------------------ #
 
 if __name__ == "__main__":
@@ -280,15 +286,15 @@ if __name__ == "__main__":
             
             if scriptToRunInFreeTime != False:
                 if towait >= 60: # if we have more than five minutes spare time, let's do something useful
-                    log("We have still %ss free time to the next pass. Let's do something useful!" % ( t2humanHM(towait-1) ) )
-                    log("Running: %s for %ss" % (scriptToRunInFreeTime, t2humanHM(towait-1)) )
+                    log("We have still %ss free time to the next pass. Let's do something useful!" % ( t2humanMS(towait-1) ) )
+                    log("Running: %s for %ss" % (scriptToRunInFreeTime, t2humanMS(towait-1)) )
                     runForDuration([scriptToRunInFreeTime, towait-1, dongleShift], towait-1)    # scrript with runt ime and dongle shift as arguments
                 else:
-                    log("Sleeping for: " + t2humanHM(towait-1) + "s")
+                    log("Sleeping for: " + t2humanMS(towait-1) + "s")
                     time.sleep(towait-1)
             else:
                 towait = int(start-time.time())
-                log("Sleeping for: " + t2humanHM(towait-1) + "s")
+                log("Sleeping for: " + t2humanMS(towait-1) + "s")
                 time.sleep(towait-1)
 
 
