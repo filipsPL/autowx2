@@ -60,7 +60,7 @@ The config file of the main program.
   - `processWith` - the path to the script/module to run
   - `fixedTime` - the fixed time of recording in the [cron](https://en.wikipedia.org/wiki/Cron#Overview) style.
   - `fixedDuration` - the duration of the recording
-
+  - `priority` - priority of the recording (if two or more overlaps); the lower number - the higher priority
 
 Sample `satellitesData` dictionary:
 
@@ -70,9 +70,19 @@ satellitesData = {
     'NOAA-15':      {'freq': '137620000', 'processWith': 'modules/noaa/noaa.sh', 'priority': 1 },
     'NOAA-19':      {'freq': '137100000', 'processWith': 'modules/noaa/noaa.sh', 'priority': 1 },
     'ISS':   {'freq': '145800000', 'processWith': 'modules/iss/iss_voice.sh', 'priority': 3 },   # voice channel
-    'PR3_NEWS': {'freq': '98988000', 'processWith': 'modules/fm/fm.sh', 'fixedTime': '0 7-23 * * *', 'fixedDuration': '300', 'priority': 1 },
+    'PR3_NEWS': {'freq': '98988000', 'processWith': 'modules/fm/fm.sh', 'fixedTime': '0 7-23 * * *', 'fixedDuration': '300', 'priority': 2 },
 }
 ```
+
+- :warning: TODO: dynamic priority calculation basing on the transit features, like azimuth or altitude.
+
+### genpasstable.py
+
+A utility to generate transit plan for the next few hours. Two elements are generated:
+- a static html page (or actually the html table to be included in the page), [see example](docs/nextpass.html)
+- a static png (or svg) image showing the transit plan in the form of the Gantt chart. An example:
+
+![image](docs/nextpass.png)
 
 
 ### bin directory
