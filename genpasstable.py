@@ -14,13 +14,15 @@
 # 
 
 from autowx2 import *
+import matplotlib
+matplotlib.use('Agg') # Force matplotlib to not use any Xwindows backend.
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as font_manager
 import matplotlib.dates
 from matplotlib.dates import HOURLY, DAILY, DateFormatter, rrulewrapper, RRuleLocator 
 import numpy as np
 
-matplotlib.use('Agg') # Force matplotlib to not use any Xwindows backend.
+
 
 
 
