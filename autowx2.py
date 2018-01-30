@@ -268,7 +268,7 @@ if __name__ == "__main__":
 
         towait = int(start-time.time())
 
-        if towait <= 1:
+        if towait <= 1 and duration > 5:
             ## here the recording happens
             log("!! Recording " + printPass(satellite, start, duration+towait, peak, azimuth, freq, processWith), style=bc.WARNING)
                     

@@ -4,8 +4,10 @@
 
 channel=23
 
-shiftFile="/home/filips/github/autowx2/var/dongleshift.txt"
-shiftHistory="/home/dane/nasluch/sat/logs/shifthistory.csv"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+shiftFile="$DIR/../var/dongleshift.txt"
+shiftHistory="$DIR/../shifthistory.csv"
 
 #-----------------------------------------------#
 
