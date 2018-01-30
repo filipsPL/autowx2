@@ -20,6 +20,10 @@ import matplotlib.dates
 from matplotlib.dates import HOURLY, DAILY, DateFormatter, rrulewrapper, RRuleLocator 
 import numpy as np
 
+matplotlib.use('Agg') # Force matplotlib to not use any Xwindows backend.
+
+
+
 def t2humanHM(timestamp):
     '''converts unix timestamp to human readable format'''
     return strftime('%H:%M', time.localtime(timestamp))
