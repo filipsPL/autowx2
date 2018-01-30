@@ -8,4 +8,4 @@ install:
  - pip install -r requirements.txt
  
 script:
- - ./autowx2.py
+ - ./genpasstable.py
