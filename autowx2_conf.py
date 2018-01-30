@@ -3,7 +3,8 @@
 ### variables used by autowx2
 ###
 
-systemDir="/home/filips/github/autowx2/"
+# systemDir="/home/filips/github/autowx2/"
+systemDir="./"
 
 # satellites to record
 satellitesData = {
