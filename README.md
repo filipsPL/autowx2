@@ -11,7 +11,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 <!--- [![ghit.me](https://ghit.me/badge.svg?repo=filipsPL/autowx2)](https://ghit.me/repo/filipsPL/autowx2) -->
 
-![badge-travis](https://api.travis-ci.org/filipsPL/autowx2.svg?branch=master) ![badge-email](docs/badge-email.png)
+[![badge-travis](https://api.travis-ci.org/filipsPL/autowx2.svg?branch=master)](https://travis-ci.org/filipsPL/autowx2) ![badge-email](docs/badge-email.png)
 
 
 ## used libraries and acknowledgements
