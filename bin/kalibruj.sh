@@ -7,7 +7,7 @@ channel=23
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 shiftFile="$DIR/../var/dongleshift.txt"
-shiftHistory="$DIR/../shifthistory.csv"
+shiftHistory="$DIR/../var/shifthistory.csv"
 
 #-----------------------------------------------#
 

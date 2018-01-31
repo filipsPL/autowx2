@@ -3,3 +3,5 @@ bin/tests/*.png
 wyslij-github.sh
 *.kate-swp
 tests
+var/shifthistory.csv
+

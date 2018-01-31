@@ -268,12 +268,13 @@ if __name__ == "__main__":
 
         towait = int(start-time.time())
 
-        if towait <= 1 and duration > 5:
+        if towait <= 1 and duration > 0:
             ## here the recording happens
             log("!! Recording " + printPass(satellite, start, duration+towait, peak, azimuth, freq, processWith), style=bc.WARNING)
                     
             processCmdline = [ processWith, fileNameCore, satellite, start, duration+towait, peak, azimuth, freq ]
             justRun(processCmdline)
+            time.sleep(10.0)
             
         else:
             # recalculating waiting time
