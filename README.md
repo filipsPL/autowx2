@@ -27,9 +27,37 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 # system requirements
 
 - python 2.7 and bash (sh, csh will be also OK)
+- installed and working dongle.
+  - adding the following statement to /etc/udev/rules.d/20.rtlsdr.rules:`SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP="adm", MODE="0666", SYMLINK+="rtl_sdr"`
+  - blacklisting the `dvb_usb_rtl28xxu` module
+  - for more details, [see here](http://www.instructables.com/id/rtl-sdr-on-Ubuntu/)
 - [pypredict](https://github.com/nsat/pypredict) for prediction of satellite passes
 - `rtl-sdr` - can be found in many distributions (`aptitude install rtl-sdr`)
 - `kal` from `kalibrate-rtl` (or [any of its forks](https://github.com/steve-m/kalibrate-rtl/network)) - if you want to calibrate your dongle periodically; may not be necesarry for good dongles with a stable drift.
+
+**For decoding NOAA data (noaa module):**
+
+- [wxtoimg](http://www.wxtoimg.com/downloads/)
+```
+sudo dpkg -i wxtoimg_2.10.11-1_i386.deb	# may generate some dependencies errors; if not, stop here
+sudo aptitude update
+sudo aptitude upgrade
+sudo dpkg -i wxtoimg_2.10.11-1_i386.deb	# to finish the installation
+```
+
+
+**Optionally:**
+
+- `multimon-ng` for receiving the APRS packets in the free time; to be cloned from e.g. [this fork](https://github.com/sq5bpf/multimon-ng-stqc)
+
+```
+sudo apt-get install libpulse-dev
+mkdir build
+cd build
+qmake ../multimon-ng.pro
+make
+sudo make install
+```
 
 # how to use
 
