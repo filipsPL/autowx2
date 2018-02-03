@@ -10,7 +10,9 @@
 
 
 echo "******** Installing required packages"
-sudo apt-get install rtl-sdr git libpulse-dev qt4-qmake fftw3
+sudo apt-get install rtl-sdr git libpulse-dev qt4-qmake fftw3 libc6 libfontconfig1 libx11-6 libxext6 libxft2 \
+libavahi-client-dev libavahi-common-dev libdbus-1-dev libfftw3-long3 libfftw3-single3 libpulse-mainloop-glib0 librtlsdr0 \
+libfftw3-dev  libfftw3-double3 libfftw3-quad3 lame sox
 
 
 echo "******** Installing python requirements"
