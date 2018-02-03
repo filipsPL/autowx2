@@ -10,18 +10,13 @@ cache:
 python:
 - 2.7
 
-
-
 install:
  - ./install.sh
  
 script:
  - wxtoimg -h
-#- multimon-ng -h
-#- kal -h
  - sox --version
  - lame --version
-#- rtl_fm --help
  - wxtoimg -V
  - wxmap -V
  - ./genpasstable.py
