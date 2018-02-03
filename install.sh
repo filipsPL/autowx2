@@ -9,12 +9,12 @@
 #sudo echo "blacklist dvb_usb_rtl28xxu" >>  /etc/modprobe.d/rtl-sdr-blacklist.conf
 
 
-# echo "******** Installing required packages"
-# sudo apt-get install rtl-sdr git libpulse-dev qt4-qmake
-# 
-# 
-# echo "******** Installing python requirements"
-# pip install -r requirements.txt
+echo "******** Installing required packages"
+sudo apt-get install rtl-sdr git libpulse-dev qt4-qmake fftw3
+
+
+echo "******** Installing python requirements"
+pip install -r requirements.txt
 
 
 mkdir -p bin/sources/
