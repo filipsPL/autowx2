@@ -86,5 +86,16 @@ sudo make install
 cd ../
 
 
+
+echo
+echo
+echo "******** Check for installed software"
+echo
+echo
+
+wxtoimg -h
+multimon-ng -h
 kal -h
+
+exit 0
 
