@@ -113,6 +113,27 @@ def listNextPasesHtml(passTable, howmany):
     
     return output
 
+def listNextPasesTxt(passTable, howmany):
+    
+    txtTemplate = "%3s\t%10s\t%10s\t%5s\t%3s\t%3s\t%3s\t%10s\t%10s\n"
+    
+    i=1
+    output=""
+    output += txtTemplate % ("#", "satellite", "start", "duration", "peak", "azimuth", "azimuth", "freq", "process with")
+    
+    for satelitePass in passTable[0:howmany]:
+        satellite, start, duration, peak, azimuth = satelitePass
+        freq   = satellitesData[satellite]['freq']
+        processWith = satellitesData[satellite]['processWith']
+        
+        output+=txtTemplate % (i, satellite, t2human(start), t2humanMS(duration), peak, azimuth, azimuth2dir(azimuth), freq, processWith)
+        i+=1
+    
+    output+="\n"
+    
+    return output
+
+
 def listNextPasesList(passTable, howmany):
     output = []
     for satelitePass in passTable[0:howmany]:
@@ -140,3 +161,5 @@ if __name__ == "__main__":
     
     listNextPasesListList = listNextPasesList(passTable, 20)
     CreateGanttChart(listNextPasesListList)
+
+    print listNextPasesTxt(passTable, 100)
