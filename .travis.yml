@@ -15,7 +15,7 @@ script:
  - sox --version
  - lame --version
  - rtl_fm --help
- - wxtoimg
+ - yes | wxtoimg
  - wxmap -V
  - ./genpasstable.py
  - cd modules/noaa/ && ./noaa-test.sh
