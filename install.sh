@@ -46,7 +46,7 @@ echo
 
 wget http://www.wxtoimg.com/downloads/wxtoimg-linux64-2.10.11-1.tar.gz
 sudo gunzip < wxtoimg-linux64-2.10.11-1.tar.gz | sudo sh -c "(cd /; tar -xvf -)"
-rm wxtoimg-linux64-2.10.11-1.tar.gz
+#rm wxtoimg-linux64-2.10.11-1.tar.gz
 
 wxtoimg -h
 
