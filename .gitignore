@@ -4,4 +4,4 @@ wyslij-github.sh
 *.kate-swp
 tests
 var/shifthistory.csv
-
+bin/sources/

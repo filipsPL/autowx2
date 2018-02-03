@@ -16,8 +16,10 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 ## used libraries and acknowledgements
 
-- [autowx](https://github.com/cyber-atomus/autowx)
+- [autowx](https://github.com/cyber-atomus/autowx) by cyber-atomus
 - [parse-crontab](https://github.com/josiahcarlson/parse-crontab) - the python crontab parser
+- [pypredict](https://github.com/nsat/pypredict)
+- [wxtoimg](http://www.wxtoimg.com/downloads/)
 
 # hardware requirements
 
@@ -27,24 +29,15 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 # system requirements
 
 - python 2.7 and bash (sh, csh will be also OK)
-- installed and working dongle.
-  - adding the following statement to /etc/udev/rules.d/20.rtlsdr.rules:`SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP="adm", MODE="0666", SYMLINK+="rtl_sdr"`
-  - blacklisting the `dvb_usb_rtl28xxu` module
+- installed and working DVB-T dongle; to make this long story short:
+  - adding the following statement to `/etc/udev/rules.d/20.rtlsdr.rules`:```
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP="adm", MODE="0666", SYMLINK+="rtl_sdr"
+```
+  - blacklisting the `dvb_usb_rtl28xxu` module:```
+echo "blacklist dvb_usb_rtl28xxu" >>  /etc/modprobe.d/rtl-sdr-blacklist.conf
+```
   - for more details, [see here](http://www.instructables.com/id/rtl-sdr-on-Ubuntu/)
-- [pypredict](https://github.com/nsat/pypredict) for prediction of satellite passes
-- `rtl-sdr` - can be found in many distributions (`aptitude install rtl-sdr`)
-- `kal` from `kalibrate-rtl` (or [any of its forks](https://github.com/steve-m/kalibrate-rtl/network)) - if you want to calibrate your dongle periodically; may not be necesarry for good dongles with a stable drift.
-
-**For decoding NOAA data (noaa module):**
-
-- [wxtoimg](http://www.wxtoimg.com/downloads/)
-```
-sudo dpkg -i wxtoimg_2.10.11-1_i386.deb	# may generate some dependencies errors; if not, stop here
-sudo aptitude update
-sudo aptitude upgrade
-sudo dpkg -i wxtoimg_2.10.11-1_i386.deb	# to finish the installation
-```
-
+- for installation script on the Debian and Debian-like systems, see [the installation script](install.sh) :warning: use with care! inspect and tune before execution!
 
 **Optionally:**
 
