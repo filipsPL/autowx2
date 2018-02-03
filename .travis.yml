@@ -9,6 +9,15 @@ install:
  - ./install.sh
  
 script:
+ - wxtoimg -h
+ - multimon-ng -h
+ - kal -h
+ - sox --version
+ - lame --version
+ - rtl_fm --help
+ - wxtoimg
+ - wxmap -V
  - ./genpasstable.py
-
+ - cd modules/noaa/ && ./noaa-test.sh
+ 
 
