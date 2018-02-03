@@ -14,7 +14,7 @@ echo "******** Installing required packages"
 echo
 echo
 
-sudo apt-get install rtl-sdr git libpulse-dev qt4-qmake fftw3 libc6 libfontconfig1 libx11-6 libxext6 libxft2 \
+sudo apt-get install rtl-sdr git libpulse-dev qt4-qmake fftw3 libc6 libfontconfig1 libx11-6 libxext6 libxft2 libusb-1.0-0-dev \
 libavahi-client-dev libavahi-common-dev libdbus-1-dev libfftw3-long3 libfftw3-single3 libpulse-mainloop-glib0 librtlsdr0 librtlsdr-dev \
 libfftw3-dev  libfftw3-double3 libfftw3-quad3 lame sox
 

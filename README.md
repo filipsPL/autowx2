@@ -30,27 +30,18 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 - python 2.7 and bash (sh, csh will be also OK)
 - installed and working DVB-T dongle; to make this long story short:
-  - adding the following statement to `/etc/udev/rules.d/20.rtlsdr.rules`:```
+- adding the following statement to `/etc/udev/rules.d/20.rtlsdr.rules`:
+
+```
 SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP="adm", MODE="0666", SYMLINK+="rtl_sdr"
 ```
-  - blacklisting the `dvb_usb_rtl28xxu` module:```
+- blacklisting the `dvb_usb_rtl28xxu` module:
+```
 echo "blacklist dvb_usb_rtl28xxu" >>  /etc/modprobe.d/rtl-sdr-blacklist.conf
 ```
-  - for more details, [see here](http://www.instructables.com/id/rtl-sdr-on-Ubuntu/)
+- for more details, [see here](http://www.instructables.com/id/rtl-sdr-on-Ubuntu/)
 - for installation script on the Debian and Debian-like systems, see [the installation script](install.sh) :warning: use with care! inspect and tune before execution!
 
-**Optionally:**
-
-- `multimon-ng` for receiving the APRS packets in the free time; to be cloned from e.g. [this fork](https://github.com/sq5bpf/multimon-ng-stqc)
-
-```
-sudo apt-get install libpulse-dev
-mkdir build
-cd build
-qmake ../multimon-ng.pro
-make
-sudo make install
-```
 
 # how to use
 
