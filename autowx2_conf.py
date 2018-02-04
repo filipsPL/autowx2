@@ -17,11 +17,12 @@ satellitesData = {
     'NOAA-15':      {'freq': '137620000', 'processWith': 'modules/noaa/noaa.sh', 'priority': 1 },
     'NOAA-19':      {'freq': '137100000', 'processWith': 'modules/noaa/noaa.sh', 'priority': 1 },
     'ISS':          {'freq': '145800000', 'processWith': 'modules/iss/iss_voice.sh', 'priority': 5 },  # voice channel
-    'PR3_NEWS':     {'freq': '98988000',  'processWith': 'modules/fm/fm.sh', 'fixedTime': '0,37 7-23 * * *', 'fixedDuration': 300, 'priority': 2 },
+    'PR3_NEWS':     {'freq': '98988000',  'processWith': 'modules/fm/fm.sh', 'fixedTime': '0 7-23 * * *', 'fixedDuration': 300, 'priority': 2 },
     'ISS':   {'freq': '145825000', 'processWith': 'modules/iss/iss.sh', 'priority': 5 },   # APRS - not active, not tested
+    'LILACSAT-1':   {'freq': '436510000', 'processWith': 'modules/iss/iss.sh', 'priority': 3 },
 
 }
-    #'LILACSAT-1':   {'freq': '436510000', 'processWith': False },
+    
 
 
 #    
@@ -89,7 +90,7 @@ dongleShift='0'
 tleDir=baseDir+'var/tle/'
 tleFile='all.txt'
 
-tleFileName = tleDir+tleFile
+tleFileName=tleDir+tleFile
 
 # dongle shift file
 dongleShiftFile=baseDir + "var/dongleshift.txt"

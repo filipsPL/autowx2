@@ -9,7 +9,6 @@ scriptDir="$(dirname "$(realpath "$0")")"
 source $scriptDir/basedir_conf.py
 source $baseDir/_listvars.sh
 
-
 ################## FINE TUNING #####################
 
 # directory for generated images
