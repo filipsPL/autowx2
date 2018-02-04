@@ -8,7 +8,7 @@
 # recording here
 # 
 
-timeout $duration $rtlfmbin -f $freq -s $sample -g $dongleGain -F 9 -A fast -E offset -p $dongleShift $recdir/$fileNameCore.raw | tee -a $logFile
+timeout $duration rtl_fm -f $freq -s $sample -g $dongleGain -F 9 -A fast -E offset -p $dongleShift $recdir/$fileNameCore.raw | tee -a $logFile
 
 #
 # transcoding here

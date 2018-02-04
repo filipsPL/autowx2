@@ -8,6 +8,8 @@
 #sudo echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP="adm", MODE="0666", SYMLINK+="rtl_sdr"' >> /etc/udev/rules.d/20.rtlsdr.rules
 #sudo echo "blacklist dvb_usb_rtl28xxu" >>  /etc/modprobe.d/rtl-sdr-blacklist.conf
 
+./configure.sh
+
 echo
 echo
 echo "******** Installing required packages"
@@ -84,6 +86,15 @@ cd kalibrate-rtl
 make
 sudo make install
 cd ../
+
+
+echo
+echo
+echo "******** Getting fresh keplers"
+echo
+echo
+
+bin/update-keps.sh
 
 exit 0
 

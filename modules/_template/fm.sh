@@ -32,9 +32,5 @@ freq="$7"
 #fileNameCore="trojka"
 
 
-echo
-echo "Recording to:" $recdir/$fileNameCore.mp3
-echo
-
 timeout $duration rtl_fm -f $freq -M wbfm -g 49.6 | lame -r -s 32 -m m - $recdir/$fileNameCore.mp3
 

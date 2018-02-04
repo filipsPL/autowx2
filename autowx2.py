@@ -214,7 +214,7 @@ def getDefaultDongleShift(dongleShift=dongleShift):
 
 def calibrate(dongleShift=dongleShift):
     '''calculate the ppm for the device'''
-    cmdline = [systemDir + 'bin/kalibruj.sh']
+    cmdline = [baseDir + 'bin/kalibruj.sh']
     newdongleShift = justRun(cmdline).strip()
     if newdongleShift != '' and is_number(newdongleShift):
         log("Recalculated dongle shift is: " + str(newdongleShift) + " ppm")
@@ -270,7 +270,7 @@ if __name__ == "__main__":
 
         if towait <= 1 and duration > 0:
             ## here the recording happens
-            log("!! Recording " + printPass(satellite, start, duration+towait, peak, azimuth, freq, processWith), style=bc.WARNING)
+            log("!! Recording " + printPass(satellite, start, duration, peak, azimuth, freq, processWith), style=bc.WARNING)
                     
             processCmdline = [ processWith, fileNameCore, satellite, start, duration+towait, peak, azimuth, freq ]
             justRun(processCmdline)

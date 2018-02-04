@@ -8,7 +8,7 @@
 #
 # generate map
 #
-$wxmapbin -T $satellite -a -H $tlefilename -o -O $duration -L "$latlonalt" $start $imgdir/$fileNameCore-mapa.png | tee -a $logFile
+wxmap -T $satellite -a -H $tlefilename -o -O $duration -L "$latlonalt" $start $imgdir/$fileNameCore-mapa.png | tee -a $logFile
 
 
 # process wav file with various enchancements
@@ -16,8 +16,8 @@ $wxmapbin -T $satellite -a -H $tlefilename -o -O $duration -L "$latlonalt" $star
 for enchancement in "${enchancements[@]}"    
 do
     echo "**** $enchancement"
-    $wxtoimgbin -e $enchancement $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}.png | tee -a $logFile
-    $wxtoimgbin -e $enchancement -m $imgdir/$fileNameCore-mapa.png $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}+map.png | tee -a $logFile
+    wxtoimg -e $enchancement $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}.png | tee -a $logFile
+    wxtoimg -e $enchancement -m $imgdir/$fileNameCore-mapa.png $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}+map.png | tee -a $logFile
 done
 
 sox $recdir/$fileNameCore.wav -n spectrogram -o $imgdir/$fileNameCore-spectrogram.png

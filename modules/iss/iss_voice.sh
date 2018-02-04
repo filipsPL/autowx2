@@ -3,8 +3,18 @@
 # file to record fm radio for a given period of time
 # may be used to record ISS voice channel - NOT TESTED!
 
-# directory for recorded raw and wav files
-recdir='/home/dane/nasluch/sat/rec/'
+# read the global configuration file autowx2_conf.py via the bash/python configuration parser
+# do not change the following three lines
+scriptDir="$(dirname "$(realpath "$0")")"
+source $scriptDir/basedir_conf.py
+source $baseDir/_listvars.sh
+
+
+#### microconfiguration
+
+recdir="$recordingDir/iss/rec/"`date +"%Y/%m/%d/"`
+
+### doing the job
 
 mkdir -p $recdir
 

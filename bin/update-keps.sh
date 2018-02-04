@@ -1,5 +1,13 @@
 #!/bin/bash
-TLEDIR=/home/filips/github/autowx2/var/tle/
+
+# read the global configuration file autowx2_conf.py via the bash/python configuration parser
+# do not change the following three lines
+scriptDir="$(dirname "$(realpath "$0")")"
+source $scriptDir/basedir_conf.py
+
+###
+
+TLEDIR=$baseDir/var/tle/
 
 rm $TLEDIR/weather.txt
 wget --no-check-certificate -r http://www.celestrak.com/NORAD/elements/weather.txt -O $TLEDIR/weather.txt

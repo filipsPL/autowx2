@@ -1,14 +1,39 @@
 #!/bin/bash
 
 # main file for recording and processing NOAA telementry data
-# configuration file: noaa.conf in the current directory
 
 
-
+# read the global configuration file autowx2_conf.py via the bash/python configuration parser
+# do not change the following three lines
 scriptDir="$(dirname "$(realpath "$0")")"
+source $scriptDir/basedir_conf.py
+source $baseDir/_listvars.sh
 
-# read config from the NOAA config file
-source $scriptDir/noaa.conf
+
+################## FINE TUNING #####################
+
+# directory for generated images
+imgdir="$recordingDir/noaa/img/"`date +"%Y/%m/%d/"`
+
+# directory for recorded raw and wav files
+recdir="$recordingDir/noaa/rec/"`date +"%Y/%m/%d/"`
+
+#
+# Sample rate, width of recorded signal - should include few kHz for doppler shift
+sample='48000'
+# Sample rate of the wav file. Shouldn't be changed
+wavrate='11025'
+
+#
+# Dongle index, is there any rtl_fm allowing passing serial of dongle?
+dongleIndex='0'
+
+# enchancements to apply to the pocessed images. See wxtoimg manual for available options
+enchancements=('MCIR-precip' 'HVC' 'MSA' 'therm' 'HVCT-precip')
+
+
+##################################################
+
 
 #fileNameCore, satellite, start, duration+towait, peak, freq
 
