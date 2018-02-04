@@ -10,6 +10,11 @@
 
 ./configure.sh
 
+
+echo "basedir_conf.py:"
+cat basedir_conf.py
+
+
 echo
 echo
 echo "******** Installing required packages"
@@ -85,7 +90,7 @@ cd kalibrate-rtl
 ./configure
 make
 sudo make install
-cd ../
+cd ../..
 
 
 echo
