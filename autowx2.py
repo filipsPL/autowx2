@@ -100,9 +100,13 @@ def genPassTable(howmany=20):
 
             for i in range(1,howmany):
                 transit = p.next()
-
-                if int(transit.peak()['elevation'])>=minElev:
-                    passTable[transit.start] = [satellite, int(transit.start + skipFirst), int(transit.duration() - skipFirst - skipLast), int(transit.peak()['elevation']), int(transit.peak()['azimuth']), priority]
+                
+                transitEnd = transit.start + transit.duration() - skipLast
+                
+                if not time.time() > transit.start + transit.duration() - skipLast - 1:  # esttimate the end of the transit, minus last 10 seconds
+                    if int(transit.peak()['elevation'])>=minElev:
+                        passTable[transit.start] = [satellite, int(transit.start + skipFirst), int(transit.duration() - skipFirst - skipLast), 
+                                                    int(transit.peak()['elevation']), int(transit.peak()['azimuth']), priority]
                     # transit.start - unix timestamp
         
         else:                   # fixed time recording
