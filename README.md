@@ -42,8 +42,18 @@ echo "blacklist dvb_usb_rtl28xxu" >>  /etc/modprobe.d/rtl-sdr-blacklist.conf
 - for more details, [see here](http://www.instructables.com/id/rtl-sdr-on-Ubuntu/)
 - for installation script on the Debian and Debian-like systems, see [the installation script](install.sh) :warning: use with care! inspect and tune before execution!
 
+# installation
 
-# how to use
+0. Check the section [hardware](#hardware-requirements) and [system requirements](#system-requirements)
+1. Fetch sources: `git clone --depth 1 git@github.com:filipsPL/autowx2.git`
+2. Inspect the script `install.sh`, modify if needed. In most cases, it should work out of the box (for debian and debian-like systems; tested on debian, ubuntu, mint and travis debian like linux)
+3. If you are fine with the above script, run it. :warning: use on your own risk!
+4. Edit the main config file `autowx2_conf.py`
+5. Edit your system's crontab file and add the `bin/update-keps.sh` script to it, eg: `0 4 * * * path/to/autowx2/bin/update-keps.sh 1> /dev/null 2>/dev/null`; you can also trigger it manually from time to time.
+6. Run the main program `autowx2.py`, wait for the next transit and marvel at the beautiful images (or other recordings)
+
+
+# configuration files and other programs
 
 ## files, subprograms and configs
 
@@ -58,7 +68,7 @@ autowx2_conf.py     - the config file
 
 ### autowx2_conf.py
 
-The config file of the main program.
+The config file of the main program, may be used also by the decoding modules. It is used by te *noaa* module.
 
 **satellitesData** - the dictionary (in the python style) of satellites to be observed and processed (eg., weather satellites) OR fixed times for recordings (eg., listening to the WeatherFax transmissions).
 - for the *satellites*, three values must be set:
@@ -123,7 +133,6 @@ noaa    - module for capturing weather data from NOAA satellites (see below)
 Module for capturing weather data from NOAA satellites.
 
 ```
-noaa.conf           - configuration file (bash style)
 noaa.sh             - the main module file (bash) - launches below files:
 noaa_record.sh      - recordinf of a sound via rtl_fm
 noaa_process.sh     - processing of the recorded wav file, generates maps etc.
