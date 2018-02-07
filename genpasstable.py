@@ -115,7 +115,7 @@ def listNextPasesHtml(passTable, howmany):
 
 def listNextPasesTxt(passTable, howmany):
     
-    txtTemplate = "%3s\t%10s\t%16s\t%9s\t%4s\t%3s\t%3s\t%10s\t%20s\n"
+    txtTemplate = "%3s\t%10s\t%16s\t%9s\t%4s\t%3s\t%6s\t%10s\t%20s\n"
     
     i=1
     output=""

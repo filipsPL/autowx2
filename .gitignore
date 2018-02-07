@@ -7,3 +7,4 @@ var/shifthistory.csv
 bin/sources/
 basedir_conf.py
 recordings
+bin/pymultimonaprs.confs/

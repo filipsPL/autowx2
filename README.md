@@ -113,6 +113,7 @@ Various auxiliary programs.
 
 ```
 aprs.sh             - aprs script to listen to and decode APRS data; to be run in free time
+pymultimonaprs.sh   - aprs iGate launcher (pymultimonaprs must be installed)
 kalibruj_initial.sh - calibrating script - initialization
 kalibruj.sh         - calibrating script - getting the drift
 update-keps.sh      - keplers updated; can/should be run from cron
@@ -146,6 +147,7 @@ Variable data.
 
 ```
 dongleshift.txt     - current dongle shift
+nextpass.*          - list and plot of the next passes
 tle                 - directory with tle data
 ```
 

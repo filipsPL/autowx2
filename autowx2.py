@@ -14,8 +14,12 @@ import subprocess
 import os
 import sys
 from _crontab import *
+from tendo import singleton # avoid two instancess
 
 from autowx2_conf import *  # configuration
+
+me = singleton.SingleInstance() # will sys.exit(-1) if other instance is running
+
 
 #import pprint   # to remove after debugging
 #pp = pprint.PrettyPrinter(indent=4)
@@ -230,10 +234,10 @@ def calibrate(dongleShift=dongleShift):
 
 def azimuth2dir(azimuth):
     ''' convert azimuth in degrees to wind rose directions (16 wings)'''
-    dirs = ["N", "NNE", "NE", "ENE",
-            "E", "ESE", "SE", "SSE", 
-            "S", "SSW", "SW", "WSW", 
-            "W", "WNW", "NW", "NNW", ]
+    dirs = ["N↑", "NNE↑↗", "NE↗", "ENE→↗",
+            "E→", "ESE→↘", "SE↘", "SSE↓↘", 
+            "S↓", "SSW↓↙", "SW↙", "WSW←↙", 
+            "W←", "WNW←↖", "NW↖", "NNW↑↖", ]
 
     part = int( float(azimuth)/360*16 )
     return dirs[part]
