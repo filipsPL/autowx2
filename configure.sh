@@ -1,7 +1,7 @@
 #!/bin/bash
 
 outfile="basedir_conf.py"
-pwdir=`pwd`
+pwdir=$(pwd)
 
 echo "# this is automaticaly generated script" > $outfile
 echo "# use configure.sh to generate the file" >> $outfile

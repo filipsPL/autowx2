@@ -4,8 +4,6 @@
 get the config file autowx2_conf and reports variables in a bash-like style
 '''
 
-from os import path
-
 from autowx2_conf import *  # configuration
 
 d = locals().copy()

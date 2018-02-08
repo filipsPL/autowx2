@@ -44,9 +44,13 @@ echo "blacklist dvb_usb_rtl28xxu" >>  /etc/modprobe.d/rtl-sdr-blacklist.conf
 
 # installation
 
+:warning: Tested for x86 and amd64 architectures. Still to be checked on a Raspberry Pi.
+
+## x86 and amd64
+
 0. Check the section [hardware](#hardware-requirements) and [system requirements](#system-requirements)
 1. Fetch sources: `git clone --depth 1 git@github.com:filipsPL/autowx2.git`
-2. Inspect the script `install.sh`, modify if needed. In most cases, it should work out of the box (for debian and debian-like systems; tested on debian, ubuntu, mint and travis debian like linux)
+2. Inspect the script `install.sh`, modify if needed. In most cases, it should work out of the box (for debian and debian-like systems; tested on debian, ubuntu, mint and travis debian like linux). Modify *wxtoimg* section to fetch sources that matches your architecture.
 3. If you are fine with the above script, run it. :warning: use at your own risk!
 4. Edit the main config file `autowx2_conf.py`
 5. Edit your system's crontab file and add the `bin/update-keps.sh` script to it, eg:<br/>`0 4 * * * path/to/autowx2/bin/update-keps.sh 1> /dev/null 2>/dev/null`<br/>you can also trigger it manually from time to time.

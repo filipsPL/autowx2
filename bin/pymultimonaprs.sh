@@ -7,14 +7,14 @@ source $scriptDir/basedir_conf.py
 source $baseDir/_listvars.sh
 
 
-logfile="$baseDir/recordings/aprs/`date +"%Y/%m"`/`date +"%Y%m%d"`.txt"
+logfile="$baseDir/recordings/aprs/$(date +"%Y/%m")/$(date +"%Y%m%d").txt"
 
-mkdir -p `dirname $logfile`
+mkdir -p $(dirname $logfile)
 
 duration=$1
 dongleShift=$2
 
-mkdir -p `dirname $logfile`
+mkdir -p $(dirname $logfile)
 
-timeout $duration pymultimonaprs -v -c $baseDir/bin/pymultimonaprs.confs/pymultimonaprs.json | tee -a $logfile
+timeout --kill-after=1 $duration pymultimonaprs -v -c $baseDir/bin/pymultimonaprs.confs/pymultimonaprs.json | tee -a $logfile
 

@@ -9,10 +9,9 @@
 import predict
 import time
 from datetime import datetime
-from time import gmtime, strftime
+from time import strftime
 import subprocess
 import os
-import sys
 from _crontab import *
 from tendo import singleton # avoid two instancess
 
@@ -105,7 +104,7 @@ def genPassTable(howmany=20):
             for i in range(1,howmany):
                 transit = p.next()
                 
-                transitEnd = transit.start + transit.duration() - skipLast
+                #transitEnd = transit.start + transit.duration() - skipLast
                 
                 if not time.time() > transit.start + transit.duration() - skipLast - 1:  # esttimate the end of the transit, minus last 10 seconds
                     if int(transit.peak()['elevation'])>=minElev:

@@ -28,5 +28,5 @@ wget -r http://www.pe0sat.vgnet.nl/kepler/mykepler.txt -O $TLEDIR/multi.txt
 rm $TLEDIR/all.txt
 cat $TLEDIR/*.txt > $TLEDIR/all.txt
 
-echo `date`
+date
 echo Updated

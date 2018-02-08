@@ -12,7 +12,7 @@ source $baseDir/_listvars.sh
 
 #### microconfiguration
 
-recdir="$recordingDir/fm/rec/"`date +"%Y/%m/"`
+recdir="$recordingDir/fm/rec/"$(date +"%Y/%m/")
 
 ### doing the job
 

@@ -5,7 +5,7 @@ source $scriptDir/basedir_conf.py
 
 echo $baseDir
 
-for line in `python $baseDir/_listvars.py`
+for line in $(python $baseDir/_listvars.py)
 do
     if echo $line | grep -F = &>/dev/null
     then

@@ -7,14 +7,14 @@ source $scriptDir/basedir_conf.py
 source $baseDir/_listvars.sh
 
 
-logfile="$baseDir/recordings/aprs/`date +"%Y/%m"`/`date +"%Y%m%d"`.txt"
+logfile="$baseDir/recordings/aprs/$(date +"%Y/%m")/$(date +"%Y%m%d").txt"
 
-mkdir -p `dirname $logfile`
+mkdir -p $(dirname $logfile)
 
 duration=$1
 dongleShift=$2
 
-mkdir -p `dirname $logfile`
+mkdir -p $(dirname $logfile)
 
 
-timeout $duration rtl_fm -f 144800000 -s 22050 -o 4 -p $dongleShift -g 49.6 | multimon-ng -a AFSK1200 -A -t raw - | tee -a $logfile
+timeout --kill-after=1 $duration rtl_fm -f 144800000 -s 22050 -o 4 -p $dongleShift -g 49.6 | multimon-ng -a AFSK1200 -A -t raw - | tee -a $logfile
