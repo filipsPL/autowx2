@@ -92,12 +92,36 @@ Sample `satellitesData` dictionary:
 
 ```
 satellitesData = {
-    'NOAA-18':      {'freq': '137912500', 'processWith': 'modules/noaa/noaa.sh', 'priority': 1 },
-    'NOAA-15':      {'freq': '137620000', 'processWith': 'modules/noaa/noaa.sh', 'priority': 1 },
-    'NOAA-19':      {'freq': '137100000', 'processWith': 'modules/noaa/noaa.sh', 'priority': 1 },
-    'ISS':   {'freq': '145800000', 'processWith': 'modules/iss/iss_voice.sh', 'priority': 3 },   # voice channel
-    'PR3_NEWS': {'freq': '98988000', 'processWith': 'modules/fm/fm.sh', 'fixedTime': '0 7-23 * * *', 'fixedDuration': '300', 'priority': 2 },
+    'NOAA-18': {
+        'freq': '137912500',
+        'processWith': 'modules/noaa/noaa.sh',
+        'priority': 1},
+    'NOAA-15': {
+        'freq': '137620000',
+        'processWith': 'modules/noaa/noaa.sh',
+        'priority': 1},
+    'NOAA-19': {
+        'freq': '137100000',
+        'processWith': 'modules/noaa/noaa.sh',
+        'priority': 1},
+    'ISS': {  
+      # voice channel
+        'freq': '145800000',
+        'processWith': 'modules/iss/iss_voice.sh',
+        'priority': 5},
+    'PR3_NEWS': {
+        'freq': '98988000',
+        'processWith': 'modules/fm/fm.sh',
+        'fixedTime': '0 7-23 * * *',
+        'fixedDuration': 300,
+        'priority': 2},
+    'LILACSAT-1': {
+        'freq': '436510000',
+        'processWith': 'modules/iss/iss_voice.sh',
+        'priority': 3},
+
 }
+
 ```
 
 - :warning: TODO: dynamic priority calculation basing on the transit features, like azimuth or altitude.
@@ -188,3 +212,7 @@ tle                 - directory with tle data
 - [x] noaa.sh
   - [x] noaa_record.sh
   - [x] noaa_process.sh
+
+# random notes
+
+- `autopep8 --in-place --aggressive --aggressive foo.py`

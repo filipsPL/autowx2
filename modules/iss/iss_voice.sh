@@ -12,7 +12,7 @@ source $baseDir/_listvars.sh
 
 #### microconfiguration
 
-recdir="$recordingDir/iss/rec/"$(date +"%Y/%m/%d/")
+recdir="$recordingDir/iss/rec/"$(date +"%Y/%m/")
 
 ### doing the job
 
@@ -44,4 +44,12 @@ echo freq="$7"
 
 
 ## M = fm or wbfm
+# command1="timeout $duration rtl_fm -f $freq -M fm -g 49.6"
+# command2="lame -r -s 32 -m m - $recdir/$fileNameCore.mp3"
+# command3="sox -t raw -r $sample -es -b 16 -c 1 -V1 -n spectrogram - -o $recdir/$fileNameCore-spectrogram.png"
+# { "$command1" 2>&3 | "$command2"; } 3>&1 1>&2 | "$command3"
+
+
 timeout $duration rtl_fm -f $freq -M fm -g 49.6 | lame -r -s 32 -m m - $recdir/$fileNameCore.mp3
+
+sox -n spectrogram  "$recdir/$fileNameCore.mp3" -o $recdir/$fileNameCore-spectrogram.png"
