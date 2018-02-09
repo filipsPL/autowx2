@@ -27,8 +27,7 @@ satellitesData = {
         'freq': '137100000',
         'processWith': 'modules/noaa/noaa.sh',
         'priority': 1},
-    'ISS': {  
-      # voice channel
+    'ISS': { # voice channel
         'freq': '145800000',
         'processWith': 'modules/iss/iss_voice.sh',
         'priority': 5},
@@ -38,10 +37,6 @@ satellitesData = {
         'fixedTime': '0 12 * * *',
         'fixedDuration': 300,
         'priority': 10},
-    'ISS': { # ARISS APRS Packet System Currently On ISS Non-Operational
-        'freq': '145825000',
-        'processWith': 'modules/iss/iss_aprs.sh',
-        'priority': 15},
     'FOX-1A': {  # http://www.dk3wn.info/p/?cat=80
         'freq': '145980000',
         'processWith': 'modules/iss/iss_voice.sh',
