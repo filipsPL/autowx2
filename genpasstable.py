@@ -19,7 +19,7 @@ matplotlib.use('Agg')  # Force matplotlib to not use any Xwindows backend.
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as font_manager
 import matplotlib.dates
-from matplotlib.dates import HOURLY, DateFormatter, rrulewrapper, RRuleLocator
+from matplotlib.dates import DateFormatter, rrulewrapper, RRuleLocator
 import numpy as np
 
 
@@ -58,7 +58,7 @@ def CreateGanttChart(listNextPasesListList):
         task_dates[task] = customDates[i]
     fig = plt.figure(figsize=(8, 5))
     ax = fig.add_subplot(111)
-    for i in range(len(ylabels)):
+    for i, ylabel in enumerate(ylabels):
         ylabelIN, startdateIN, enddateIN = listNextPasesListList[i]
         start_date, end_date = task_dates[ylabels[i]]
         ax.barh(

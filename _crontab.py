@@ -68,7 +68,7 @@ ability. There are tests...'''
 
 if sys.version_info >= (3, 0):
     _number_types = (int, float)
-    xrange = range
+    #xrange = range
 else:
     _number_types = (int, long, float)
 
