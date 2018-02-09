@@ -2,4 +2,4 @@
 
 ## calibrating of the dongle 
 
-kal -s GSM900 -e 1
+kal -s GSM900 -e 0

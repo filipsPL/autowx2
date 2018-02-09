@@ -11,7 +11,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 <!--- [![ghit.me](https://ghit.me/badge.svg?repo=filipsPL/autowx2)](https://ghit.me/repo/filipsPL/autowx2) -->
 
-[![badge-travis](https://api.travis-ci.org/filipsPL/autowx2.svg?branch=master)](https://travis-ci.org/filipsPL/autowx2) ![badge-email](docs/badge-email.png)
+[![badge-travis](https://api.travis-ci.org/filipsPL/autowx2.svg?branch=master)](https://travis-ci.org/filipsPL/autowx2) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bb77483f88414ef799621247bd186795)](https://www.codacy.com/app/filipsPL/autowx2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=filipsPL/autowx2&amp;utm_campaign=Badge_Grade) ![badge-email](docs/badge-email.png)
 
 
 ## used libraries and acknowledgements
@@ -181,37 +181,7 @@ tle                 - directory with tle data
 
 # to do
 
-## to do
-
-- [ ] good README.md file :running: in progress
-- [ ] logs to file, not only to screen
-- [ ] plots of the dongle shift drift
-- [ ] average dongle shifts from the last n measurements 
-- [ ] coś lepszego niż `kal`, żeby było bardziej idioten proof i error proof
-- [ ] coś do robienia w wolnej chwili
-- [ ] efficiently kill aprs or other app from the python - [ ] now it remains running in te background... (multimon)
-- [ ] ISS / rtl_fm parameters for recording
-- [ ] any other cool satellites to record and process?
-- [ ] switch off dongle calibration and move it to a separate external file
-- [ ] gallery from images + descriptions
-- [ ] dynamic priority calculation basing on the transit features, like azimuth or altitude.
-
-## to test
-
- 
-
-## done!
-
-- [x] recording options
-- [x] bash scripts global config file
-- [x] if newdongleShift != '' # WARNING and newdongleShift is numeric:
-- [x] priorities of recordings if the time of recording overlap
-- [x] run recordings on the specified fixed time (for weather fax, for example)
-- [x] pass list generator with a Gantt plot
-- [x] move all recordings to the bash file
-- [x] noaa.sh
-  - [x] noaa_record.sh
-  - [x] noaa_process.sh
+- moved to the [issues section](https://github.com/filipsPL/autowx2/issues/)
 
 # random notes
 
