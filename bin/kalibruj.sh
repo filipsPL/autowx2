@@ -2,12 +2,19 @@
 
 ## calibrating of the dongle 
 
-channel=23
+# read the global configuration file autowx2_conf.py via the bash/python configuration parser
+# do not change the following three lines
+scriptDir="$(dirname "$(realpath "$0")")"
+source $scriptDir/basedir_conf.py > /dev/null
+source $baseDir/_listvars.sh > /dev/null
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-shiftFile="$DIR/../var/dongleshift.txt"
-shiftHistory="$DIR/../var/shifthistory.csv"
+shiftFile="$baseDir/var/dongleshift.txt"
+channelFile="$baseDir/var/gsm_channel.txt"
+shiftHistory="$baseDir/var/shifthistory.csv"
+
+channel=$(cat $channelFile)
+
 
 #-----------------------------------------------#
 
