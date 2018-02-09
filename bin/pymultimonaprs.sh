@@ -14,7 +14,7 @@ mkdir -p $(dirname $logfile)
 duration=$1
 dongleShift=$2
 
-echo "Running for $duration with dongleshift $dongleshift"
+echo "Running for $duration with dongleshift $dongleShift"
 
 mkdir -p $(dirname $logfile)
 

@@ -31,6 +31,7 @@ dongleIndex='0'
 enchancements=('MCIR-precip' 'HVC' 'MSA' 'therm' 'HVCT-precip')
 
 
+
 ##################################################
 
 
@@ -51,6 +52,11 @@ echo "duration=$duration"
 echo "peak=$peak"
 echo "azimuth=$azimuth"
 echo "freq=$freq"
+
+echo "sample=$sample"
+echo "wavrate=$wavrate"
+echo "dongleIndex=$dongleIndex"
+echo "enchancements=${enchancements}"
 
 
 #-------------------------------#

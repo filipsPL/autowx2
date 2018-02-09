@@ -43,6 +43,9 @@ echo "peak=$peak"
 echo "azimuth=$azimuth"
 echo "freq=$freq"
 
+echo "imgdir=$imgdir"
+echo "recdir=$recdir"
+
 
 #
 # execute processing script and passing all arguments to the script
