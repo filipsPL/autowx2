@@ -44,6 +44,14 @@ peak="$5"
 azimuth="$6"
 freq="$7"
 
+echo "fileNameCore=$fileNameCore"
+echo "satellite=$satellite"
+echo "start=$start"
+echo "duration=$duration"
+echo "peak=$peak"
+echo "azimuth=$azimuth"
+echo "freq=$freq"
+
 
 #-------------------------------#
 # to test the processing part:

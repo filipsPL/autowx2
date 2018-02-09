@@ -14,6 +14,8 @@ mkdir -p $(dirname $logfile)
 duration=$1
 dongleShift=$2
 
+echo "Running for $duration with dongleshift $dongleshift"
+
 mkdir -p $(dirname $logfile)
 
 timeout --kill-after=1 $duration pymultimonaprs -v -c $baseDir/bin/pymultimonaprs.confs/pymultimonaprs.json | tee -a $logfile

@@ -26,6 +26,15 @@ peak="$5"
 azimuth="$6"
 freq="$7"
 
+echo "fileNameCore=$fileNameCore"
+echo "satellite=$satellite"
+echo "start=$start"
+echo "duration=$duration"
+echo "peak=$peak"
+echo "azimuth=$azimuth"
+echo "freq=$freq"
+
+
 # fixed values for tests
 #freq="98988000"
 #duration="10s"

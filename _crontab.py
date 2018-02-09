@@ -216,7 +216,8 @@ class _Matcher(object):
         self.allowed = frozenset(self.allowed)
 
     def __call__(self, v, dt):
-        for i, x in enumerate(self.split):
+        #for i, x in enumerate(self.split):
+        for x in self.split:
             if x == 'l':
                 if v == _end_of_month(dt).day:
                     return True

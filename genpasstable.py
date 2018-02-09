@@ -19,7 +19,7 @@ matplotlib.use('Agg')  # Force matplotlib to not use any Xwindows backend.
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as font_manager
 import matplotlib.dates
-from matplotlib.dates import DateFormatter, rrulewrapper, RRuleLocator
+from matplotlib.dates import DateFormatter, rrulewrapper
 import numpy as np
 
 
@@ -172,8 +172,8 @@ def listNextPasesList(passTable, howmany):
     output = []
     for satelitePass in passTable[0:howmany]:
         satellite, start, duration, peak, azimuth = satelitePass
-        freq = satellitesData[satellite]['freq']
-        processWith = satellitesData[satellite]['processWith']
+        #freq = satellitesData[satellite]['freq']
+        #processWith = satellitesData[satellite]['processWith']
 
         output.append([satellite, start, start + duration])
     return output

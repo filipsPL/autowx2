@@ -34,7 +34,8 @@ def mkdir_p(outdir):
         os.makedirs(outdir)
 
 
-class bc:
+class bc():
+    """Colors made easy"""
     HEADER = '\033[95m'
     CYAN = '\033[96m'
     YELLOW = '\033[93m'
@@ -68,7 +69,7 @@ def getTleData(satellite):
     for i, line in enumerate(tledata):
         if satellite in line:
             for n in tledata[i:i + 3]:
-                tleData.append(n.strip('\r\n').rstrip()),
+                tleData.append(n.strip('\r\n').rstrip())
             break
     if len(tleData) > 0:
         return tleData
