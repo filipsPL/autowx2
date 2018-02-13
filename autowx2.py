@@ -248,7 +248,7 @@ def getDefaultDongleShift(dongleShift=dongleShift):
 
 def calibrate(dongleShift=dongleShift):
     '''calculate the ppm for the device'''
-    cmdline = [baseDir + 'bin/kalibruj.sh']
+    cmdline = [ calibrationTool ]
     newdongleShift = justRun(cmdline).strip()
     if newdongleShift != '' and is_number(newdongleShift):
         log("Recalculated dongle shift is: " + str(newdongleShift) + " ppm")

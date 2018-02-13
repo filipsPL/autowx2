@@ -50,6 +50,9 @@ echo "freq=$freq"
 # { "$command1" 2>&3 | "$command2"; } 3>&1 1>&2 | "$command3"
 
 
-timeout $duration rtl_fm -f $freq -M fm -g 49.6 | lame -r -s 32 -m m - $recdir/$fileNameCore.mp3
+###timeout $duration rtl_fm -f $freq -M fm -g 49.6 | sox -traw -r24k -es -b16 -c1 -V1 - -tmp3 "$recdir/$fileNameCore.mp3"
 
-sox -n spectrogram  "$recdir/$fileNameCore.mp3" -o $recdir/$fileNameCore-spectrogram.png"
+timeout $duration rtl_fm -f $freq -M fm -g 49.6 | lame -r -s 32 -m m - "$recdir/$fileNameCore.mp3"
+sox "$recdir/$fileNameCore.mp3" -n spectrogram  -o "$recdir/$fileNameCore-spectrogram.png"
+$baseDir/bin/multidemodulator.sh "$recdir/$fileNameCore.mp3" > "$recdir/$fileNameCore-demodulated.log"
+

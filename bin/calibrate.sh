@@ -26,9 +26,7 @@ if ! [[ $recentShift =~ $re ]] ; then
    recentShift=0
 fi
 
-#kal -s GSM900 -e $recentShift
-
-newShift=$(kal -c $channel -g 49.6 -e $recentShift 2> /dev/null | tail -1 | cut -d " " -f 4)
+newShift=$(timeout 100 kal -c $channel -g 49.6 -e $recentShift 2> /dev/null | tail -1 | cut -d " " -f 4)
 echo $newShift | tee $shiftFile
 
 echo $(date +"%Y%m%d_%H:%M:%S") $(date +"%s")    $newShift >> $shiftHistory

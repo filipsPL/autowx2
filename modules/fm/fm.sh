@@ -37,7 +37,7 @@ echo "freq=$freq"
 
 
 # fixed values for tests
-#freq="98988000"
+#freq="98796500"
 #duration="10s"
 #fileNameCore="trojka"
 

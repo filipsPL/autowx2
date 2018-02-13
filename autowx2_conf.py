@@ -32,7 +32,7 @@ satellitesData = {
         'processWith': 'modules/iss/iss_voice.sh',
         'priority': 5},
     'PR3_NEWS': {
-        'freq': '98988000',
+        'freq': '98796500',
         'processWith': 'modules/fm/fm.sh',
         'fixedTime': '0 12 * * *',
         'fixedDuration': 300,
@@ -107,8 +107,8 @@ ganttNextPassList = baseDir + 'var/nextpass.png'
 # script tha will be used whle waiting for the next pass; set False if we just want to sleep
 # by default, this script will get the parameter of duration of the time to be run and the recent dongleShift
 # scriptToRunInFreeTime = False				# does nothing
-# scriptToRunInFreeTime = baseDir + "bin/aprs.sh" 	# APRS monitor
-scriptToRunInFreeTime = baseDir + "bin/pymultimonaprs.sh" # APRS iGate,
+scriptToRunInFreeTime = baseDir + "bin/aprs.sh" 	# APRS monitor
+#scriptToRunInFreeTime = baseDir + "bin/pymultimonaprs.sh" # APRS iGate,
 # pymultimonaprs must be installed, see: https://github.com/asdil12/pymultimonaprs/
 
 
@@ -123,6 +123,12 @@ tleFileName = tleDir + tleFile
 
 # dongle shift file
 dongleShiftFile = baseDir + "var/dongleshift.txt"
+
+# dongle calibration program
+# should return the dongle ppm shift
+
+#calibrationTool = baseDir + "bin/calibrate.sh"         # uses predefined GSM channel
+calibrationTool = baseDir + "bin/calibrate_full.sh"     # check for the best GSM channel and calibrates
 
 
 # DERIVATIVES #############################
