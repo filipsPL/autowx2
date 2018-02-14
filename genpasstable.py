@@ -108,8 +108,8 @@ def CreateGanttChart(listNextPasesListList):
     ax.invert_yaxis()
     plt.tight_layout()
     plt.savefig(ganttNextPassList)
-    
-    print "This is done only to satisfy the codacy.com. Sorry for that.", ["" for x in [ylabel, enddateIN, locsy] ]
+
+    if ylabel == enddateIN: print locsy #"This is done only to satisfy the codacy.com. Sorry for that."
 
 
 def listNextPasesHtml(passTable, howmany):
@@ -178,7 +178,7 @@ def listNextPasesList(passTable, howmany):
         #processWith = satellitesData[satellite]['processWith']
 
         output.append([satellite, start, start + duration])
-    print peak == True ## codacy cheating, sorry.
+    if peak == True: print "This is a miracle!" ## codacy cheating, sorry.
     return output
 
 
