@@ -4,6 +4,7 @@ wyslij-github.sh
 *.kate-swp
 tests
 var/shifthistory.csv
+var/tle/
 bin/sources/
 basedir_conf.py
 recordings
