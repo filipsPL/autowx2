@@ -107,10 +107,10 @@ ganttNextPassList = baseDir + 'var/nextpass.png'
 # script tha will be used whle waiting for the next pass; set False if we just want to sleep
 # by default, this script will get the parameter of duration of the time to be run and the recent dongleShift
 # scriptToRunInFreeTime = False				# does nothing
-scriptToRunInFreeTime = baseDir + "bin/aprs.sh" 	# APRS monitor
-#scriptToRunInFreeTime = baseDir + "bin/pymultimonaprs.sh" # APRS iGate,
+# scriptToRunInFreeTime = baseDir + "bin/aprs.sh" 	# APRS monitor
+# scriptToRunInFreeTime = baseDir + "bin/pymultimonaprs.sh" # APRS iGate,
 # pymultimonaprs must be installed, see: https://github.com/asdil12/pymultimonaprs/
-
+scriptToRunInFreeTime = "bin/dump1090.sh"
 
 # Dongle PPM shift, hopefully this will change to reflect different PPM on freq
 dongleShift = '0'
