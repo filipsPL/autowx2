@@ -5,7 +5,6 @@ cache:
   pip: true
   directories:
     - bin/sources/
- 
 
 python:
 - 2.7
@@ -20,5 +19,7 @@ script:
  - wxtoimg -V
  - wxmap -V
  - ./genpasstable.py
+ - bin/heatmap.py --help
+ - bin/dump1090-stream-parser.py --help
  
 
