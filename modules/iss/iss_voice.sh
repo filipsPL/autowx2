@@ -54,5 +54,6 @@ echo "freq=$freq"
 
 timeout $duration rtl_fm -f $freq -M fm -g 49.6 | lame -r -s 32 -m m - "$recdir/$fileNameCore.mp3"
 sox "$recdir/$fileNameCore.mp3" -n spectrogram  -o "$recdir/$fileNameCore-spectrogram.png"
+sox "$recdir/$fileNameCore.mp3" "$recdir/$fileNameCore-silence.mp3" silence -l 1 0.3 10% -1 2.0 10%
 $baseDir/bin/multidemodulator.sh "$recdir/$fileNameCore.mp3" > "$recdir/$fileNameCore-demodulated.log"
 

@@ -127,8 +127,8 @@ dongleShiftFile = baseDir + "var/dongleshift.txt"
 # dongle calibration program
 # should return the dongle ppm shift
 
-#calibrationTool = baseDir + "bin/calibrate.sh"         # uses predefined GSM channel
-calibrationTool = baseDir + "bin/calibrate_full.sh"     # check for the best GSM channel and calibrates
+calibrationTool = baseDir + "bin/calibrate.sh"         # uses predefined GSM channel
+#calibrationTool = baseDir + "bin/calibrate_full.sh"     # check for the best GSM channel and calibrates
 
 
 # DERIVATIVES #############################

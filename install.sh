@@ -98,6 +98,8 @@ sudo make install
 
 kal -h
 
+#git clone git@github.com:filipsPL/heatmap.git
+
 
 echo
 echo

@@ -21,6 +21,14 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 - [pypredict](https://github.com/nsat/pypredict)
 - [wxtoimg](http://www.wxtoimg.com/downloads/)
 
+These scripts may be used by the autowx2 in the free time, e.g., to track airplanes, capture APRS signals etc:
+
+- [dump1090](https://github.com/antirez/dump1090) - the classic version, by antirez
+- [dump1090-stream-parser.py](https://github.com/yanofsky/dump1090-stream-parser) by yanofsky
+- [heatmap](https://github.com/filipsPL/heatmap) a fork of the great heatmap by sethoscope, modified by filipsPL to support sqlite
+- [multimon-ng](https://github.com/sq5bpf/multimon-ng-stqc) fork by sq5bpf with STQC decoding support
+
+
 # hardware requirements
 
 - usb dvbt dongle, like RTL2832 DVB-T tuner

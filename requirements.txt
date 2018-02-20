@@ -2,3 +2,5 @@ pypredict
 matplotlib
 numpy
 tendo
+osmviz
+sqlite3
