@@ -16,4 +16,4 @@ dongleShift=$2
 
 
 timeout --kill-after=1 $duration dump1090 --quiet --metric --net --aggressive --ppm $dongleShift &
-timeout --kill-after=1 $duration /home/filips/github/dump1090-heatmaps/dump1090-stream-parser.py --database $database
+timeout --kill-after=1 $duration $baseDir/bin/dump1090-stream-parser.py --database $database
