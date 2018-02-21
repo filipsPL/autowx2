@@ -106,7 +106,7 @@ echo
 echo
 
 cd $baseDir/bin/
-wget https://raw.githubusercontent.com/filipsPL/heatmap/master/heatmap.py
+wget https://raw.githubusercontent.com/filipsPL/heatmap/master/heatmap.py -O $baseDir/bin/heatmap.py
 
 
 
