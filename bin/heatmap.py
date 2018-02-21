@@ -22,8 +22,17 @@ from __future__ import print_function
 import sys
 import logging
 import math
-from PIL import Image
-from PIL import ImageColor
+
+try:
+    from PIL import Image
+    from PIL import ImageColor
+except:
+    import Image
+    import ImageColor
+
+#from PIL import Image
+#from PIL import ImageColor
+
 from itertools import chain
 import tempfile
 import os.path
