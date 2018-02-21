@@ -98,7 +98,16 @@ sudo make install
 
 kal -h
 
-#git clone git@github.com:filipsPL/heatmap.git
+
+echo
+echo
+echo "******** Getting auxiliary programs"
+echo
+echo
+
+cd $baseDir/bin/
+wget https://raw.githubusercontent.com/filipsPL/heatmap/master/heatmap.py
+
 
 
 echo
