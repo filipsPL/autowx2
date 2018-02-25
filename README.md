@@ -2,7 +2,8 @@
 
 The set of scripts for automatic processing of the satellite data (like capturing of the weather APT images from NOAA satellites) and fixed time recordings (like WeatherFaxes).
 
-![image](docs/NOAA19-HVCT.jpg) ![image](docs/NOAA19-therm.jpg) 
+![image](docs/NOAA19-HVCT.jpg) ![image](docs/NOAA19-therm.jpg) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2?ref=badge_shield)
+
 
 This is a rewritten and fine-tuned version of tools for the automatic weather satellite images capturing. Most directly it bases on cyber-atomus' [autowx](https://github.com/cyber-atomus/autowx) and my fork of autowx. The main differences between this project **autowx2** and previously created tools:
 - high modularity - all recording and processing are done by separate scripts (modules? plugins?), which can be easily configured to meet one's needs. The main module (called *noaa*) is devoted to the capture of weather data from the NOAA satellites, but with other modules (i.e., *ISS* voice) one can record voice communication from the satellite (tested for ISS :tada: !).
@@ -194,3 +195,7 @@ tle                 - directory with tle data
 # random notes
 
 - `autopep8 --in-place --aggressive --aggressive foo.py`
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2?ref=badge_large)
