@@ -11,7 +11,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 <!--- [![ghit.me](https://ghit.me/badge.svg?repo=filipsPL/autowx2)](https://ghit.me/repo/filipsPL/autowx2) -->
 
-[![badge-travis](https://api.travis-ci.org/filipsPL/autowx2.svg?branch=master)](https://travis-ci.org/filipsPL/autowx2) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bb77483f88414ef799621247bd186795)](https://www.codacy.com/app/filipsPL/autowx2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=filipsPL/autowx2&amp;utm_campaign=Badge_Grade) ![badge-email](docs/badge-email.png)
+[![badge-travis](https://api.travis-ci.org/filipsPL/autowx2.svg?branch=master)](https://travis-ci.org/filipsPL/autowx2) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bb77483f88414ef799621247bd186795)](https://www.codacy.com/app/filipsPL/autowx2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=filipsPL/autowx2&amp;utm_campaign=Badge_Grade) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2?ref=badge_shield) ![badge-email](docs/badge-email.png)
 
 
 ## used libraries and acknowledgements
@@ -26,6 +26,7 @@ These scripts may be used by the autowx2 in the free time, e.g., to track airpla
 - [dump1090](https://github.com/antirez/dump1090) - the classic version, by antirez
 - [dump1090-stream-parser.py](https://github.com/yanofsky/dump1090-stream-parser) by yanofsky
 - [heatmap](https://github.com/filipsPL/heatmap) a fork of the great heatmap by sethoscope, modified by filipsPL to support sqlite
+  - [osmviz](http://cbick.github.io/osmviz/html/)
 - [multimon-ng](https://github.com/sq5bpf/multimon-ng-stqc) fork by sq5bpf with STQC decoding support
 
 
