@@ -27,8 +27,10 @@ satellitesData = {
         'freq': '137100000',
         'processWith': 'modules/noaa/noaa.sh',
         'priority': 1},
-    'ISS': { # voice channel
-        'freq': '145800000',
+    'ISS': {
+        #'freq': '145800000',  # FM U/v VOICE Repeater (Worldwide) and FM SSTV downlink (Worldwide) [OK]
+        'freq': '143625000',  # FM VHF-1 downlink. Main Russian communications channel. Often active over Moskow. [ ]
+        #'freq': '145825000', # APRS -- AX.25 1200 Bd AFSK Packet Radio (Worldwide) Downlink [ ]
         'processWith': 'modules/iss/iss_voice.sh',
         'priority': 5},
     'PR3_NEWS': {
@@ -107,10 +109,10 @@ ganttNextPassList = baseDir + 'var/nextpass.png'
 # script tha will be used whle waiting for the next pass; set False if we just want to sleep
 # by default, this script will get the parameter of duration of the time to be run and the recent dongleShift
 # scriptToRunInFreeTime = False				# does nothing
-# scriptToRunInFreeTime = baseDir + "bin/aprs.sh" 	# APRS monitor
+scriptToRunInFreeTime = baseDir + "bin/aprs.sh" 	# APRS monitor
 # scriptToRunInFreeTime = baseDir + "bin/pymultimonaprs.sh" # APRS iGate,
 # pymultimonaprs must be installed, see: https://github.com/asdil12/pymultimonaprs/
-scriptToRunInFreeTime = "bin/dump1090.sh"
+#scriptToRunInFreeTime = "bin/dump1090.sh"
 
 # Dongle PPM shift, hopefully this will change to reflect different PPM on freq
 dongleShift = '0'
