@@ -1,13 +1,13 @@
 # autowx2
 
-The set of scripts for automatic processing of the satellite data (like capturing of the weather APT images from NOAA satellites) and fixed time recordings (like WeatherFaxes).
+**autowx2** is the python program for schedule satellite and ground recordings with SDR dongle. Bundled plugins include scripts for processing weather APT images from NOAA satellites and ISS voice communication recordings.
 
 ![image](docs/NOAA19-HVCT.jpg) ![image](docs/NOAA19-therm.jpg) 
 
 This is a rewritten and fine-tuned version of tools for the automatic weather satellite images capturing. Most directly it bases on cyber-atomus' [autowx](https://github.com/cyber-atomus/autowx) and my fork of autowx. The main differences between this project **autowx2** and previously created tools:
 - high modularity - all recording and processing are done by separate scripts (modules? plugins?), which can be easily configured to meet one's needs. The main module (called *noaa*) is devoted to the capture of weather data from the NOAA satellites, but with other modules (i.e., *ISS* voice) one can record voice communication from the satellite (tested for ISS :tada: !).
 - configurability - most (all?) variables can be set up in the config file. For both: the main program and the NOAA module.
-- flexibility - it can be set up to record satelite transmissions based on the passing predictions as well as fixed time recordings, configured via cron-like syntax.
+- flexibility - it can be set up to record satellite transmissions based on the passing predictions as well as fixed time recordings, configured via cron-like syntax.
 - simplicity (not sure if this is true). List of observed satellites is defined in one place only (the config file) and can be easily modified.
 - efficiency - program some tasks to do between scheduled transmissions (see below)
 
@@ -15,7 +15,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 [![badge-travis](https://api.travis-ci.org/filipsPL/autowx2.svg?branch=master)](https://travis-ci.org/filipsPL/autowx2) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bb77483f88414ef799621247bd186795)](https://www.codacy.com/app/filipsPL/autowx2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=filipsPL/autowx2&amp;utm_campaign=Badge_Grade) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2?ref=badge_shield) ![badge-email](docs/badge-email.png)
 
-**autowx2** was tested and successfuly applied to schedule recordings of:
+**autowx2** was tested and successfully applied to schedule recordings of:
 - [x] NOAA weather satellites
 - [x] ISS transmissions
 - [x] Fox-1B satellite transmissions
