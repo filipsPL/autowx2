@@ -22,7 +22,7 @@ echo
 echo "******** Installing required packages"
 echo
 echo
-
+sudo apt-get update
 sudo apt-get install rtl-sdr git libpulse-dev qt4-qmake fftw3 libc6 libfontconfig1 libx11-6 libxext6 libxft2 libusb-1.0-0-dev \
 libavahi-client-dev libavahi-common-dev libdbus-1-dev libfftw3-long3 libfftw3-single3 libpulse-mainloop-glib0 librtlsdr0 librtlsdr-dev \
 libfftw3-dev  libfftw3-double3 libfftw3-quad3 lame sox libsox-fmt-mp3 libtool automake python-pil python-imaging
@@ -53,7 +53,8 @@ echo
 # # sudo dpkg -i wxtoimg_2.10.11-1_i386.deb	# to finish the installation
 # rm wxtoimg_2.10.11-1_i386.deb
 
-wget http://www.wxtoimg.com/downloads/wxtoimg-linux64-2.10.11-1.tar.gz
+#wget http://www.wxtoimg.com/downloads/wxtoimg-linux64-2.10.11-1.tar.gz
+wget https://wxtoimgrestored.xyz/downloads/wxtoimg-linux64-2.10.11-1.tar.gz
 gunzip < wxtoimg-linux64-2.10.11-1.tar.gz | sudo sh -c "(cd /; tar -xvf -)"
 #rm wxtoimg-linux64-2.10.11-1.tar.gz
 
