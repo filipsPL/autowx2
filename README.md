@@ -2,7 +2,7 @@
 
 **autowx2** is the python program for schedule satellite and ground recordings with SDR dongle. Bundled plugins include scripts for processing weather APT images from NOAA satellites and ISS voice communication recordings.
 
-![image](docs/NOAA19-HVCT.jpg) ![image](docs/NOAA19-therm.jpg) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2?ref=badge_shield)
+![image](docs/NOAA19-HVCT.jpg) ![image](docs/NOAA19-therm.jpg)
 
 
 This is a rewritten and fine-tuned version of tools for the automatic weather satellite images capturing. Most directly it bases on cyber-atomus' [autowx](https://github.com/cyber-atomus/autowx) and my fork of autowx. The main differences between this project **autowx2** and previously created tools:
