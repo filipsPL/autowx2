@@ -32,25 +32,25 @@ satellitesData = {
         'freq': '143625000',  # FM VHF-1 downlink. Main Russian communications channel. Often active over Moskow. [ ]
         #'freq': '145825000', # APRS -- AX.25 1200 Bd AFSK Packet Radio (Worldwide) Downlink [ ]
         'processWith': 'modules/iss/iss_voice.sh',
-        'priority': 5},
-    'PR3_NEWS': {
-        'freq': '98796500',
-        'processWith': 'modules/fm/fm.sh',
-        'fixedTime': '0 12 * * *',
-        'fixedDuration': 300,
-        'priority': 10},
-    'FOX-1A': {  # http://www.dk3wn.info/p/?cat=80
-        'freq': '145980000',
-        'processWith': 'modules/iss/iss_voice.sh',
-        'priority': 4},
-    'FOX-1D': {  # http://www.dk3wn.info/p/?cat=80
-        'freq': '145880000',
-        'processWith': 'modules/iss/iss_voice.sh',
-        'priority': 4},
-    'FOX-1B': {  # http://www.dk3wn.info/p/?cat=80
-        'freq': '145960000',
-        'processWith': 'modules/iss/iss_voice.sh',
-        'priority': 4},
+        'priority': 3},
+#    'PR3_NEWS': {
+#        'freq': '98796500',
+#        'processWith': 'modules/fm/fm.sh',
+#        'fixedTime': '0 12 * * *',
+#        'fixedDuration': 300,
+#        'priority': 10},
+    #'FOX-1A': {  # http://www.dk3wn.info/p/?cat=80
+        #'freq': '145980000',
+        #'processWith': 'modules/iss/iss_voice.sh',
+        #'priority': 4},
+    #'FOX-1D': {  # http://www.dk3wn.info/p/?cat=80
+        #'freq': '145880000',
+        #'processWith': 'modules/iss/iss_voice.sh',
+        #'priority': 4},
+    #'FOX-1B': {  # http://www.dk3wn.info/p/?cat=80
+        #'freq': '145960000',
+        #'processWith': 'modules/iss/iss_voice.sh',
+        #'priority': 4},
 
 }
 
@@ -109,10 +109,12 @@ ganttNextPassList = baseDir + 'var/nextpass.png'
 # script tha will be used whle waiting for the next pass; set False if we just want to sleep
 # by default, this script will get the parameter of duration of the time to be run and the recent dongleShift
 # scriptToRunInFreeTime = False				# does nothing
-scriptToRunInFreeTime = baseDir + "bin/aprs.sh" 	# APRS monitor
-# scriptToRunInFreeTime = baseDir + "bin/pymultimonaprs.sh" # APRS iGate,
+#scriptToRunInFreeTime = baseDir + "bin/aprs.sh" 	# APRS monitor
+scriptToRunInFreeTime = baseDir + "bin/radiosonde_auto_rx.sh" # radiosonde tracker, see https://github.com/projecthorus/radiosonde_auto_rx
+#scriptToRunInFreeTime = baseDir + "bin/pymultimonaprs.sh" # APRS iGate,
+
 # pymultimonaprs must be installed, see: https://github.com/asdil12/pymultimonaprs/
-#scriptToRunInFreeTime = "bin/dump1090.sh"
+#scriptToRunInFreeTime = baseDir + "bin/dump1090.sh"
 
 # Dongle PPM shift, hopefully this will change to reflect different PPM on freq
 dongleShift = '0'
@@ -129,8 +131,8 @@ dongleShiftFile = baseDir + "var/dongleshift.txt"
 # dongle calibration program
 # should return the dongle ppm shift
 
-calibrationTool = baseDir + "bin/calibrate.sh"         # uses predefined GSM channel
-#calibrationTool = baseDir + "bin/calibrate_full.sh"     # check for the best GSM channel and calibrates
+#calibrationTool = baseDir + "bin/calibrate.sh"         # uses predefined GSM channel
+calibrationTool = baseDir + "bin/calibrate_full.sh"     # check for the best GSM channel and calibrates
 
 
 # DERIVATIVES #############################

@@ -156,12 +156,10 @@ def genPassTable(howmany=20):
                 # print "End pass:", satelliteI, t2human(endTimeI), "--- Start
                 # time:", satelliteJ, t2human(startJ)
                 if priorityJ < priorityI:
-                    # print " 1. discard %s, keep %s" % (satelliteI,
-                    # satelliteJ)
+                    print " 1. discard %s, keep %s" % (satelliteI, satelliteJ)
                     passTableSortedPrioritized[i] = ''
                 elif priorityJ > priorityI:
-                    # print " 2. discard %s, keep %s" % (satelliteJ,
-                    # satelliteI)
+                    print " 2. discard %s, keep %s" % (satelliteJ, satelliteI)
                     passTableSortedPrioritized[i + 1] = ''
 
     # let's clean the table and remove empty (removed) records
@@ -325,7 +323,7 @@ if __name__ == "__main__":
         else:
             # recalculating waiting time
 
-            if towait > 120:
+            if towait > 300:
                     log("Recalibrating the dongle...")
                     dongleShift = calibrate()  # replace the global value
 

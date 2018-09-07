@@ -16,7 +16,7 @@ wxmap -T $satellite -a -H $tleFileName -o -O $duration -L "$latlonalt" $start $i
 for enchancement in "${enchancements[@]}"    
 do
     echo "**** $enchancement"
-    wxtoimg -e $enchancement $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}.png | tee -a $logFile
+#     wxtoimg -e $enchancement $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}.png | tee -a $logFile
     wxtoimg -e $enchancement -m $imgdir/$fileNameCore-mapa.png $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}+map.png | tee -a $logFile
 done
 

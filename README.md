@@ -7,11 +7,24 @@ The set of scripts for automatic processing of the satellite data (like capturin
 This is a rewritten and fine-tuned version of tools for the automatic weather satellite images capturing. Most directly it bases on cyber-atomus' [autowx](https://github.com/cyber-atomus/autowx) and my fork of autowx. The main differences between this project **autowx2** and previously created tools:
 - high modularity - all recording and processing are done by separate scripts (modules? plugins?), which can be easily configured to meet one's needs. The main module (called *noaa*) is devoted to the capture of weather data from the NOAA satellites, but with other modules (i.e., *ISS* voice) one can record voice communication from the satellite (tested for ISS :tada: !).
 - configurability - most (all?) variables can be set up in the config file. For both: the main program and the NOAA module.
+- flexibility - it can be set up to record satelite transmissions based on the passing predictions as well as fixed time recordings, configured via cron-like syntax.
 - simplicity (not sure if this is true). List of observed satellites is defined in one place only (the config file) and can be easily modified.
+- efficiency - program some tasks to do between scheduled transmissions (see below)
 
 <!--- [![ghit.me](https://ghit.me/badge.svg?repo=filipsPL/autowx2)](https://ghit.me/repo/filipsPL/autowx2) -->
 
 [![badge-travis](https://api.travis-ci.org/filipsPL/autowx2.svg?branch=master)](https://travis-ci.org/filipsPL/autowx2) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bb77483f88414ef799621247bd186795)](https://www.codacy.com/app/filipsPL/autowx2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=filipsPL/autowx2&amp;utm_campaign=Badge_Grade) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2?ref=badge_shield) ![badge-email](docs/badge-email.png)
+
+**autowx2** was tested and successfuly applied to schedule recordings of:
+- [x] NOAA weather satellites
+- [x] ISS transmissions
+- [x] Fox-1B satellite transmissions
+- [x] Fixed-time FM recordings
+
+**autowx2** can be easily configured to do other useful things (with SDR dongle) while waiting for the next scheduled transmissions. Tested and available "plugins" include:
+- [x] APRS decoding (just log or act as a iGate)
+- [x] ADS-B with `dump1090`, heatmap plotting
+- [x] Radiosonde monitoring with [radiosonde_auto_rx](https://github.com/projecthorus/radiosonde_auto_rx/wiki)
 
 
 ## used libraries and acknowledgements
@@ -28,6 +41,7 @@ These scripts may be used by the autowx2 in the free time, e.g., to track airpla
 - [heatmap](https://github.com/filipsPL/heatmap) a fork of the great heatmap by sethoscope, modified by filipsPL to support sqlite
   - [osmviz](http://cbick.github.io/osmviz/html/)
 - [multimon-ng](https://github.com/sq5bpf/multimon-ng-stqc) fork by sq5bpf with STQC decoding support
+- [radiosonde_auto_rx](https://github.com/projecthorus/radiosonde_auto_rx/wiki) - Radiosonde monitoring
 
 
 # hardware requirements
