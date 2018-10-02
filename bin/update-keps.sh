@@ -9,11 +9,14 @@ source $scriptDir/basedir_conf.py
 
 TLEDIR=$baseDir/var/tle/
 
-rm $TLEDIR/weather.txt
-wget --no-check-certificate -r http://www.celestrak.com/NORAD/elements/weather.txt -O $TLEDIR/weather.txt
+#rm $TLEDIR/weather.txt
+#wget --no-check-certificate -r http://www.celestrak.com/NORAD/elements/weather.txt -O $TLEDIR/weather.txt
 
 #rm $TLEDIR/noaa.txt
 #wget -r http://www.celestrak.com/NORAD/elements/noaa.txt -O $TLEDIR/noaa.txt
+
+rm $TLEDIR/nasa.txt
+wget -r https://www.amsat.org/amsat/ftp/keps/current/nasa.all -O $TLEDIR/nasa.txt
 
 rm $TLEDIR/amateur.txt
 wget -r http://www.celestrak.com/NORAD/elements/amateur.txt -O $TLEDIR/amateur.txt
