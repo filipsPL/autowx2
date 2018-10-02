@@ -107,6 +107,10 @@ def genPassTable(howmany=20):
 
             p = predict.transits(tleData, qth, czasStart)
 
+            #d = predict.observe(tleData, qth)
+            #print d['doppler'] ## doppler : doppler shift between groundstation and satellite.  
+            #exit(1)
+
             for i in range(1, howmany):
                 transit = p.next()
 
@@ -117,8 +121,10 @@ def genPassTable(howmany=20):
                         passTable[transit.start] = [satellite, int(
                             transit.start + skipFirst), int(
                                 transit.duration() - skipFirst - skipLast),
-                            int(transit.peak()['elevation']), int(transit.peak()['azimuth']), priority]
+                            int(transit.peak()['elevation']), int(transit.peak()['azimuth']), priority
+                            ]
                     # transit.start - unix timestamp
+                    
 
         else:                   # fixed time recording
             # cron = getFixedRecordingTime(satellite)["fixedTime"]

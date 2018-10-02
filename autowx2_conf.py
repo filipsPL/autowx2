@@ -15,24 +15,24 @@ from basedir_conf import *
 # http://www.dk3wn.info/p/?page_id=29535
 
 satellitesData = {
-    'NOAA-18': {
+    'NOAA 18': {
         'freq': '137912500',
         'processWith': 'modules/noaa/noaa.sh',
-        'priority': 1},
-    'NOAA-15': {
+        'priority': 2},
+    'NOAA 15': {
         'freq': '137620000',
         'processWith': 'modules/noaa/noaa.sh',
-        'priority': 1},
-    'NOAA-19': {
+        'priority': 2},
+    'NOAA 19': {
         'freq': '137100000',
         'processWith': 'modules/noaa/noaa.sh',
-        'priority': 1},
+        'priority': 2},
     'ISS': {
         #'freq': '145800000',  # FM U/v VOICE Repeater (Worldwide) and FM SSTV downlink (Worldwide) [OK]
         'freq': '143625000',  # FM VHF-1 downlink. Main Russian communications channel. Often active over Moskow. [ ]
         #'freq': '145825000', # APRS -- AX.25 1200 Bd AFSK Packet Radio (Worldwide) Downlink [ ]
         'processWith': 'modules/iss/iss_voice.sh',
-        'priority': 3},
+        'priority': 1},
 #    'PR3_NEWS': {
 #        'freq': '98796500',
 #        'processWith': 'modules/fm/fm.sh',

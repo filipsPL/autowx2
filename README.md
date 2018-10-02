@@ -11,7 +11,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 - **flexibility** - it can be set up to record satellite transmissions based on the passing predictions as well as fixed time recordings, configured via cron-like syntax.
 - **simplicity** (not sure if this is true). List of observed satellites is defined in one place only (the config file) and can be easily modified.
 - **time efficiency** - it can perform sdr-related tasks to do between scheduled transmissions (see below)
-- other features include: autocallibration between recordings with [kalibrate-rtl](https://github.com/viraptor/kalibrate-rtl); prioritization of recordings (eg., when passing time overlaps, choose one with a higher priority)
+- other features include: autocallibration between recordings with [kalibrate-rtl](https://github.com/viraptor/kalibrate-rtl); prioritization of recordings (eg., when passing time overlaps, choose one with a higher priority); generation of the [passing/recording table](#genpasstablepy) for the next few hours (static html + image);
 
 <!--- [![ghit.me](https://ghit.me/badge.svg?repo=filipsPL/autowx2)](https://ghit.me/repo/filipsPL/autowx2) -->
 
@@ -118,15 +118,15 @@ Sample `satellitesData` dictionary:
 
 ```
 satellitesData = {
-    'NOAA-18': {
+    'NOAA 18': {
         'freq': '137912500',
         'processWith': 'modules/noaa/noaa.sh',
         'priority': 1},
-    'NOAA-15': {
+    'NOAA 15': {
         'freq': '137620000',
         'processWith': 'modules/noaa/noaa.sh',
         'priority': 1},
-    'NOAA-19': {
+    'NOAA 19': {
         'freq': '137100000',
         'processWith': 'modules/noaa/noaa.sh',
         'priority': 1},
