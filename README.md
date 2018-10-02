@@ -102,7 +102,7 @@ The config file of the main program, may be used also by the decoding modules. I
 
 **satellitesData** - the dictionary (in the python style) of satellites to be observed and processed (eg., weather satellites) OR fixed times for recordings (eg., listening to the WeatherFax transmissions).
 - for the *satellites*, three values must be set:
-  - the satellite name (eg., 'NOAA-18'), must be the same as one found in TLE file
+  - the satellite name (eg., 'NOAA 18'), must be the same as one found in TLE file
   - `freq` - the frequency to listen at
   - `processWith` - the path to the script/module to run during the transit
   - `priority` - priority of the recording (if two or more overlaps); the lower number - the higher priority
