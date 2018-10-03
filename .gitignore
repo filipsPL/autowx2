@@ -10,4 +10,4 @@ basedir_conf.py
 recordings
 bin/pymultimonaprs.confs/
 bin/heatmap.py
-
+var/nextpass.png
