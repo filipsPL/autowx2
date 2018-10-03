@@ -51,6 +51,7 @@ def CreateGanttChart(listNextPasesListList):
         customDates.append([_create_date(startdate), _create_date(enddate)])
         i += 1
 
+
     ilen = len(ylabels)
     pos = np.arange(0.5, ilen * 0.5 + 0.5, 0.5)
     task_dates = {}
@@ -69,6 +70,7 @@ def CreateGanttChart(listNextPasesListList):
             align='center',
             edgecolor='black',
             color='navy',
+            label='',
             alpha=0.95)
         ax.text(
             end_date,
@@ -79,6 +81,8 @@ def CreateGanttChart(listNextPasesListList):
             va='center',
             fontsize=7,
             color='gray')
+
+
 
     locsy, labelsy = plt.yticks(pos, ylabels)
     plt.setp(labelsy, fontsize=8)
@@ -95,7 +99,6 @@ def CreateGanttChart(listNextPasesListList):
 
     Majorformatter = DateFormatter("%H:%M\n%d-%b")
     ax.xaxis.set_major_formatter(Majorformatter)
-
     labelsx = ax.get_xticklabels()
     # plt.setp(labelsx, rotation=30, fontsize=10)
     plt.setp(labelsx, rotation=0, fontsize=7)
@@ -103,8 +106,6 @@ def CreateGanttChart(listNextPasesListList):
         'Transit plan for %s, generated %s' %
         (stationName, t2human(time.time())))
 
-    font = font_manager.FontProperties(size='small')
-    ax.legend(loc=1, prop=font)
     ax.invert_yaxis()
     plt.tight_layout()
     plt.savefig(ganttNextPassList)
