@@ -295,13 +295,15 @@ if __name__ == "__main__":
         satelitePass = passTable[0]
 
         satellite, start, duration, peak, azimuth = satelitePass
+        
+        satelliteNoSpaces = satellite.replace(" ", "_") #remove spaces from the satellite name
 
         freq = satellitesData[satellite]['freq']
         processWith = satellitesData[satellite]['processWith']
 
         fileNameCore = datetime.fromtimestamp(
             start).strftime(
-                '%Y%m%d-%H%M') + "_" + satellite
+                '%Y%m%d-%H%M') + "_" + satelliteNoSpaces
 
         log("Next pass:")
         log(printPass(satellite, start, duration,

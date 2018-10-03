@@ -8,7 +8,7 @@
 #
 # generate map
 #
-wxmap -T $satellite -a -H $tleFileName -o -O $duration -L "$latlonalt" $start $imgdir/$fileNameCore-mapa.png | tee -a $logFile
+wxmap -T "$satellite" -a -H $tleFileName -o -O $duration -L "$latlonalt" $start $imgdir/$fileNameCore-mapa.png | tee -a $logFile
 
 
 # process wav file with various enchancements
