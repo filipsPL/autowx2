@@ -118,15 +118,15 @@ Sample `satellitesData` dictionary:
 
 ```
 satellitesData = {
-    'NOAA 18': {
+    'NOAA-18': {
         'freq': '137912500',
         'processWith': 'modules/noaa/noaa.sh',
         'priority': 1},
-    'NOAA 15': {
+    'NOAA-15': {
         'freq': '137620000',
         'processWith': 'modules/noaa/noaa.sh',
         'priority': 1},
-    'NOAA 19': {
+    'NOAA-19': {
         'freq': '137100000',
         'processWith': 'modules/noaa/noaa.sh',
         'priority': 1},

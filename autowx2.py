@@ -126,7 +126,7 @@ def genPassTable(howmany=20):
                     # transit.start - unix timestamp
                     
 
-        else:                   # fixed time recording
+        elif 'fixedTime' in satellitesData[satellite]:                   # if ['fixedTime'] exists in satellitesData => time recording
             # cron = getFixedRecordingTime(satellite)["fixedTime"]
             cron = satellitesData[satellite]['fixedTime']
             duration = getFixedRecordingTime(satellite)["fixedDuration"]
@@ -140,6 +140,8 @@ def genPassTable(howmany=20):
                 start = delta + time.time()
                 passTable[start] = [
                     satellite, int(start), int(duration), '0', '0', priority]
+        else:
+            print bc.FAIL + "ERROR: " + bc.ENDC + "Can't find TLE data (in keplers) nor fixed time schedule (in config) for " + satellite
 
     # Sort pass table
     passTableSorted = []
@@ -252,15 +254,18 @@ def getDefaultDongleShift(dongleShift=dongleShift):
 
 def calibrate(dongleShift=dongleShift):
     '''calculate the ppm for the device'''
-    cmdline = [ calibrationTool ]
-    newdongleShift = justRun(cmdline).strip()
-    if newdongleShift != '' and is_number(newdongleShift):
-        log("Recalculated dongle shift is: " + str(newdongleShift) + " ppm")
-        return str(float(newdongleShift))
+    if (calibrationTool != False):
+        cmdline = [ calibrationTool ]
+        newdongleShift = justRun(cmdline).strip()
+        if newdongleShift != '' and is_number(newdongleShift):
+            log("Recalculated dongle shift is: " + str(newdongleShift) + " ppm")
+            return str(float(newdongleShift))
+        else:
+            log("Using the good old dongle shift: " + str(dongleShift) + " ppm")
+            return dongleShift
     else:
         log("Using the good old dongle shift: " + str(dongleShift) + " ppm")
         return dongleShift
-
 
 def azimuth2dir(azimuth):
     ''' convert azimuth in degrees to wind rose directions (16 wings)'''
@@ -296,7 +301,7 @@ if __name__ == "__main__":
 
         satellite, start, duration, peak, azimuth = satelitePass
         
-        satelliteNoSpaces = satellite.replace(" ", "_") #remove spaces from the satellite name
+        satelliteNoSpaces = satellite.replace(" ", "-") #remove spaces from the satellite name
 
         freq = satellitesData[satellite]['freq']
         processWith = satellitesData[satellite]['processWith']

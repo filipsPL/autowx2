@@ -15,15 +15,15 @@ from basedir_conf import *
 # http://www.dk3wn.info/p/?page_id=29535
 
 satellitesData = {
-    'NOAA 18': {
+    'NOAA-18': {
         'freq': '137912500',
         'processWith': 'modules/noaa/noaa.sh',
         'priority': 2},
-    'NOAA 15': {
+    'NOAA-15': {
         'freq': '137620000',
         'processWith': 'modules/noaa/noaa.sh',
         'priority': 2},
-    'NOAA 19': {
+    'NOAA-19': {
         'freq': '137100000',
         'processWith': 'modules/noaa/noaa.sh',
         'priority': 2},
@@ -109,8 +109,8 @@ ganttNextPassList = baseDir + 'var/nextpass.png'
 # script tha will be used whle waiting for the next pass; set False if we just want to sleep
 # by default, this script will get the parameter of duration of the time to be run and the recent dongleShift
 # scriptToRunInFreeTime = False				# does nothing
-#scriptToRunInFreeTime = baseDir + "bin/aprs.sh" 	# APRS monitor
-scriptToRunInFreeTime = baseDir + "bin/radiosonde_auto_rx.sh" # radiosonde tracker, see https://github.com/projecthorus/radiosonde_auto_rx
+scriptToRunInFreeTime = baseDir + "bin/aprs.sh" 	# APRS monitor
+#scriptToRunInFreeTime = baseDir + "bin/radiosonde_auto_rx.sh" # radiosonde tracker, see https://github.com/projecthorus/radiosonde_auto_rx
 #scriptToRunInFreeTime = baseDir + "bin/pymultimonaprs.sh" # APRS iGate,
 
 # pymultimonaprs must be installed, see: https://github.com/asdil12/pymultimonaprs/
@@ -131,8 +131,9 @@ dongleShiftFile = baseDir + "var/dongleshift.txt"
 # dongle calibration program
 # should return the dongle ppm shift
 
+calibrationTool = False # don't calibrate the dongle, use old/fixed shift
 #calibrationTool = baseDir + "bin/calibrate.sh"         # uses predefined GSM channel
-calibrationTool = baseDir + "bin/calibrate_full.sh"     # check for the best GSM channel and calibrates
+#calibrationTool = baseDir + "bin/calibrate_full.sh"     # check for the best GSM channel and calibrates
 
 
 # DERIVATIVES #############################
