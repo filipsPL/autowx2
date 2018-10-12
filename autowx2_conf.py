@@ -116,6 +116,12 @@ scriptToRunInFreeTime = baseDir + "bin/aprs.sh" 	# APRS monitor
 # pymultimonaprs must be installed, see: https://github.com/asdil12/pymultimonaprs/
 #scriptToRunInFreeTime = baseDir + "bin/dump1090.sh"
 
+
+### Logging to file (enter the path) or False to disable
+# logging = False
+logging = recordingDir + "/logs/"
+
+
 # Dongle PPM shift, hopefully this will change to reflect different PPM on freq
 dongleShift = '0'
 
