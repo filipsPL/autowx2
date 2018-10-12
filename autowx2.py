@@ -14,6 +14,7 @@ import subprocess
 import os
 from _crontab import *
 from tendo import singleton  # avoid two instancess
+import re
 
 from autowx2_conf import *  # configuration
 
@@ -277,9 +278,33 @@ def azimuth2dir(azimuth):
     part = int(float(azimuth) / 360 * 16)
     return dirs[part]
 
+def escape_ansi(line):
+    '''remove anssi colors from the given string'''
+    ansi_escape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -/]*[@-~]')
+    return ansi_escape.sub('', line)
+
 
 def log(string, style=bc.CYAN):
-    print bc.BOLD + datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M'), bc.ENDC, style, str(string), bc.ENDC
+    message = "%s%s%s %s %s %s " % (bc.BOLD, datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M'), bc.ENDC, style, str(string), bc.ENDC)    
+    print message
+    
+    # logging to file, if not Flase
+    if logging:
+        logToFile(escape_ansi(message) + "\n", logging)
+
+
+def logToFile(message, logDir):
+    # save message to the file
+    mkdir_p(logDir)
+    outfile = "%s/%s.txt" % ( logDir, datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d') )
+
+    file_append(outfile, message)
+    
+
+def file_append(filename, content):
+  f = open( filename, 'a' )
+  f.write(content)
+  f.close()    
 
 
 # ------------------------------------------------------------------------------------------------------ #
@@ -338,7 +363,7 @@ if __name__ == "__main__":
 
             if towait > 300:
                     log("Recalibrating the dongle...")
-                    dongleShift = calibrate()  # replace the global value
+                    dongleShift = calibrate(dongleShift)  # replace the global value
 
             towait = int(start - time.time())
 
