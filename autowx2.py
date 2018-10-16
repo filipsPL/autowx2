@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 
 #
-# autowx2
+# autowx2 - The program for scheduling recordings and processing of the
+# satellite and ground radio transmissions (like capturing of the weather
+# APT images from NOAA satellites, voice messages from ISS, fixed time
+# recordings of WeatherFaxes etc.)
+# https://github.com/filipsPL/autowx2/
 #
 
 
@@ -21,9 +25,6 @@ from autowx2_conf import *  # configuration
 me = singleton.SingleInstance()
                               # will sys.exit(-1) if other instance is running
 
-
-# import pprint   # to remove after debugging
-# pp = pprint.PrettyPrinter(indent=4)
 
 satellites = list(satellitesData)
 qth = (stationLat, stationLon, stationAlt)
@@ -109,7 +110,7 @@ def genPassTable(howmany=20):
             p = predict.transits(tleData, qth, czasStart)
 
             #d = predict.observe(tleData, qth)
-            #print d['doppler'] ## doppler : doppler shift between groundstation and satellite.  
+            #print d['doppler'] ## doppler : doppler shift between groundstation and satellite.
             #exit(1)
 
             for i in range(1, howmany):
@@ -125,7 +126,7 @@ def genPassTable(howmany=20):
                             int(transit.peak()['elevation']), int(transit.peak()['azimuth']), priority
                             ]
                     # transit.start - unix timestamp
-                    
+
 
         elif 'fixedTime' in satellitesData[satellite]:                   # if ['fixedTime'] exists in satellitesData => time recording
             # cron = getFixedRecordingTime(satellite)["fixedTime"]
@@ -220,9 +221,8 @@ def runForDuration(cmdline, duration):
         time.sleep(duration)
         child.terminate()
     except OSError as e:
-        print "OS Error during command: " + " ".join(cmdline)
-        print "OS Error: " + e.strerror
-
+        log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL )
+        log("✖ OS Error: " + e.strerror, style=bc.FAIL)
 
 def justRun(cmdline):
     '''Just run the command as long as necesary and return the output'''
@@ -232,8 +232,29 @@ def justRun(cmdline):
         result = child.communicate()[0]
         return result
     except OSError as e:
-        print "OS Error during command: " + " ".join(cmdline)
-        print "OS Error: " + e.strerror
+        log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL )
+        log("✖ OS Error: " + e.strerror, style=bc.FAIL)
+
+
+def runTest(duration=2):
+    '''Check, if RTL_SDR dongle is connected'''
+    child = subprocess.Popen('rtl_test', stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+    time.sleep(duration)
+    child.terminate()
+    out, err = child.communicate()
+    # if no device: ['No', 'supported', 'devices', 'found.']
+    # if OK: ['Found', '1', 'device(s):', '0:', 'Realtek,', 'RTL2838UHIDIR,',...
+    info = err.split()[0]
+    if info == "No":
+        log("✖ No SDR device found!", style=bc.FAIL)
+        return False
+    elif info == "Found":
+        log("SDR device found!")
+        return True
+    else:
+        log("Not sure, if SDR device is there...")
+        return True
 
 
 def getDefaultDongleShift(dongleShift=dongleShift):
@@ -285,9 +306,9 @@ def escape_ansi(line):
 
 
 def log(string, style=bc.CYAN):
-    message = "%s%s%s %s %s %s " % (bc.BOLD, datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M'), bc.ENDC, style, str(string), bc.ENDC)    
+    message = "%s%s%s %s %s %s " % (bc.BOLD, datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M'), bc.ENDC, style, str(string), bc.ENDC)
     print message
-    
+
     # logging to file, if not Flase
     if logging:
         logToFile(escape_ansi(message) + "\n", logging)
@@ -299,21 +320,25 @@ def logToFile(message, logDir):
     outfile = "%s/%s.txt" % ( logDir, datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d') )
 
     file_append(outfile, message)
-    
+
 
 def file_append(filename, content):
   f = open( filename, 'a' )
   f.write(content)
-  f.close()    
+  f.close()
 
 
 # ------------------------------------------------------------------------------------------------------ #
 
 if __name__ == "__main__":
 
+    log("Program start")
     dongleShift = getDefaultDongleShift()
 
     while True:
+        while not runTest():
+            log("Waiting for the SDR dongle...")
+            time.sleep(10)
 
         # recalculate table of next passes
         passTable = genPassTable()
@@ -325,7 +350,7 @@ if __name__ == "__main__":
         satelitePass = passTable[0]
 
         satellite, start, duration, peak, azimuth = satelitePass
-        
+
         satelliteNoSpaces = satellite.replace(" ", "-") #remove spaces from the satellite name
 
         freq = satellitesData[satellite]['freq']
