@@ -46,5 +46,5 @@ echo
 echo "Recording to:" $recdir/$fileNameCore.mp3
 echo
 
-timeout $duration rtl_fm -f $freq -M wbfm -g 49.6 | lame -r -s 32 -m m - $recdir/$fileNameCore.mp3
+timeout $duration rtl_fm -f $freq -M wbfm -g 49.6 -l 0 | lame -r -s 32k -m m - $recdir/$fileNameCore.mp3
 
