@@ -33,12 +33,12 @@ satellitesData = {
         #'freq': '145825000', # APRS -- AX.25 1200 Bd AFSK Packet Radio (Worldwide) Downlink [ ]
         'processWith': 'modules/iss/iss_voice.sh',
         'priority': 1},
-#    'PR3_NEWS': {
-#        'freq': '98796500',
-#        'processWith': 'modules/fm/fm.sh',
-#        'fixedTime': '0 12 * * *',
-#        'fixedDuration': 300,
-#        'priority': 10},
+   # 'PR3_NEWS': {
+   #     'freq': '98796500',
+   #     'processWith': 'modules/fm/fm.sh',
+   #     'fixedTime': '46 21 * * *',
+   #     'fixedDuration': 30,
+   #     'priority': 1},
     #'FOX-1A': {  # http://www.dk3wn.info/p/?cat=80
         #'freq': '145980000',
         #'processWith': 'modules/iss/iss_voice.sh',

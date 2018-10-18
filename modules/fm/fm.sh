@@ -26,6 +26,7 @@ peak="$5"
 azimuth="$6"
 freq="$7"
 
+
 echo "fileNameCore=$fileNameCore"
 echo "satellite=$satellite"
 echo "start=$start"
@@ -37,14 +38,13 @@ echo "freq=$freq"
 
 
 # fixed values for tests
-#freq="98796500"
-#duration="10s"
-#fileNameCore="trojka"
+# freq="98796500"
+# duration="10s"
+# fileNameCore="trojka"
 
 
 echo
 echo "Recording to:" $recdir/$fileNameCore.mp3
 echo
 
-timeout $duration rtl_fm -f $freq -M wbfm -g 49.6 -l 0 | lame -r -s 32k -m m - $recdir/$fileNameCore.mp3
-
+timeout $duration rtl_fm -f $freq -M wbfm -g 49.6 -l 0 | lame -r -s 32k -m m - "$recdir/$fileNameCore.mp3"

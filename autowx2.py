@@ -336,9 +336,6 @@ if __name__ == "__main__":
     dongleShift = getDefaultDongleShift()
 
     while True:
-        while not runTest():
-            log("Waiting for the SDR dongle...")
-            time.sleep(10)
 
         # recalculate table of next passes
         passTable = genPassTable()
@@ -366,6 +363,13 @@ if __name__ == "__main__":
 
         towait = int(start - time.time())
 
+        # test if SDR dongle is available
+        if towait > 15: # if we have time to perform the test?
+            while not runTest():
+                log("Waiting for the SDR dongle...")
+                time.sleep(10)
+
+        # It's a high time to record!
         if towait <= 1 and duration > 0:
             # here the recording happens
             log("!! Recording " + printPass(satellite, start, duration,
@@ -383,15 +387,14 @@ if __name__ == "__main__":
             justRun(processCmdline)
             time.sleep(10.0)
 
+        # still some time before recording
         else:
             # recalculating waiting time
-
             if towait > 300:
                     log("Recalibrating the dongle...")
                     dongleShift = calibrate(dongleShift)  # replace the global value
 
             towait = int(start - time.time())
-
             if scriptToRunInFreeTime:
                 if towait >= 60:  # if we have more than five minutes spare time, let's do something useful
                     log("We have still %ss free time to the next pass. Let's do something useful!" %
