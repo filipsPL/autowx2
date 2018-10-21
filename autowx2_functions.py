@@ -35,6 +35,7 @@ import numpy as np
 # configuration
 from autowx2_conf import *
 
+
 def mkdir_p(outdir):
     ''' bash "mkdir -p" analog'''
     if not os.path.exists(outdir):
@@ -42,6 +43,7 @@ def mkdir_p(outdir):
 
 
 class bc():
+
     """Colors made easy"""
     HEADER = '\033[95m'
     CYAN = '\033[96m'
@@ -114,9 +116,9 @@ def genPassTable(satellites, qth, howmany=20):
 
             p = predict.transits(tleData, qth, czasStart)
 
-            #d = predict.observe(tleData, qth)
-            #print d['doppler'] ## doppler : doppler shift between groundstation and satellite.
-            #exit(1)
+            # d = predict.observe(tleData, qth)
+            # print d['doppler'] ## doppler : doppler shift between groundstation and satellite.
+            # exit(1)
 
             for i in range(1, howmany):
                 transit = p.next()
@@ -128,10 +130,10 @@ def genPassTable(satellites, qth, howmany=20):
                         passTable[transit.start] = [satellite, int(
                             transit.start + skipFirst), int(
                                 transit.duration() - skipFirst - skipLast),
-                            int(transit.peak()['elevation']), int(transit.peak()['azimuth']), priority
-                            ]
+                            int(transit.peak()['elevation']), int(
+                                transit.peak()['azimuth']), priority
+                        ]
                     # transit.start - unix timestamp
-
 
         elif 'fixedTime' in satellitesData[satellite]:                   # if ['fixedTime'] exists in satellitesData => time recording
             # cron = getFixedRecordingTime(satellite)["fixedTime"]
@@ -148,7 +150,8 @@ def genPassTable(satellites, qth, howmany=20):
                 passTable[start] = [
                     satellite, int(start), int(duration), '0', '0', priority]
         else:
-            log("Can't find TLE data (in keplers) nor fixed time schedule (in config) for " + satellite, style=bc.FAIL)
+            log("Can't find TLE data (in keplers) nor fixed time schedule (in config) for " +
+                satellite, style=bc.FAIL)
 
     # Sort pass table
     passTableSorted = []
@@ -171,10 +174,10 @@ def genPassTable(satellites, qth, howmany=20):
                 # print "End pass:", satelliteI, t2human(endTimeI), "--- Start
                 # time:", satelliteJ, t2human(startJ)
                 if priorityJ < priorityI:
-                    log(" 1. discard %s, keep %s" % (satelliteI, satelliteJ) )
+                    log(" 1. discard %s, keep %s" % (satelliteI, satelliteJ))
                     passTableSortedPrioritized[i] = ''
                 elif priorityJ > priorityI:
-                    log(" 2. discard %s, keep %s" % (satelliteJ, satelliteI) )
+                    log(" 2. discard %s, keep %s" % (satelliteJ, satelliteI))
                     passTableSortedPrioritized[i + 1] = ''
 
     # let's clean the table and remove empty (removed) records
@@ -224,8 +227,9 @@ def runForDuration(cmdline, duration):
         time.sleep(duration)
         child.terminate()
     except OSError as e:
-        log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL )
+        log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
         log("✖ OS Error: " + e.strerror, style=bc.FAIL)
+
 
 def justRun(cmdline):
     '''Just run the command as long as necesary and return the output'''
@@ -235,19 +239,20 @@ def justRun(cmdline):
         result = child.communicate()[0]
         return result
     except OSError as e:
-        log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL )
+        log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
         log("✖ OS Error: " + e.strerror, style=bc.FAIL)
 
 
 def runTest(duration=2):
     '''Check, if RTL_SDR dongle is connected'''
     child = subprocess.Popen('rtl_test', stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+                             stderr=subprocess.PIPE)
     time.sleep(duration)
     child.terminate()
     out, err = child.communicate()
     # if no device: ['No', 'supported', 'devices', 'found.']
-    # if OK: ['Found', '1', 'device(s):', '0:', 'Realtek,', 'RTL2838UHIDIR,',...
+    # if OK: ['Found', '1', 'device(s):', '0:', 'Realtek,',
+    # 'RTL2838UHIDIR,',...
     info = err.split()[0]
     if info == "No":
         log("✖ No SDR device found!", style=bc.FAIL)
@@ -278,18 +283,21 @@ def getDefaultDongleShift(dongleShift=dongleShift):
 
 def calibrate(dongleShift=dongleShift):
     '''calculate the ppm for the device'''
-    if (calibrationTool != False):
-        cmdline = [ calibrationTool ]
+    if (calibrationTool):
+        cmdline = [calibrationTool]
         newdongleShift = justRun(cmdline).strip()
         if newdongleShift != '' and is_number(newdongleShift):
-            log("Recalculated dongle shift is: " + str(newdongleShift) + " ppm")
+            log("Recalculated dongle shift is: " +
+                str(newdongleShift) + " ppm")
             return str(float(newdongleShift))
         else:
-            log("Using the good old dongle shift: " + str(dongleShift) + " ppm")
+            log("Using the good old dongle shift: " +
+                str(dongleShift) + " ppm")
             return dongleShift
     else:
         log("Using the good old dongle shift: " + str(dongleShift) + " ppm")
         return dongleShift
+
 
 def azimuth2dir(azimuth):
     ''' convert azimuth in degrees to wind rose directions (16 wings)'''
@@ -301,6 +309,7 @@ def azimuth2dir(azimuth):
     part = int(float(azimuth) / 360 * 16)
     return dirs[part]
 
+
 def escape_ansi(line):
     '''remove anssi colors from the given string'''
     ansi_escape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -/]*[@-~]')
@@ -308,7 +317,13 @@ def escape_ansi(line):
 
 
 def log(string, style=bc.CYAN):
-    message = "%s%s%s %s %s %s " % (bc.BOLD, datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M'), bc.ENDC, style, str(string), bc.ENDC)
+    message = "%s%s%s %s %s %s " % (
+        bc.BOLD,
+        datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M'),
+     bc.ENDC,
+     style,
+     str(string),
+     bc.ENDC)
     print message
 
     # logging to file, if not Flase
@@ -319,18 +334,20 @@ def log(string, style=bc.CYAN):
 def logToFile(message, logDir):
     # save message to the file
     mkdir_p(logDir)
-    outfile = "%s/%s.txt" % ( logDir, datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d') )
+    outfile = "%s/%s.txt" % (
+        logDir,
+        datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d'))
 
     file_append(outfile, message)
 
 
 def file_append(filename, content):
-  f = open( filename, 'a' )
-  f.write(content)
-  f.close()
+    f = open(filename, 'a')
+    f.write(content)
+    f.close()
 
 
-## ------------ functions for generation of pass table, saving, png image etc...
+# ------------ functions for generation of pass table, saving, png image etc...
 
 
 def t2humanHM(timestamp):
@@ -360,7 +377,6 @@ def CreateGanttChart(listNextPasesListList):
         # ylabels.append("%s" % (ylabel) )
         customDates.append([_create_date(startdate), _create_date(enddate)])
         i += 1
-
 
     ilen = len(ylabels)
     pos = np.arange(0.5, ilen * 0.5 + 0.5, 0.5)
@@ -392,8 +408,6 @@ def CreateGanttChart(listNextPasesListList):
             fontsize=7,
             color='gray')
 
-
-
     locsy, labelsy = plt.yticks(pos, ylabels)
     plt.setp(labelsy, fontsize=8)
     ax.axis('tight')
@@ -420,7 +434,8 @@ def CreateGanttChart(listNextPasesListList):
     plt.tight_layout()
     plt.savefig(ganttNextPassList)
 
-    if ylabel == enddateIN: print locsy #"This is done only to satisfy the codacy.com. Sorry for that."
+    if ylabel == enddateIN:
+        print locsy  # "This is done only to satisfy the codacy.com. Sorry for that."
 
 
 def listNextPasesHtml(passTable, howmany):
@@ -485,11 +500,12 @@ def listNextPasesList(passTable, howmany):
     output = []
     for satelitePass in passTable[0:howmany]:
         satellite, start, duration, peak, azimuth = satelitePass
-        #freq = satellitesData[satellite]['freq']
-        #processWith = satellitesData[satellite]['processWith']
+        # freq = satellitesData[satellite]['freq']
+        # processWith = satellitesData[satellite]['processWith']
 
         output.append([satellite, start, start + duration])
-    if peak == True: print "This is a miracle!" ## codacy cheating, sorry.
+    if peak:
+        print "This is a miracle!"  # codacy cheating, sorry.
     return output
 
 

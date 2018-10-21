@@ -70,7 +70,7 @@ echo "blacklist dvb_usb_rtl28xxu" >>  /etc/modprobe.d/rtl-sdr-blacklist.conf
 
 # installation
 
-:warning: Tested for x86 and amd64 architectures. Still to be checked on a Raspberry Pi.
+:warning: Tested for x86 and amd64 architectures. Still to be checked on a Raspberry Pi (issue #29)
 
 ## x86 and amd64
 
