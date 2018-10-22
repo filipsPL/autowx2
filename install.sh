@@ -8,6 +8,8 @@
 #sudo echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP="adm", MODE="0666", SYMLINK+="rtl_sdr"' >> /etc/udev/rules.d/20.rtlsdr.rules
 #sudo echo "blacklist dvb_usb_rtl28xxu" >>  /etc/modprobe.d/rtl-sdr-blacklist.conf
 
+MACHINE_TYPE=`uname -m`
+
 ./configure.sh
 
 
@@ -44,19 +46,17 @@ echo
 echo "******** Installing wxtoimg"
 echo
 echo
-## 32 bit version
-# wget http://www.wxtoimg.com/downloads/wxtoimg_2.10.11-1_i386.deb
-# sudo dpkg -i wxtoimg_2.10.11-1_i386.deb	# may generate some dependencies errors; if not, stop here
-# # sudo apt-get update
-# # sudo apt-get upgrade
-# sudo apt-get -f install
-# # sudo dpkg -i wxtoimg_2.10.11-1_i386.deb	# to finish the installation
-# rm wxtoimg_2.10.11-1_i386.deb
 
-#wget http://www.wxtoimg.com/downloads/wxtoimg-linux64-2.10.11-1.tar.gz
-wget https://wxtoimgrestored.xyz/downloads/wxtoimg-linux64-2.10.11-1.tar.gz
-gunzip < wxtoimg-linux64-2.10.11-1.tar.gz | sudo sh -c "(cd /; tar -xvf -)"
-#rm wxtoimg-linux64-2.10.11-1.tar.gz
+if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+    echo "64-bit system"
+    wget https://wxtoimgrestored.xyz/downloads/wxtoimg-linux64-2.10.11-1.tar.gz
+    gunzip < wxtoimg-linux64-2.10.11-1.tar.gz | sudo sh -c "(cd /; tar -xvf -)"
+else
+    echo "32-bit system"
+    wget https://wxtoimgrestored.xyz/downloads/wxtoimg_2.10.11-1_i386.deb
+    sudo dpkg -i wxtoimg_2.10.11-1_i386.deb	# may generate some dependencies errors; if not, stop here
+    # sudo apt-get -f install
+fi
 
 wxtoimg -h
 

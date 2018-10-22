@@ -15,7 +15,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 <!--- [![ghit.me](https://ghit.me/badge.svg?repo=filipsPL/autowx2)](https://ghit.me/repo/filipsPL/autowx2) -->
 
-[![badge-travis](https://api.travis-ci.org/filipsPL/autowx2.svg?branch=master)](https://travis-ci.org/filipsPL/autowx2) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bb77483f88414ef799621247bd186795)](https://www.codacy.com/app/filipsPL/autowx2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=filipsPL/autowx2&amp;utm_campaign=Badge_Grade) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2?ref=badge_shield) ![Python 2.7](docs/Python-2.7-lightgreen.png) ![badge-email](docs/badge-email.png)
+[![badge-travis](https://api.travis-ci.org/filipsPL/autowx2.svg?branch=master)](https://travis-ci.org/filipsPL/autowx2) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bb77483f88414ef799621247bd186795)](https://www.codacy.com/app/filipsPL/autowx2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=filipsPL/autowx2&amp;utm_campaign=Badge_Grade) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2?ref=badge_shield) ![Python 2.7](docs/Python-2.7-lightgreen.png) [![release version](https://img.shields.io/github/release/filipsPL/autowx2.svg)](https://github.com/filipsPL/autowx2/releases) ![badge-email](docs/badge-email.png)
 
 **autowx2** was tested and successfully applied to schedule recordings of:
 - [x] NOAA weather satellites
@@ -70,7 +70,7 @@ echo "blacklist dvb_usb_rtl28xxu" >>  /etc/modprobe.d/rtl-sdr-blacklist.conf
 
 # installation
 
-:warning: Tested for x86 and amd64 architectures. Still to be checked on a Raspberry Pi (issue #29)
+:warning: Tested for x86 and amd64 architectures. Still to be checked on a Raspberry Pi (issue GH-29)
 
 ## x86 and amd64
 
