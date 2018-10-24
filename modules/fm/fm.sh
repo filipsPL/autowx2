@@ -47,4 +47,4 @@ echo
 echo "Recording to:" $recdir/$fileNameCore.mp3
 echo
 
-timeout $duration rtl_fm -f $freq -M wbfm -g 49.6 -l 0 | lame -r -s 32k -m m - "$recdir/$fileNameCore.mp3"
+timeout $duration rtl_fm -f $freq -M wfm -g 49.6 -l 0 -s 220k -A std -E deemp -r 44.1k | sox -t raw -e signed -c 1 -b 16 -r 44000 -V1 - "$recdir/$fileNameCore.mp3"
