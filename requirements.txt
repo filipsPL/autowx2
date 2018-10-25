@@ -1,5 +1,5 @@
 pypredict==1.2
-matplotlib
+matplotlib==3.0.0
 numpy
 tendo
 osmviz
