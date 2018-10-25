@@ -8,6 +8,7 @@ source $scriptDir/basedir_conf.py
 ###
 
 TLEDIR=$baseDir/var/tle/
+mkdir -p $TLEDIR
 
 rm $TLEDIR/weather.txt
 wget --no-check-certificate -r http://www.celestrak.com/NORAD/elements/weather.txt -O $TLEDIR/weather.txt
