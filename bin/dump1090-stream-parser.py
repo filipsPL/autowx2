@@ -141,7 +141,7 @@ def main():
 				    if lat != '' and lon != '':
 					#print lat, lon
 					#print d
-					
+
 					# add the current time to the row
 					line.append(ds)
 

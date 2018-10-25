@@ -26,7 +26,6 @@ qth = (stationLat, stationLon, stationAlt)
 # ------------------------------------------------------------------------------------------------------ #
 
 if __name__ == "__main__":
-
     log("⚡ Program start")
     dongleShift = getDefaultDongleShift()
 

@@ -20,7 +20,7 @@ from time import strftime
 import subprocess
 import os
 from _crontab import *
-from tendo import singleton  # avoid two instancess
+from tendo import singleton # avoid two instancess
 import re
 
 # for plotting
@@ -320,10 +320,11 @@ def log(string, style=bc.CYAN):
     message = "%s%s%s %s %s %s " % (
         bc.BOLD,
         datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M'),
-     bc.ENDC,
-     style,
-     str(string),
-     bc.ENDC)
+        bc.ENDC,
+        style,
+        str(string),
+        bc.ENDC)
+
     print message
 
     # logging to file, if not Flase

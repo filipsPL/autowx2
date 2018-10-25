@@ -13,7 +13,7 @@ source $baseDir/_listvars.sh
 duration=$1
 dongleShift=$2
 
+echo "$dongleShift"
 
 cd ~/progs/radiosonde_auto_rx/auto_rx/
 timeout --kill-after=20 --signal=SIGINT $duration python auto_rx.py
-

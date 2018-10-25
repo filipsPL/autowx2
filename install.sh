@@ -8,7 +8,8 @@
 #sudo echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP="adm", MODE="0666", SYMLINK+="rtl_sdr"' >> /etc/udev/rules.d/20.rtlsdr.rules
 #sudo echo "blacklist dvb_usb_rtl28xxu" >>  /etc/modprobe.d/rtl-sdr-blacklist.conf
 
-MACHINE_TYPE=`uname -m`
+MACHINE_TYPE=$(uname -m)
+echo $MACHINE_TYPE
 
 ./configure.sh
 
