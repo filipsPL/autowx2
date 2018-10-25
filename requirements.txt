@@ -1,4 +1,4 @@
-pypredict
+pypredict==1.2
 matplotlib
 numpy
 tendo
