@@ -66,11 +66,11 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP="adm"
 echo "blacklist dvb_usb_rtl28xxu" >>  /etc/modprobe.d/rtl-sdr-blacklist.conf
 ```
 - for more details, [see here](http://www.instructables.com/id/rtl-sdr-on-Ubuntu/)
-- for installation script on the Debian and Debian-like systems, see [the installation script](install.sh) :warning: use with care! inspect and tune before execution!
+- for installation script on the Debian, Debian-like systems and Raspberry Pi, see [the installation script](install.sh) :warning: use with care! inspect and tune before execution!
 
 # installation
 
-:warning: Tested for x86 and amd64 architectures. Still to be checked on a Raspberry Pi (issue GH-29)
+:warning: Tested for x86, amd64 and [Raspberry Pi](https://github.com/filipsPL/autowx2/issues/29)
 
 ## x86 and amd64
 
