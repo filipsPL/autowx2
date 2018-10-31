@@ -19,7 +19,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 **autowx2** was tested and successfully applied to schedule recordings of:
 - [x] NOAA weather satellites
-- [x] ISS transmissions
+- [x] ISS transmissions (voice, [SSTV](https://github.com/filipsPL/autowx2/issues/35))
 - [x] Fox-1B satellite transmissions
 - [x] Fixed-time FM recordings
 
