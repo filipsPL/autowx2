@@ -1,7 +1,13 @@
 #!/bin/bash
 
 # file to record fm radio for a given period of time
-# may be used to record ISS voice channel - NOT TESTED!
+# may be used to record ISS voice channel
+
+# variable(s) to adjust:
+
+#recordTo="wav" # record to wav file
+recordTo="mp3"  # record to mp3 file
+
 
 # read the global configuration file autowx2_conf.py via the bash/python configuration parser
 # do not change the following three lines
@@ -52,8 +58,20 @@ echo "freq=$freq"
 
 ###timeout $duration rtl_fm -f $freq -M fm -g 49.6 | sox -traw -r24k -es -b16 -c1 -V1 - -tmp3 "$recdir/$fileNameCore.mp3"
 
-timeout $duration rtl_fm -f $freq -M fm -g 49.6 -l 0 | lame -r -s 32k -m m - "$recdir/$fileNameCore.mp3"
-sox "$recdir/$fileNameCore.mp3" -n spectrogram  -o "$recdir/$fileNameCore-spectrogram.png"
-sox "$recdir/$fileNameCore.mp3" "$recdir/$fileNameCore-silence.mp3" silence -l 1 0.3 10% -1 2.0 10%
-$baseDir/bin/multidemodulator.sh "$recdir/$fileNameCore.mp3" > "$recdir/$fileNameCore-demodulated.log"
 
+if [ ${recordTo} == 'mp3' ]; then
+  ### RECORDING TO MP3
+  echo "Recording to mp3"
+  timeout $duration rtl_fm -f $freq -M fm -g 49.6 -l 0 | lame -r -s 32k -m m - "$recdir/$fileNameCore.mp3"
+  sox "$recdir/$fileNameCore.mp3" -n spectrogram  -o "$recdir/$fileNameCore-spectrogram.png"
+  sox "$recdir/$fileNameCore.mp3" "$recdir/$fileNameCore-silence.mp3" silence -l 1 0.3 10% -1 2.0 10%
+  $baseDir/bin/multidemodulator.sh "$recdir/$fileNameCore.mp3" > "$recdir/$fileNameCore-demodulated.log"
+
+elif [ ${recordTo} == 'wav' ]; then
+  ### RECORDING TO WAV, for further processing, eg, for SSTV
+  echo "Recording to wav"
+  timeout $duration rtl_fm -f $freq -s $sample -g $dongleGain -F 9 -A fast -E offset -p $dongleShift $recdir/$fileNameCore.raw | tee -a $logFile
+  sox -t raw -r $sample -es -b 16 -c 1 -V1 $recdir/$fileNameCore.raw $recdir/$fileNameCore.wav rate $wavrate | tee -a $logFile
+  touch -r $recdir/$fileNameCore.raw $recdir/$fileNameCore.wav
+  rm $recdir/$fileNameCore.raw
+fi
