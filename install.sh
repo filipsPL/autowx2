@@ -26,16 +26,37 @@ echo "******** Installing required packages"
 echo
 echo
 sudo apt-get update
-sudo apt-get install rtl-sdr git libpulse-dev qt4-qmake fftw3 libc6 libfontconfig1 libx11-6 libxext6 libxft2 libusb-1.0-0-dev \
-libavahi-client-dev libavahi-common-dev libdbus-1-dev libfftw3-long3 libfftw3-single3 libpulse-mainloop-glib0 librtlsdr0 librtlsdr-dev \
-libfftw3-dev  libfftw3-double3 libfftw3-quad3 lame sox libsox-fmt-mp3 libtool automake python-pil python-imaging
+sudo apt-get install -y rtl-sdr git libpulse-dev qt4-qmake fftw3 libc6 libfontconfig1 libx11-6 libxext6 libxft2 libusb-1.0-0-dev \
+libavahi-client-dev libavahi-common-dev libdbus-1-dev libfftw3-single3 libpulse-mainloop-glib0 librtlsdr0 librtlsdr-dev \
+libfftw3-dev  libfftw3-double3 lame sox libsox-fmt-mp3 libtool automake python-pil python-imaging
+
+
+if [ ${MACHINE_TYPE} == 'armv6l' ]; then
+	echo
+	echo
+	echo "******** Installing Rpi required packages"
+	echo
+	echo
+	sudo apt-get install -y libtool qt4-default automake autotools-dev m4 
+	curl https://bootstrap.pypa.io/get-pip.py > get-pip.py
+	sudo python get-pip.py
+else
+	sudo apt-get install -y libfftw3-long3
+	sudo apt-get install -y libfftw3-quad3
+fi
+
+
+PIP_OPTIONS=""
+if [ ${MACHINE_TYPE} == 'armv6l' ]; then
+  PIP_OPTIONS="--no-cache-dir"
+fi
 
 echo
 echo
 echo "******** Installing python requirements"
 echo
 echo
-pip install -r requirements.txt
+pip $PIP_OPTIONS install -r requirements.txt
 
 
 mkdir -p $baseDir/bin/sources/
@@ -52,6 +73,9 @@ if [ ${MACHINE_TYPE} == 'x86_64' ]; then
     echo "64-bit system"
     wget https://wxtoimgrestored.xyz/downloads/wxtoimg-linux64-2.10.11-1.tar.gz
     gunzip < wxtoimg-linux64-2.10.11-1.tar.gz | sudo sh -c "(cd /; tar -xvf -)"
+elif [ ${MACHINE_TYPE} == 'armv6l' ]; then
+    wget https://wxtoimgrestored.xyz/beta/wxtoimg-armhf-2.11.2-beta.deb
+    sudo dpkg -i wxtoimg-armhf-2.11.2-beta.deb
 else
     echo "32-bit system"
     wget https://wxtoimgrestored.xyz/downloads/wxtoimg_2.10.11-1_i386.deb
