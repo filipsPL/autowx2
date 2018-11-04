@@ -135,7 +135,7 @@ satellitesData = {
     'ISS': {  
       # voice channel
         'freq': '145800000',
-        'processWith': 'modules/iss/iss_voice.sh',
+        'processWith': 'modules/iss/iss_voice_mp3.sh',
         'priority': 5},
     'PR3_NEWS': {
         'freq': '98988000',
