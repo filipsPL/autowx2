@@ -36,6 +36,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 - [pypredict](https://github.com/nsat/pypredict)
 - [wxtoimg](http://www.wxtoimg.com/downloads/)
 - [kalibrate-rtl](https://github.com/viraptor/kalibrate-rtl)
+- Special acknowledgements: [Stack Overflow community](https://stackoverflow.com/)
 
 These scripts may be used by the autowx2 in the free time, e.g., to track airplanes, capture APRS signals etc:
 
