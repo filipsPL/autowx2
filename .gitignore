@@ -1,6 +1,5 @@
 *.pyc
 bin/tests/*.png
-wyslij-github.sh
 *.kate-swp
 tests
 var/shifthistory.csv
@@ -14,3 +13,5 @@ bin/heatmap.py
 var/nextpass.png
 var/nextpass.html
 autowx2_conf.py
+git-merge-devel.sh
+git-wyslij-github.sh
