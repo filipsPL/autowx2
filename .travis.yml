@@ -10,8 +10,8 @@ python:
 - 2.7
 
 install:
- - ./install.sh
- 
+ - bash ./install.sh
+
 script:
  - wxtoimg -h
  - sox --version
@@ -20,5 +20,3 @@ script:
  - wxmap -V
  - ./genpasstable.py
  - bin/dump1090-stream-parser.py --help
- 
-

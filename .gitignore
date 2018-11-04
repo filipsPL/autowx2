@@ -13,3 +13,4 @@ bin/pymultimonaprs.confs/
 bin/heatmap.py
 var/nextpass.png
 var/nextpass.html
+autowx2_conf.py

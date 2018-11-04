@@ -11,7 +11,10 @@
 MACHINE_TYPE=$(uname -m)
 echo $MACHINE_TYPE
 
-./configure.sh
+bash ./configure.sh
+
+echo "copy sample config file, but don't overwrite"
+cp --no-clobber autowx2_conf.py.example autowx2_conf.py
 
 
 echo "basedir_conf.py:"
@@ -37,7 +40,7 @@ if [ ${MACHINE_TYPE} == 'armv6l' ]; then
 	echo "******** Installing Rpi required packages"
 	echo
 	echo
-	sudo apt-get install -y libtool qt4-default automake autotools-dev m4 
+	sudo apt-get install -y libtool qt4-default automake autotools-dev m4
 	curl https://bootstrap.pypa.io/get-pip.py > get-pip.py
 	sudo python get-pip.py
 else
@@ -146,6 +149,13 @@ cd $baseDir
 bin/update-keps.sh
 
 
+echo
+echo "-------------------------------------------------------------------------"
+echo "The installation script seems to be finished."
+echo "please inspect the output. If there are no errors, your system is"
+echo "installed correctly."
+echo "Edit autowx2_conf.py to suit your needs and have fun!"
+echo "-------------------------------------------------------------------------"
+echo
 
 exit 0
-

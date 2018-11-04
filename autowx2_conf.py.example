@@ -29,28 +29,28 @@ satellitesData = {
         'priority': 2},
     'ISS': {
         #'freq': '145800000',  # FM U/v VOICE Repeater (Worldwide) and FM SSTV downlink (Worldwide) [OK]
-        'freq': '143625000',  # FM VHF-1 downlink. Main Russian communications channel. Often active over Moskow. [ ]
+        'freq': '143625000',  # FM VHF-1 downlink. Main Russian communications channel. Often active over Moscow. [ ]
         #'freq': '145825000', # APRS -- AX.25 1200 Bd AFSK Packet Radio (Worldwide) Downlink [ ]
         'processWith': 'modules/iss/iss_voice.sh',
         'priority': 1},
-   # 'PR3_NEWS': {
-   #     'freq': '98796500',
-   #     'processWith': 'modules/fm/fm.sh',
-   #     'fixedTime': '46 21 * * *',
-   #     'fixedDuration': 30,
-   #     'priority': 1},
-    #'FOX-1A': {  # http://www.dk3wn.info/p/?cat=80
-        #'freq': '145980000',
-        #'processWith': 'modules/iss/iss_voice.sh',
-        #'priority': 4},
-    #'FOX-1D': {  # http://www.dk3wn.info/p/?cat=80
-        #'freq': '145880000',
-        #'processWith': 'modules/iss/iss_voice.sh',
-        #'priority': 4},
-    #'FOX-1B': {  # http://www.dk3wn.info/p/?cat=80
-        #'freq': '145960000',
-        #'processWith': 'modules/iss/iss_voice.sh',
-        #'priority': 4},
+    # 'PR3_NEWS': {
+    #     'freq': '98796500',
+    #     'processWith': 'modules/fm/fm.sh',
+    #     'fixedTime': '46 21 * * *',
+    #     'fixedDuration': 30,
+    #     'priority': 1},
+    # 'FOX-1A': {  # http://www.dk3wn.info/p/?cat=80
+    #     'freq': '145980000',
+    #     'processWith': 'modules/iss/iss_voice.sh',
+    #     'priority': 4},
+    # 'FOX-1D': {  # http://www.dk3wn.info/p/?cat=80
+    #     'freq': '145880000',
+    #     'processWith': 'modules/iss/iss_voice.sh',
+    #     'priority': 4},
+    # 'FOX-1B': {  # http://www.dk3wn.info/p/?cat=80
+    #     'freq': '145960000',
+    #     'processWith': 'modules/iss/iss_voice.sh',
+    #     'priority': 4},
 
 }
 
