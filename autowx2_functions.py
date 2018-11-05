@@ -255,11 +255,11 @@ class teeLog(object):
 def runForDuration(cmdline, duration):
     cmdline = [str(x) for x in cmdline]
     try:
-        pipeLog = teeLog(logDir)
+        if logging: pipeLog = teeLog(logging)
         child = subprocess.Popen(cmdline)
         time.sleep(duration)
         child.terminate()
-        pipeLog.__del__()
+        if logging: pipeLog.__del__()
     except OSError as e:
         log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
         log("✖ OS Error: " + e.strerror, style=bc.FAIL)
