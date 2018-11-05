@@ -269,7 +269,7 @@ def justRun(cmdline):
     '''Just run the command as long as necesary and return the output'''
     cmdline = [str(x) for x in cmdline]
     try:
-        pipeLog = teeLog(logDir)
+        pipeLog = teeLog(logging)
         child = subprocess.Popen(cmdline, stdout=subprocess.PIPE)
         result = child.communicate()[0]
         pipeLog.__del__()
