@@ -221,24 +221,32 @@ def listNextPases(passTable, howmany):
         i += 1
 
 
-def runForDuration(cmdline, duration):
+def runForDuration(cmdline, duration, loggingDir):
+    outLogFile = logFile(loggingDir)
+    teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
+
     cmdline = [str(x) for x in cmdline]
+    print cmdline
     try:
-        child = subprocess.Popen(cmdline)
+        p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p2 = subprocess.Popen(teeCommand, stdin=p1.stdout)
         time.sleep(duration)
-        child.terminate()
+        p1.terminate()
     except OSError as e:
         log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
         log("✖ OS Error: " + e.strerror, style=bc.FAIL)
 
 
-def justRun(cmdline):
+def justRun(cmdline, loggingDir):
     '''Just run the command as long as necesary and return the output'''
+    outLogFile = logFile(loggingDir)
+    teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
+
     cmdline = [str(x) for x in cmdline]
+    print cmdline
     try:
-        child = subprocess.Popen(cmdline, stdout=subprocess.PIPE)
-        result = child.communicate()[0]
-        return result
+        p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p2 = subprocess.Popen(teeCommand, stdin=p1.stdout)
     except OSError as e:
         log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
         log("✖ OS Error: " + e.strerror, style=bc.FAIL)
@@ -329,17 +337,22 @@ def log(string, style=bc.CYAN):
     print message
 
     # logging to file, if not Flase
-    if logging:
-        logToFile(escape_ansi(message) + "\n", logging)
+    if loggingDir:
+        logToFile(escape_ansi(message) + "\n", loggingDir)
 
 
-def logToFile(message, logDir):
-    # save message to the file
+def logFile(logDir):
+    '''Create output logging dir, returns name of the logfile'''
     mkdir_p(logDir)
     outfile = "%s/%s.txt" % (
         logDir,
         datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d'))
+    return outfile
 
+
+def logToFile(message, logDir):
+    # save message to the file
+    outfile = logFile(logDir)
     file_append(outfile, message)
 
 

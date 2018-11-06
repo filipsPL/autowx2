@@ -82,7 +82,7 @@ if __name__ == "__main__":
                 peak,
                 azimuth,
                 freq]
-            justRun(processCmdline)
+            justRun(processCmdline, loggingDir)
             time.sleep(10.0)
 
         # still some time before recording
@@ -103,8 +103,8 @@ if __name__ == "__main__":
                         [scriptToRunInFreeTime,
                          towait - 1,
                          dongleShift],
-                        towait - 1)
-                                   # scrript with runt ime and dongle shift as
+                        towait - 1, loggingDir)
+                                   # scrript with run time and dongle shift as
                                    # arguments
                 else:
                     log("Sleeping for: " + t2humanMS(towait - 1) + "s")
