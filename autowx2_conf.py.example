@@ -118,8 +118,8 @@ scriptToRunInFreeTime = baseDir + "bin/aprs.sh" 	# APRS monitor
 
 
 ### Logging to file (enter the path) or False to disable
-# logging = False
-logging = recordingDir + "/logs/"
+# loggingDir = False
+loggingDir = recordingDir + "/logs/"
 
 
 # Dongle PPM shift, hopefully this will change to reflect different PPM on freq
