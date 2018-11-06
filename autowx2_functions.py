@@ -220,46 +220,13 @@ def listNextPases(passTable, howmany):
             peak, azimuth, freq, processWith))
         i += 1
 
-'''
-class Tee(object):
-    def __init__(self, name, mode):
-        self.file = open(name, mode)
-        self.stdout = sys.stdout
-        sys.stdout = self
-    def __del__(self):
-        sys.stdout = self.stdout
-        self.file.close()
-    def write(self, data):
-        self.file.write(data)
-        self.stdout.write(data)
-'''
-
-class teeLog(object):
-    '''Class for piping what is printed to both: screen and file'''
-    def __init__(self, logDir):
-        mkdir_p(logDir)
-        outfile = "%s/%s.txt" % (
-            logDir,
-            datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d'))
-        self.file = open(outfile, "a")
-        self.stdout = sys.stdout
-        sys.stdout = self
-    def __del__(self):
-        sys.stdout = self.stdout
-        self.file.close()
-    def write(self, data):
-        self.file.write(data)
-        self.stdout.write(data)
-
 
 def runForDuration(cmdline, duration):
     cmdline = [str(x) for x in cmdline]
     try:
-        if logging: pipeLog = teeLog(logging)
         child = subprocess.Popen(cmdline)
         time.sleep(duration)
         child.terminate()
-        if logging: pipeLog.__del__()
     except OSError as e:
         log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
         log("✖ OS Error: " + e.strerror, style=bc.FAIL)
@@ -269,10 +236,8 @@ def justRun(cmdline):
     '''Just run the command as long as necesary and return the output'''
     cmdline = [str(x) for x in cmdline]
     try:
-        pipeLog = teeLog(logging)
         child = subprocess.Popen(cmdline, stdout=subprocess.PIPE)
         result = child.communicate()[0]
-        pipeLog.__del__()
         return result
     except OSError as e:
         log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
