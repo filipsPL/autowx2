@@ -243,10 +243,11 @@ def justRun(cmdline, loggingDir):
     teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
 
     cmdline = [str(x) for x in cmdline]
-    print cmdline
     try:
         p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         p2 = subprocess.Popen(teeCommand, stdin=p1.stdout)
+	result = p1.communicate()[0]
+        return result
     except OSError as e:
         log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
         log("✖ OS Error: " + e.strerror, style=bc.FAIL)
@@ -294,7 +295,7 @@ def calibrate(dongleShift=dongleShift):
     '''calculate the ppm for the device'''
     if (calibrationTool):
         cmdline = [calibrationTool]
-        newdongleShift = justRun(cmdline).strip()
+        newdongleShift = justRun(cmdline, loggingDir).strip()
         if newdongleShift != '' and is_number(newdongleShift):
             log("Recalculated dongle shift is: " +
                 str(newdongleShift) + " ppm")
