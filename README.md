@@ -145,7 +145,7 @@ satellitesData = {
         'priority': 2},
     'LILACSAT-1': {
         'freq': '436510000',
-        'processWith': 'modules/iss/iss_voice.sh',
+        'processWith': 'modules/iss/iss_voice_mp3.sh',
         'priority': 3},
 
 }
