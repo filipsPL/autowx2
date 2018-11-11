@@ -11,11 +11,15 @@ source $baseDir/_listvars.sh
 
 ################## FINE TUNING #####################
 
+# directory with noaa stuff
+noaaDir="$recordingDir/noaa/"
+
 # directory for generated images
-imgdir="$recordingDir/noaa/img/"$(date +"%Y/%m/%d/")
+imgdir="$noaaDir/img/"$(date +"%Y/%m/%d/")
 
 # directory for recorded raw and wav files
-recdir="$recordingDir/noaa/rec/"$(date +"%Y/%m/%d/")
+recdir="$noaaDir/rec/"$(date +"%Y/%m/%d/")
+
 
 #
 # Sample rate, width of recorded signal - should include few kHz for doppler shift
@@ -107,3 +111,9 @@ source $scriptDir/noaa_record.sh
 #
 
 source $scriptDir/noaa_process.sh
+
+#
+# generate gallery for a given pass
+#
+
+source $scriptDir/noaa_gallery.sh
