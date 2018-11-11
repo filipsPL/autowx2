@@ -456,8 +456,8 @@ def CreateGanttChart(listNextPasesListList):
 
 def listNextPasesHtml(passTable, howmany):
     i = 1
-    output = "<table>\n"
-    output += "<tr><td>#</td><td>satellite</td><td>start</td><td>duration</td><td>peak</td><td>azimuth</td><td>freq</td><td>process with</td><tr>\n"
+    output = "<table class='table'>\n"
+    output += "<tr><th>#</th><th>satellite</th><th>start</th><th>duration</th><th>peak</th><th>azimuth</th><th>freq</th><th>process with</th><tr>\n"
 
     for satelitePass in passTable[0:howmany]:
         satellite, start, duration, peak, azimuth = satelitePass
