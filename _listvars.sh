@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# get the config file autowx2_conf and reports variables in a bash-like style
+
 scriptDir="$(dirname "$(realpath "$0")")"
 source $scriptDir/basedir_conf.py
 
