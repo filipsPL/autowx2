@@ -95,16 +95,20 @@ dongleGain = '49.6'
 #
 recordingDir = baseDir + "recordings/"
 
+#
+# where to place the www data (static html pages)
+#
+wwwDir=baseDir + 'var/www/'
 
 #
 # location of the HTML file with a list of next passes
 #
-htmlNextPassList = baseDir + 'var/nextpass.html'
+htmlNextPassList = wwwDir + 'nextpass.html'
 
 #
 # location of the Gantt chart file with a plot of next passes; PNG or SVG file extension possible
 #
-ganttNextPassList = baseDir + 'var/nextpass.png'
+ganttNextPassList = wwwDir + 'nextpass.png'
 
 # script tha will be used whle waiting for the next pass; set False if we just want to sleep
 # by default, this script will get the parameter of duration of the time to be run and the recent dongleShift
