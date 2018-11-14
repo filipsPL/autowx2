@@ -18,5 +18,6 @@ script:
  - lame --version
  - wxtoimg -V
  - wxmap -V
- - ./genpasstable.py
  - bin/dump1090-stream-parser.py --help
+ - convert -help
+ - ./genpasstable.py

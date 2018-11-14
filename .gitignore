@@ -10,8 +10,8 @@ autowx2_conf.py
 recordings
 bin/pymultimonaprs.confs/
 bin/heatmap.py
-var/nextpass.png
-var/nextpass.html
+var/www/nextpass.png
+var/www/nextpass.html
 autowx2_conf.py
 git-merge-devel.sh
 git-wyslij-github.sh

@@ -21,6 +21,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 - [x] NOAA weather satellites
 - [x] ISS transmissions (voice, [SSTV](https://github.com/filipsPL/autowx2/issues/35))
 - [x] Fox-1B satellite transmissions
+- [x] Fixed-time radiosondes (meteo baloons) observations (with [radiosonde_auto_rx](https://github.com/projecthorus/radiosonde_auto_rx/wiki))
 - [x] Fixed-time FM recordings
 
 **autowx2** can be easily configured to do other useful things (with SDR dongle) while waiting for the next scheduled transmissions. Tested and available "plugins" include:
@@ -147,6 +148,12 @@ satellitesData = {
         'freq': '436510000',
         'processWith': 'modules/iss/iss_voice_mp3.sh',
         'priority': 3},
+    'Radiosonde': {	# twice a day watch for meteo balloons
+        'freq': '98796500',
+        'processWith': 'modules/radiosonde/run_radiosonde_scanner.sh',
+        'fixedTime': '20 0,12 * * *',
+        'fixedDuration': 12000,
+        'priority': 1},
 
 }
 

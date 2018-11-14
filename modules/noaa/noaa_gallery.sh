@@ -44,13 +44,13 @@ echo "<p>f=${varFreq}Hz, peak: ${varPeak}°, duration: ${varDur}s</p>" >> $outHt
 for enchancement in "${enchancements[@]}"
 do
     echo "**** $enchancement"
-    obrazek="$fileNameCore-$enchancement+map.png"
+    obrazek="$fileNameCore-$enchancement+map.jpg"
     echo $obrazek
 
-    echo "<img src='$fileNameCore-${enchancement}+map.png' alt=''$fileNameCore' width='$width'> " >> $outHtml
+    echo "<img src='$fileNameCore-${enchancement}+map.jpg' alt=''$fileNameCore' width='$width'> " >> $outHtml
 done
 
-echo "<img src='$fileNameCore-spectrogram.png' alt=''spectrogram' width='$width'>" >> $outHtml
+echo "<img src='$fileNameCore-spectrogram.jpg' alt=''spectrogram' width='$width'>" >> $outHtml
 
 
 # ----consolidate data from the given day ------------------------------------#

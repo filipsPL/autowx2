@@ -245,8 +245,8 @@ def justRun(cmdline, loggingDir):
     cmdline = [str(x) for x in cmdline]
     try:
         p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        p2 = subprocess.Popen(teeCommand, stdin=p1.stdout, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-	result = p2.communicate()[0]
+        p2 = subprocess.Popen(teeCommand, stdin=p1.stdout)
+	result = p1.communicate()[0]
         return result
     except OSError as e:
         log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
@@ -301,7 +301,7 @@ def calibrate(dongleShift=dongleShift):
                 str(newdongleShift) + " ppm")
             return str(float(newdongleShift))
         else:
-            log("Using the good old dongle shift (a): " +
+            log("Using the good old dongle shift: " +
                 str(dongleShift) + " ppm")
             return dongleShift
     else:
@@ -456,8 +456,8 @@ def CreateGanttChart(listNextPasesListList):
 
 def listNextPasesHtml(passTable, howmany):
     i = 1
-    output = "<table class='table'>\n"
-    output += "<tr><th>#</th><th>satellite</th><th>start</th><th>duration</th><th>peak</th><th>azimuth</th><th>freq</th><th>process with</th><tr>\n"
+    output = "<table>\n"
+    output += "<tr><td>#</td><td>satellite</td><td>start</td><td>duration</td><td>peak</td><td>azimuth</td><td>freq</td><td>process with</td><tr>\n"
 
     for satelitePass in passTable[0:howmany]:
         satellite, start, duration, peak, azimuth = satelitePass
