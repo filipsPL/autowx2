@@ -37,7 +37,7 @@ logFile="$imgdir/$fileNameCore.log"   # log file to read from
 
 varDate=$(sed '1q;d' $logFile)
 varSat=$(sed '3q;d' $logFile)
-varStart=$(sed '4q;d' $logFile)
+# varStart=$(sed '4q;d' $logFile) # unused
 varDur=$(sed '5q;d' $logFile)
 varPeak=$(sed '6q;d' $logFile)
 varFreq=$(sed '7q;d' $logFile)

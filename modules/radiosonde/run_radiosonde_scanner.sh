@@ -14,7 +14,7 @@ source $baseDir/_listvars.sh
 #### microconfiguration
 
 radiosondeBin="/home/filips/bin/radiosonde_auto_rx/auto_rx"
-logfile="$recordingDir/radiosonde/log/"$(date +"%Y%m%d")".txt"
+logfile="$recordingDir/radiosonde/log/$(date +"%Y%m%d").txt"
 mkdir -p "$recordingDir/radiosonde/log/"
 
 ### doing the job
@@ -38,4 +38,3 @@ echo "freq=$freq"
 
 cd $radiosondeBin
 timeout $duration python auto_rx.py | tee -a $logfile
-
