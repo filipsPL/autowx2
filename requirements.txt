@@ -2,4 +2,4 @@ pypredict
 matplotlib
 numpy
 tendo
-osmviz
+osmviz==2.1.0
