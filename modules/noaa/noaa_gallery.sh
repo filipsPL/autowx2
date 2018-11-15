@@ -14,18 +14,24 @@ enchancements=('MCIR-precip' 'HVC' 'MSA' 'therm' 'HVCT-precip')
 # freq="$7"
 
 # static values for tests
-# imgdir=/home/filips/github/autowx2/recordings/noaa/img/2018/09/08/
-# fileNameCore="20180908-1626_NOAA-19"
-# noaaWwwDir="/home/filips/github/autowx2/recordings/noaa/"
+#imgdir=/home/filips/bin/autowx2/var/www/recordings/noaa/img/2018/11/14/
+#fileNameCore="20181114-1818_NOAA-18"
+#noaaDir="/home/filips/bin/autowx2/var/www/recordings/noaa/"
 
 
 
 # prorgam itself - variables
 outHtml="$imgdir/$fileNameCore.html"  # html for this single pass
 indexHtml="$imgdir/index.html"        # main index file for a given day
-width="400px"                         # resized image width
 
 # ---single gallery preparation------------------------------------------------#
+
+makethumb() {
+    obrazek="$1"
+    local thumbnail=$(basename "$obrazek" .jpg)".th.jpg"
+    convert -define jpeg:size=200x200 "$obrazek" -thumbnail '200x200^' granite: +swap -gravity center -extent 200x200 -composite -quality 82 "$thumbnail"
+    echo "$thumbnail"
+    }
 
 logFile="$imgdir/$fileNameCore.log"   # log file to read from
 
@@ -38,6 +44,8 @@ varFreq=$(sed '7q;d' $logFile)
 
 # indexHtmlWww=$(date -d @$varStart +"%Y-%m-%d")  # the output of the html from template
 
+cd $imgdir
+
 echo "<h1>$varSat | $varDate</h1>" > $outHtml
 echo "<p>f=${varFreq}Hz, peak: ${varPeak}°, duration: ${varDur}s</p>" >> $outHtml
 
@@ -45,12 +53,14 @@ for enchancement in "${enchancements[@]}"
 do
     echo "**** $enchancement"
     obrazek="$fileNameCore-$enchancement+map.jpg"
-    echo $obrazek
-
-    echo "<img src='$fileNameCore-${enchancement}+map.jpg' alt=''$fileNameCore' width='$width'> " >> $outHtml
+    sizeof=$(du -sh "$obrazek" | cut -f 1)
+    # generate thumbnail
+    thumbnail=$(makethumb "$obrazek")
+    echo "<a href='$obrazek'><img src='$thumbnail' alt='$enchancement' title='$enchancement | $sizeof' /></a> " >> $outHtml
 done
 
-echo "<img src='$fileNameCore-spectrogram.jpg' alt=''spectrogram' width='$width'>" >> $outHtml
+thumbnail=$(makethumb "$fileNameCore-spectrogram.jpg")
+echo "<a href='$fileNameCore-spectrogram.jpg'><img src='$thumbnail' alt=''spectrogram' /></a>" >> $outHtml
 
 
 # ----consolidate data from the given day ------------------------------------#
