@@ -149,6 +149,11 @@ cd $baseDir
 bin/update-keps.sh
 
 
+
+echo "***************** default dongle shift...."
+
+echo -n "0" > var/dongleshift.txt
+
 echo
 echo "-------------------------------------------------------------------------"
 echo "The installation script seems to be finished."
