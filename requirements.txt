@@ -1,5 +1,5 @@
-pypredict
-matplotlib
-numpy
-tendo
-osmviz
+pypredict==1.2
+matplotlib==3.0.0
+numpy==1.15.3
+tendo==0.2.12
+osmviz==3.0.0
