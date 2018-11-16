@@ -20,8 +20,7 @@ source $baseDir/_listvars.sh
 #noaaDir="/home/filips/bin/autowx2/var/www/recordings/noaa/"
 
 imgdir="$1"
-noaaDir="/home/filips/bin/autowx2/var/www/recordings/noaa/"
-curdir=$(pwd)
+# curdir=$(pwd)
 
 for logfile in $(ls $imgdir/*.log)
 do
