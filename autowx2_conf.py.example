@@ -107,11 +107,21 @@ recordingDir = wwwDir + "recordings/"		# will go to www dir
 # location of the HTML file with a list of next passes
 #
 htmlNextPassList = wwwDir + 'nextpass.html'
-    
+
 #
 # location of the Gantt chart file with a plot of next passes; PNG or SVG file extension possible
 #
 ganttNextPassList = wwwDir + 'nextpass.png'
+
+#
+# WWW root path - where is your main index.html file
+# this could be:
+# / - for page in the root www directory, eg. www.domain.org/index.html
+# /~filipsPL/ - for page located in filipsPL's home directory
+# file:///home/filipsPL/github/autowx2/var/www/ - for files stored locally in the given local directory
+
+wwwRootPath='/'
+
 
 
 # script tha will be used whle waiting for the next pass; set False if we just want to sleep
