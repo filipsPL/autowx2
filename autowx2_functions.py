@@ -28,7 +28,7 @@ import sys
 import matplotlib
 matplotlib.use('Agg')  # Force matplotlib to not use any Xwindows backend.
 import matplotlib.pyplot as plt
-import matplotlib.font_manager as font_manager
+# import matplotlib.font_manager as font_manager
 import matplotlib.dates
 from matplotlib.dates import DateFormatter
 import numpy as np
@@ -229,7 +229,7 @@ def runForDuration(cmdline, duration, loggingDir):
     print cmdline
     try:
         p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        p2 = subprocess.Popen(teeCommand, stdin=p1.stdout)
+        _ = subprocess.Popen(teeCommand, stdin=p1.stdout)
         time.sleep(duration)
         p1.terminate()
     except OSError as e:
@@ -259,7 +259,7 @@ def runTest(duration=2):
                              stderr=subprocess.PIPE)
     time.sleep(duration)
     child.terminate()
-    out, err = child.communicate()
+    _, err = child.communicate()
     # if no device: ['No', 'supported', 'devices', 'found.']
     # if OK: ['Found', '1', 'device(s):', '0:', 'Realtek,',
     # 'RTL2838UHIDIR,',...
