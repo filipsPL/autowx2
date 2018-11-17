@@ -7,8 +7,8 @@ source $scriptDir/basedir_conf.py
 source $baseDir/_listvars.sh
 
 
-database="$baseDir/recordings/dump1090/adsb_messages.db"
-outdir="$baseDir/recordings/dump1090/"   #$(date +"%Y/%m")/$(date +"%Y%m%d").txt"
+database="$recordingDir/dump1090/adsb_messages.db"
+outdir="$recordingDir/dump1090/" # $(date +"%Y/%m")/$(date +"%Y%m%d").txt"
 tempdir="/tmp"
 
 mkdir -p $(dirname $outdir)
@@ -24,4 +24,11 @@ $baseDir/bin/heatmap.py -o $outdir/heatmap-osm2.png -r 40 --height 900 --osm --m
 $baseDir/bin/heatmap.py -b black -r 30 -W 1200 -o $tempdir/h1.png -k gaussian --sqlite_table squitters $database
 $baseDir/bin/heatmap.py -r 5 -W 1200 -o $tempdir/h2.png --decay 0.3 --margin 25 -k gaussian --sqlite_table squitters $database
 
-rm $tempdir/h1.png $tempdir/h2.png
+# convert to jpg
+
+convert -quality 83 $outdir/heatmap-osm.png $outdir/heatmap-osm.jpg
+convert -quality 83 $outdir/heatmap-osm2.png $outdir/heatmap-osm2.jpg
+
+
+# remove unused files
+rm $tempdir/h1.png $tempdir/h2.png $outdir/heatmap-osm.png $outdir/heatmap-osm2.png

@@ -7,8 +7,9 @@ source $scriptDir/basedir_conf.py
 source $baseDir/_listvars.sh
 
 
-database="$baseDir/recordings/dump1090/adsb_messages.db"
+#### microconfiguration
 
+database="$recordingDir/dump1090/adsb_messages.db"
 mkdir -p $(dirname $database)
 
 duration=$1

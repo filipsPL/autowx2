@@ -42,7 +42,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 These scripts may be used by the autowx2 in the free time, e.g., to track airplanes, capture APRS signals etc:
 
-- [dump1090](https://github.com/antirez/dump1090) - the classic version, by antirez
+- [dump1090](https://github.com/MalcolmRobb/dump1090) - tested with MalcolmRobb's fork
 - [dump1090-stream-parser.py](https://github.com/yanofsky/dump1090-stream-parser) by yanofsky
 - [heatmap](https://github.com/filipsPL/heatmap) a fork of the great heatmap by sethoscope, modified by filipsPL to support sqlite
   - [osmviz](http://cbick.github.io/osmviz/html/)

@@ -15,11 +15,11 @@ enchancements=('MCIR-precip' 'HVC' 'MSA' 'therm' 'HVCT-precip')
 
 # static values for tests
 # imgdir=/home/filips/bin/autowx2/var/www/recordings/noaa/img/2018/09/08/
-imgdir=/home/filips/github/autowx2/var/www/recordings/noaa/img/2018/09/08/
+#imgdir=/home/filips/github/autowx2/var/www/recordings/noaa/img/2018/09/08/
 #fileNameCore="20181114-1818_NOAA-18"
-fileNameCore=20180908-1626_NOAA-19
-wwwDir="/home/filips/github/autowx2/var/www/"
-wwwRootPath='file:///home/filips/github/autowx2/var/www/'
+#fileNameCore=20180908-1626_NOAA-19
+#wwwDir="/home/filips/github/autowx2/var/www/"
+#wwwRootPath='file:///home/filips/github/autowx2/var/www/'
 
 
 
@@ -61,11 +61,11 @@ do
     sizeof=$(du -sh "$obrazek" | cut -f 1)
     # generate thumbnail
     thumbnail=$(makethumb "$obrazek")
-    echo "<a href='$obrazek'><img src='$thumbnail' alt='$enchancement' title='$enchancement | $sizeof' /></a> " >> $outHtml
+    echo "<a href='$obrazek'><img src='$thumbnail' alt='$enchancement' title='$enchancement | $sizeof' class="img-thumbnail" /></a> " >> $outHtml
 done
 
 thumbnail=$(makethumb "$fileNameCore-spectrogram.jpg")
-echo "<a href='$fileNameCore-spectrogram.jpg'><img src='$thumbnail' alt=''spectrogram' /></a>" >> $outHtml
+echo "<a href='$fileNameCore-spectrogram.jpg'><img src='$thumbnail' alt=''spectrogram' class="img-thumbnail" /></a>" >> $outHtml
 
 
 # ----consolidate data from the given day ------------------------------------#

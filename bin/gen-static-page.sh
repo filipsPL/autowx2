@@ -24,9 +24,12 @@ htmlOutput="$wwwDir/index.html"
 htmlOutputTable="$wwwDir/table.html"
 
 
-# ----list all dates and times  -------------------------------------------------#
+echo "" > $dirList
 
-echo "<ul>" > $dirList
+# ---- NOAA list all dates and times  -------------------------------------------------#
+
+echo "<h2>NOAA recordings</h2>" >> $dirList
+echo "<ul>" >> $dirList
 for y in $(ls $noaaDir/img/ | sort -rn)
 do
   echo "<li>$y</li><ul>" >> $dirList
@@ -36,13 +39,43 @@ do
     for d in $(ls $noaaDir/img/$y/$m/ | sort -rn)
     do
       # collect info about files in the directory
-      echo "<a href='recordings/noaa/img/$y/$m/$d/index.html'>$d</a> " >> $dirList
+      echo "<a href='$wwwRootPath/recordings/noaa/img/$y/$m/$d/index.html'>$d</a> " >> $dirList
     done
     echo "</li>" >> $dirList
   done
   echo "</ul>" >> $dirList
 done
 echo "</ul>" >> $dirList
+
+
+# ---- ISS loop all dates and times  -------------------------------------------------#
+
+echo "<h2>ISS recordings</h2>" >> $dirList
+echo "<ul>" >> $dirList
+for y in $(ls $noaaDir/img/ | sort -rn)
+do
+  echo "<li>($y) " >> $dirList
+  for m in $(ls $noaaDir/img/$y | sort -rn)
+  do
+    echo "<a href='$wwwRootPath/recordings/iss/rec/$y/$m/'>$m</a> " >> $dirList
+  done
+  echo "</li>" >> $dirList
+done
+echo "</ul>" >> $dirList
+
+# ---- LOGS  -------------------------------------------------#
+
+echo "<h2>Logs</h2>" >> $dirList
+echo "<ul><li>(All) <a href='$wwwRootPath/recordings/logs/'>Logs</a></li></ul>" >> $dirList
+
+
+# ---- dump1090  -------------------------------------------------#
+
+echo "<h2>dump1090 heatmap</h2>" >> $dirList
+echo "<img src='$wwwRootPath/recordings/dump1090/heatmap-osm.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
+echo "<img src='$wwwRootPath/recordings/dump1090/heatmap-osm2.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
+
+
 
 
 # ------------------------------------------template engine --------------------- #

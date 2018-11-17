@@ -33,7 +33,7 @@ cat <<EOF
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="/">Home
+              <a class="nav-link" href="$wwwRootPath/">Home
                 <span class="sr-only">(current)</span>
               </a>
             </li>
@@ -55,6 +55,10 @@ cat <<EOF
 $htmlBody
     </div>
     <!-- /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="$wwwRootPath/css/jquery.min.js"></script>
+    <script src="$wwwRootPath/css/bootstrap.bundle.min.js"></script>
 
   </body>
 

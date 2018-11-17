@@ -13,3 +13,18 @@ body {
     padding-top: 76px;
   }
 }
+
+
+h2 {
+     padding-top: 16px;
+}
+
+img { padding: 10px;}
+
+h2:after
+{
+    content:' ';
+    display:block;
+    border:1px dotted silver;
+
+}
