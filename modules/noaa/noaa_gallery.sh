@@ -79,7 +79,9 @@ done
 
 # ---------- generates pages according to the template file -------------------
 
-date=$(date)
+currentDate=$(date)
+echo $currentDate
+
 htmlTitle="NOAA images | $dateTime"
 htmlBody=$(cat $indexHtml.tmp)
 

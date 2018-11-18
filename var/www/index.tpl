@@ -52,7 +52,7 @@ cat <<EOF
     <div class="container">
 
 <h1>$htmlTitle</h1>
-Generated: $date
+Generated: $currentDate
 
 $htmlBody
     </div>
