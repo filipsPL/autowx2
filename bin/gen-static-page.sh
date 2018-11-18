@@ -23,6 +23,8 @@ htmlTemplate="$wwwDir/index.tpl"
 htmlOutput="$wwwDir/index.html"
 htmlOutputTable="$wwwDir/table.html"
 
+date=$(date)
+
 
 echo "" > $dirList
 
@@ -74,7 +76,6 @@ echo "<ul><li>(All) <a href='$wwwRootPath/recordings/logs/'>Logs</a></li></ul>" 
 echo "<h2>dump1090 heatmap</h2>" >> $dirList
 echo "<img src='$wwwRootPath/recordings/dump1090/heatmap-osm.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
 echo "<img src='$wwwRootPath/recordings/dump1090/heatmap-osm2.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
-
 
 
 

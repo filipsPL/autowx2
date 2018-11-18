@@ -10,6 +10,7 @@ echo "baseDir=\"$pwdir/\"" >> $outfile
 
 
 ln -r -f -s $outfile "bin/$outfile"
+ln -r -f -s $outfile "bin/crontab/$outfile"
 
 echo "Creating symlinks to the config file..."
 

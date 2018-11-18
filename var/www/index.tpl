@@ -37,7 +37,7 @@ cat <<EOF
                 <span class="sr-only">(current)</span>
               </a>
             </li>
-            <a class="nav-link" href="table.html">Capture plan
+            <a class="nav-link" href="$wwwRootPath/table.html">Capture plan
             </a>
           </li>
             <li class="nav-item">
@@ -52,6 +52,8 @@ cat <<EOF
     <div class="container">
 
 <h1>$htmlTitle</h1>
+Generated: $date
+
 $htmlBody
     </div>
     <!-- /.container -->
