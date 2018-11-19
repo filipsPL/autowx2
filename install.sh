@@ -34,7 +34,7 @@ libavahi-client-dev libavahi-common-dev libdbus-1-dev libfftw3-single3 libpulse-
 libfftw3-dev libfftw3-double3 lame sox libsox-fmt-mp3 libtool automake python-pil python-imaging imagemagick python-dev
 
 
-if [ ${MACHINE_TYPE} == 'armv6l' ] || [ ${MACHINE_TYPE} == 'armv71' ]; then
+if [ ${MACHINE_TYPE} == 'armv6l' ] || [ ${MACHINE_TYPE} == 'armv7l' ]; then
 	echo
 	echo
 	echo "******** Installing Rpi required packages"
@@ -50,7 +50,7 @@ fi
 
 
 PIP_OPTIONS=""
-if [ ${MACHINE_TYPE} == 'armv6l' ] || [ ${MACHINE_TYPE} == 'armv71' ]; then
+if [ ${MACHINE_TYPE} == 'armv6l' ] || [ ${MACHINE_TYPE} == 'armv7l' ]; then
   PIP_OPTIONS="--no-cache-dir"
 fi
 
@@ -76,7 +76,7 @@ if [ ${MACHINE_TYPE} == 'x86_64' ]; then
     echo "64-bit system"
     wget https://wxtoimgrestored.xyz/downloads/wxtoimg-linux64-2.10.11-1.tar.gz
     gunzip < wxtoimg-linux64-2.10.11-1.tar.gz | sudo sh -c "(cd /; tar -xvf -)"
-elif [ ${MACHINE_TYPE} == 'armv6l' ] || [ ${MACHINE_TYPE} == 'armv71' ]; then
+elif [ ${MACHINE_TYPE} == 'armv6l' ] || [ ${MACHINE_TYPE} == 'armv7l' ]; then
     wget https://wxtoimgrestored.xyz/beta/wxtoimg-armhf-2.11.2-beta.deb
     sudo dpkg -i wxtoimg-armhf-2.11.2-beta.deb
 else
