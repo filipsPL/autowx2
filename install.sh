@@ -59,7 +59,7 @@ echo
 echo "******** Installing python requirements"
 echo
 echo
-pip $PIP_OPTIONS install -r requirements.txt
+sudo pip $PIP_OPTIONS install -r requirements.txt
 
 
 mkdir -p $baseDir/bin/sources/
