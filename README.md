@@ -38,6 +38,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 - [wxtoimg](http://www.wxtoimg.com/downloads/)
 - [kalibrate-rtl](https://github.com/viraptor/kalibrate-rtl)
 - [bootstrap logo-nav](https://startbootstrap.com/template-overviews/logo-nav/) www template, Copyright 2013-2018 Blackrock Digital LLC. Code released under the [MIT](https://github.com/BlackrockDigital/startbootstrap-logo-nav/blob/gh-pages/LICENSE) license
+- [https://github.com/fancyapps/fancyBox](fancyBox) jQuery lightbox script for displaying images, videos and more
 - Special acknowledgements: [Stack Overflow community](https://stackoverflow.com/)
 
 These scripts may be used by the autowx2 in the free time, e.g., to track airplanes, capture APRS signals etc:

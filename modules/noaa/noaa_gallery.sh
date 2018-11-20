@@ -61,11 +61,11 @@ do
     sizeof=$(du -sh "$obrazek" | cut -f 1)
     # generate thumbnail
     thumbnail=$(makethumb "$obrazek")
-    echo "<a href='$obrazek'><img src='$thumbnail' alt='$enchancement' title='$enchancement | $sizeof' class="img-thumbnail" /></a> " >> $outHtml
+    echo "<a data-fancybox='gallery' data-caption='$varSat | $varDate | $enchancement ($sizeof)' href='$obrazek'><img src='$thumbnail' alt='$enchancement' title='$enchancement | $sizeof' class="img-thumbnail" /></a> " >> $outHtml
 done
 
 thumbnail=$(makethumb "$fileNameCore-spectrogram.jpg")
-echo "<a href='$fileNameCore-spectrogram.jpg'><img src='$thumbnail' alt=''spectrogram' class="img-thumbnail" /></a>" >> $outHtml
+echo "<a data-fancybox='gallery' data-caption='spectrogram'  href='$fileNameCore-spectrogram.jpg'><img src='$thumbnail' alt='spectrogram' class="img-thumbnail" /></a>" >> $outHtml
 
 
 # ----consolidate data from the given day ------------------------------------#

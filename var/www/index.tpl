@@ -17,6 +17,9 @@ cat <<EOF
     <!-- Custom styles for this template -->
     <link href="$wwwRootPath/css/logo-nav.css" rel="stylesheet">
 
+
+    <link  href="$wwwRootPath/css/fancybox/jquery.fancybox.min.css" rel="stylesheet">
+
   </head>
 
   <body>
@@ -61,6 +64,7 @@ $htmlBody
     <!-- Bootstrap core JavaScript -->
     <script src="$wwwRootPath/css/jquery.min.js"></script>
     <script src="$wwwRootPath/css/bootstrap.bundle.min.js"></script>
+    <script src="$wwwRootPath/css/fancybox/jquery.fancybox.min.js"></script>
 
   </body>
 

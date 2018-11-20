@@ -16,3 +16,4 @@ autowx2_conf.py
 git-merge-devel.sh
 git-wyslij-github.sh
 var/dongleshift.txt
+var/gsm_channel.txt
