@@ -106,7 +106,7 @@ recordingDir = wwwDir + "recordings/"		# will go to www dir
 #
 # location of the HTML file with a list of next passes
 #
-htmlNextPassList = wwwDir + 'nextpass.html'
+htmlNextPassList = wwwDir + 'nextpass.tmp'
 
 #
 # location of the Gantt chart file with a plot of next passes; PNG or SVG file extension possible
