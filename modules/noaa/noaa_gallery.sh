@@ -48,6 +48,10 @@ varPeak=$(sed '6q;d' $logFile)
 varFreq=$(sed '7q;d' $logFile)
 
 dateTime=$(date -d @$varStart +"%Y-%m-%d")
+dateTimeDir=$(date -d @$varStart +"%Y/%m/%d")  # directory format of date, eg. 2018/11/22/
+wwwPath=$wwwRootPath/recordings/noaa/img/$dateTimeDir
+
+echo $wwwPath/$fileNameCore > $wwwDir/noaa-last-recording.tmp
 
 cd $imgdir
 
@@ -61,11 +65,12 @@ do
     sizeof=$(du -sh "$obrazek" | cut -f 1)
     # generate thumbnail
     thumbnail=$(makethumb "$obrazek")
-    echo "<a data-fancybox='gallery' data-caption='$varSat | $varDate | $enchancement ($sizeof)' href='$obrazek'><img src='$thumbnail' alt='$enchancement' title='$enchancement | $sizeof' class="img-thumbnail" /></a> " >> $outHtml
+    echo "<a data-fancybox='gallery' data-caption='$varSat | $varDate | $enchancement ($sizeof)' href='$wwwPath/$obrazek'><img src='$wwwPath/$thumbnail' alt='$enchancement' title='$enchancement | $sizeof' class='img-thumbnail' /></a> " >> $outHtml
 done
 
 thumbnail=$(makethumb "$fileNameCore-spectrogram.jpg")
-echo "<a data-fancybox='gallery' data-caption='spectrogram'  href='$fileNameCore-spectrogram.jpg'><img src='$thumbnail' alt='spectrogram' class="img-thumbnail" /></a>" >> $outHtml
+echo "<a data-fancybox='gallery' data-caption='spectrogram' href='$wwwPath/$fileNameCore-spectrogram.jpg'><img src='$wwwPath/$thumbnail' alt='spectrogram' class='img-thumbnail' /></a>" >> $outHtml
+
 
 
 # ----consolidate data from the given day ------------------------------------#

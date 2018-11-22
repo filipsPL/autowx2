@@ -7,7 +7,7 @@ cat <<EOF
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="autowx2 atomated satellite receiving station">
-    <meta name="author" content="">
+    <meta name="author" content="filipsPL@github">
 
     <title>autowx2 atomated satellite receiving station :: $htmlTitle</title>
 
@@ -27,7 +27,7 @@ cat <<EOF
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="$wwwRootPath">
           autowx2 | automatic receiving station
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,11 +36,11 @@ cat <<EOF
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="$wwwRootPath/">Home
+              <a class="nav-link" href="$wwwRootPath">Home
                 <span class="sr-only">(current)</span>
               </a>
             </li>
-            <a class="nav-link" href="$wwwRootPath/table.html">Capture plan
+            <a class="nav-link" href="$wwwRootPath/table.html">Pass table
             </a>
           </li>
             <li class="nav-item">

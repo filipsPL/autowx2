@@ -18,7 +18,7 @@ source $baseDir/_listvars.sh
 
 
 noaaDir=$recordingDir/noaa/
-dirList="$wwwDir/noaa_dirlist.html"
+dirList="$wwwDir/noaa_dirlist.tmp"
 htmlTemplate="$wwwDir/index.tpl"
 htmlOutput="$wwwDir/index.html"
 htmlOutputTable="$wwwDir/table.html"
@@ -32,6 +32,13 @@ echo "" > $dirList
 # ---- NOAA list all dates and times  -------------------------------------------------#
 
 echo "<h2>NOAA recordings</h2>" >> $dirList
+echo "<h4>Recent pass</h4>" >> $dirList
+echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-therm+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
+echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-MCIR-precip+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
+echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-HVC+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
+
+
+echo "<h4>Archive</h4>" >> $dirList
 echo "<ul>" >> $dirList
 for y in $(ls $noaaDir/img/ | sort -rn)
 do
@@ -74,9 +81,9 @@ echo "<ul><li>(All) <a href='$wwwRootPath/recordings/logs/'>Logs</a></li></ul>" 
 
 # ---- dump1090  -------------------------------------------------#
 
-echo "<h2>dump1090 heatmap</h2>" >> $dirList
-echo "<img src='$wwwRootPath/recordings/dump1090/heatmap-osm.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
-echo "<img src='$wwwRootPath/recordings/dump1090/heatmap-osm2.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
+#echo "<h2>dump1090 heatmap</h2>" >> $dirList
+#echo "<img src='$wwwRootPath/recordings/dump1090/heatmap-osm.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
+#echo "<img src='$wwwRootPath/recordings/dump1090/heatmap-osm2.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
 
 
 
@@ -89,7 +96,7 @@ source $htmlTemplate > $htmlOutput
 # ----- PASS LIST ---- #
 
 
-htmlTitle="Pass list"
+htmlTitle="Pass table"
 htmlBody=$(cat $htmlNextPassList)
 htmlBody="<p><img src='nextpass.png' alt='pass table plot' /></p>"$htmlBody
 
