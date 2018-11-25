@@ -26,4 +26,4 @@ if __name__ == "__main__":
         t1 = Thread(target = mainLoop)
         t1.setDaemon(True)
         t1.start()
-        app.run(debug=True)
+        app.run(debug=True, port=webInterfacePort)

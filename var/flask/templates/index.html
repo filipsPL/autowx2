@@ -8,7 +8,7 @@
     <meta name="description" content="autowx2 atomated satellite receiving station">
     <meta name="author" content="filipsPL@github">
 
-    <title>autowx2 atomated satellite receiving station :: $htmlTitle</title>
+    <title>autowx2 atomated satellite receiving station :: {{title}}}}</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static',filename='bootstrap.min.css') }}" rel="stylesheet">
@@ -35,13 +35,15 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="/">Home
-                <span class="sr-only">(current)</span>
-              </a>
+              <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
             </li>
-            <a class="nav-link" href="/table.html">Pass table
-            </a>
+          <li>
+            <a class="nav-link" href="/table">Pass table</a>
           </li>
+          <li>
+            <a class="nav-link" href="/lastlog">Recent logs</a>
+          </li>
+
             <li class="nav-item">
               <a class="nav-link" href="https://github.com/filipsPL/autowx2">Source code</a>
             </li>
@@ -52,8 +54,11 @@
 
     <!-- Page Content -->
     <div class="container">
-
+<h1>{{title}}</h1>
+{% autoescape false %}
 {{ body }}
+{% endautoescape %}
+
     </div>
     <!-- /.container -->
 
