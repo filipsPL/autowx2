@@ -8,12 +8,9 @@
 from autowx2_conf import *
 
 from flask import Flask, render_template
-from threading import Thread
 
 # satellites = list(satellitesData)
 # qth = (stationLat, stationLon, stationAlt)
-
-
 
 app = Flask(__name__, template_folder="var/flask/templates/", static_folder='var/flask/static') # " template_folder="var/flask/templates/"
 

@@ -13,6 +13,8 @@ from autowx2_conf import *  # configuration
 from autowx2_functions import * # all functions and magic hidden here
 
 from autowx2_webserver import *
+from threading import Thread
+
 
 # ------------------------------------------------------------------------------------------------------ #
 
