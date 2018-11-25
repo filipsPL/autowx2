@@ -61,6 +61,10 @@ if __name__ == "__main__":
 
         towait = int(start - time.time())
 
+        if cleanupRtl:
+    	    log("Killing all remaining rtl_* processes...")
+    	    justRun(["bin/kill_rtl.sh"], loggingDir)
+
         # test if SDR dongle is available
         if towait > 15: # if we have time to perform the test?
             while not runTest():
