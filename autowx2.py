@@ -12,14 +12,7 @@
 from autowx2_conf import *  # configuration
 from autowx2_functions import * # all functions and magic hidden here
 
-from flask import Flask, render_template
-from threading import Thread
-
-
-app = Flask(__name__)
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+from autowx2_webserver import *
 
 # ------------------------------------------------------------------------------------------------------ #
 

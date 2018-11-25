@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# autowx2 - genpastable.py
-# generates the pass table and recording plan for tne next few days and the appropriate plot
+# autowx2 - function and classes used by autowx2 and auxiliary programs
 #
 # GANTT Chart with Matplotlib
 # Sukhbinder
