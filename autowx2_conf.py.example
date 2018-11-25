@@ -91,6 +91,14 @@ dongleGain = '49.6'
 
 
 #
+# Kill all rtl_ related processes after/berofr recordings?
+# This should be enabled when the user doesn't use another instances which may run rtl software
+# 
+
+cleanupRtl = True
+
+
+#
 # where to place the www data (static html pages)
 #
 wwwDir=baseDir + 'var/www/'
