@@ -9,18 +9,11 @@
 # https://github.com/filipsPL/autowx2/
 #
 
-
 from autowx2_conf import *  # configuration
-from autowx2_functions import *
+from autowx2_functions import * # all functions and magic hidden here
 
-
-me = singleton.SingleInstance()
-                              # will sys.exit(-1) if other instance is running
-
-
-satellites = list(satellitesData)
-qth = (stationLat, stationLon, stationAlt)
-
+from autowx2_webserver import *
+from threading import Thread
 
 
 # ------------------------------------------------------------------------------------------------------ #
@@ -28,7 +21,6 @@ qth = (stationLat, stationLon, stationAlt)
 if __name__ == "__main__":
     log("⚡ Program start")
     dongleShift = getDefaultDongleShift()
-
     while True:
 
         # recalculate table of next passes
