@@ -12,18 +12,16 @@
 from autowx2_conf import *  # configuration
 from autowx2_functions import * # all functions and magic hidden here
 
-from autowx2_webserver import *
-from threading import Thread
-
-
 # ------------------------------------------------------------------------------------------------------ #
 
 if __name__ == "__main__":
     log("⚡ Program start")
     dongleShift = getDefaultDongleShift()
-    # mainLoop()
+
     while True:
         t1 = Thread(target = mainLoop)
         t1.setDaemon(True)
         t1.start()
-        app.run(debug=True, port=webInterfacePort)
+        # app.run(debug=True, port=webInterfacePort)
+
+        socketio.run(app, port=webInterfacePort, debug=True)

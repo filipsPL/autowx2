@@ -35,6 +35,10 @@ import numpy as np
 # configuration
 from autowx2_conf import *
 
+from autowx2_webserver import *
+from threading import Thread
+
+
 satellites = list(satellitesData)
 qth = (stationLat, stationLon, stationAlt)
 
@@ -336,7 +340,8 @@ def log(string, style=bc.CYAN):
         style,
         str(string),
         bc.ENDC)
-
+    # socketio.emit('log', {'data': message}, namespace='/')
+    handle_my_custom_event(escape_ansi(message) + "<br />\n")
     print message
 
     # logging to file, if not Flase

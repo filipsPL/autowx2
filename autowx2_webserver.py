@@ -3,11 +3,14 @@
 #
 # autowx2 - webserver definitions
 
+from flask import Flask, render_template
+from flask_socketio import SocketIO, emit
+
 
 # configuration
 from autowx2_conf import *
 from autowx2_functions import * # all functions and magic hidden here
-from flask import Flask, render_template
+
 import codecs
 
 # satellites = list(satellitesData)
@@ -23,8 +26,10 @@ def file_read(filename):
 
 
 app = Flask(__name__, template_folder="var/flask/templates/", static_folder='var/flask/static')
+socketio = SocketIO(app)
 
-body="body"
+body="body2"
+
 
 #
 # homepage
@@ -32,8 +37,12 @@ body="body"
 
 @app.route('/')
 def homepage():
+    print "aaaaaaaaaaaaaaaa!@"
     return render_template('index.html', title="Home page", body=body)
 
+@socketio.on('my event')
+def handle_my_custom_event(text):
+    socketio.emit('my response', { 'tekst': text } )
 
 #
 # display last log
