@@ -15,15 +15,18 @@
     <!-- Custom styles for this template -->
     <link href="{{ url_for('static',filename='logo-nav.css') }}" rel="stylesheet">
     <link  href="{{ url_for('static',filename='fancybox/jquery.fancybox.min.css') }}" rel="stylesheet">
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='socket.io.slim.js') }}"></script>
 
     <script type="text/javascript">
     var socket = io.connect('http://' + document.domain + ':' + location.port);
      socket.on( 'my response', function( msg ) {
        console.log( msg )
-        $('#lastlog').append(msg.tekst)
-        $('#myTextArea').append(msg.tekst); //.append( msg.tekst )
-     })
+        // $('#lastlog').val(msg.tekst)
+        $('#logWindow').append( msg.tekst );
+        var psconsole = $('#logWindow');
+        if(psconsole.length)
+          psconsole.scrollTop(psconsole[0].scrollHeight - psconsole.height());
+           })
     </script>
 
 
@@ -63,10 +66,8 @@
     <!-- Page Content -->
     <div class="container">
 <h1>{{title}}</h1>
-
-<div id="lastlog"></div>
-<textarea id="myTextArea" rows="20" cols="72" class="small"></textarea>
-
+<!-- <textarea id="logWindow" rows="15" cols="85" class="small text-nowrap pre-scrollable"></textarea> -->
+<pre style="height: 400px;" id="logWindow" class="pre-scrollable small text-nowrap"></pre>
 
 {% autoescape false %}
 {{ body }}
