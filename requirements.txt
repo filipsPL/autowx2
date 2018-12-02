@@ -3,3 +3,5 @@ matplotlib
 numpy
 tendo
 osmviz==2.1.0
+Flask
+Flask-SocketIO
