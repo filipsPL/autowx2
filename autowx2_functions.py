@@ -19,9 +19,10 @@ from time import strftime
 import subprocess
 import os
 from _crontab import *
-from tendo import singleton # avoid two instancess
+from tendo import singleton # avoid two instancess WARNING do we need it? :# QUESTION: 
 import re
 import sys
+import gc # Enable automatic garbage collection.
 
 # for plotting
 import matplotlib
@@ -248,6 +249,7 @@ def justRun(cmdline, loggingDir):
     outLogFile = logFile(loggingDir)
     teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
 
+    gc.collect()
     cmdline = [str(x) for x in cmdline]
     try:
         p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -559,6 +561,8 @@ def generatePassTableAndSaveFiles(satellites, qth, verbose=True):
 
 def mainLoop():
     while True:
+        gc.enable() # Enable automatic garbage collection.
+
         # recalculate table of next passes
         passTable = genPassTable(satellites, qth)
 
