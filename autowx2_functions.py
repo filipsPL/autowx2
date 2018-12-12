@@ -19,10 +19,10 @@ from time import strftime
 import subprocess
 import os
 from _crontab import *
-from tendo import singleton # avoid two instancess WARNING do we need it? :# QUESTION: 
+from tendo import singleton # avoid two instancess WARNING do we need it? :# QUESTION:
 import re
 import sys
-import gc # Enable automatic garbage collection.
+
 
 # for plotting
 import matplotlib
@@ -33,12 +33,18 @@ import matplotlib.dates
 from matplotlib.dates import DateFormatter
 import numpy as np
 
-# configuration
-from autowx2_conf import *
-
-from autowx2_webserver import *
+# webserver
+from flask import Flask, render_template
+from flask_socketio import SocketIO, emit
+import codecs
 from threading import Thread
 
+
+# configuration
+from autowx2_conf import *
+from autowx2_webserver import *
+
+# ---------------------------------------------------------------------------- #
 
 satellites = list(satellitesData)
 qth = (stationLat, stationLon, stationAlt)
@@ -249,7 +255,6 @@ def justRun(cmdline, loggingDir):
     outLogFile = logFile(loggingDir)
     teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
 
-    gc.collect()
     cmdline = [str(x) for x in cmdline]
     try:
         p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -556,12 +561,47 @@ def generatePassTableAndSaveFiles(satellites, qth, verbose=True):
 
 
 # --------------------------------------------------------------------------- #
+# --------- THE WEBSERVER --------------------------------------------------- #
+# --------------------------------------------------------------------------- #
+
+
+def file_read(filename):
+    with codecs.open(filename, 'r', encoding='utf-8') as f:
+        lines = f.read()
+    linesBr = "<br />".join( lines.split("\n") )
+    return linesBr
+
+
+@app.route('/')
+def homepage():
+    logfile = logFile(loggingDir)
+    logs = file_read(logfile)
+
+    # log window
+    body = "<h3>Recent logs</h3><p><strong>File</strong>: %s</p><pre style='height: 400px;' id='logWindow' class='pre-scrollable small text-nowrap'>%s</pre>" % (logfile, logs)
+    return render_template('index.html', title="Home page", body=body)
+
+@socketio.on('my event')
+def handle_my_custom_event(text):
+    socketio.emit('my response', { 'tekst': text } )
+
+
+#
+# show pass table
+#
+
+@app.route('/table')
+def passTable():
+    body=file_read(htmlNextPassList)
+    return render_template('index.html', title="Pass table", body=body)
+
+
+# --------------------------------------------------------------------------- #
 # --------- THE MAIN LOOP --------------------------------------------------- #
 # --------------------------------------------------------------------------- #
 
 def mainLoop():
     while True:
-        gc.enable() # Enable automatic garbage collection.
 
         # recalculate table of next passes
         passTable = genPassTable(satellites, qth)
@@ -645,3 +685,5 @@ def mainLoop():
                 towait = int(start - time.time())
                 log("Sleeping for: " + t2humanMS(towait - 1) + "s")
                 time.sleep(towait - 1)
+
+logfile = logFile(loggingDir)
