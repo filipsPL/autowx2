@@ -19,13 +19,18 @@
 
     <script type="text/javascript">
     var socket = io.connect('http://' + document.domain + ':' + location.port);
+    // log window //
      socket.on( 'my response', function( msg ) {
        console.log( msg )
-        // $('#lastlog').val(msg.tekst)
         $('#logWindow').append( msg.tekst );
         var psconsole = $('#logWindow');
         if(psconsole.length)
           psconsole.scrollTop(psconsole[0].scrollHeight - psconsole.height());
+           })
+     // Pass Table in Html //
+     socket.on( 'response next pass table', function( msg ) {
+       console.log( msg )
+        $('#nextPassWindow').append( msg.tekst );
            })
     </script>
 

@@ -16,7 +16,6 @@ from autowx2_functions import * # all functions and magic hidden here
 
 if __name__ == "__main__":
     log("⚡ Program start")
-    dongleShift = getDefaultDongleShift()
 
     while True:
         t1 = Thread(target = mainLoop)

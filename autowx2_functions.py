@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 #
 # autowx2 - function and classes used by autowx2 and auxiliary programs
 #
@@ -43,6 +42,8 @@ from threading import Thread
 # configuration
 from autowx2_conf import *
 from autowx2_webserver import *
+
+
 
 # ---------------------------------------------------------------------------- #
 
@@ -239,10 +240,12 @@ def runForDuration(cmdline, duration, loggingDir):
     teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
 
     cmdline = [str(x) for x in cmdline]
-    print cmdline
+    # print cmdline
     try:
         p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        handle_my_custom_event(p1.stdout)
         _ = subprocess.Popen(teeCommand, stdin=p1.stdout)
+
         time.sleep(duration)
         p1.terminate()
     except OSError as e:
@@ -334,7 +337,7 @@ def azimuth2dir(azimuth):
 
 
 def escape_ansi(line):
-    '''remove anssi colors from the given string'''
+    '''remove ansi colors from the given string'''
     ansi_escape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -/]*[@-~]')
     return ansi_escape.sub('', line)
 
@@ -382,6 +385,7 @@ def file_append(filename, content):
 
 def t2humanHM(timestamp):
     '''converts unix timestamp to human readable format'''
+    # oggingDir
     return strftime('%H:%M', time.localtime(timestamp))
 
 
@@ -484,7 +488,7 @@ def listNextPasesHtml(passTable, howmany):
 
     output += "</table>\n"
 
-    return output
+    return output.decode('utf-8')
 
 
 def listNextPasesTxt(passTable, howmany):
@@ -540,8 +544,11 @@ def listNextPasesList(passTable, howmany):
 
 
 def saveToFile(filename, data):
+    # print filename
+    # print data
+    # exit(1)
     plik = open(filename, "w")
-    plik.write(data)
+    plik.write(data.encode("utf-8"))
     plik.close()
 
 
@@ -566,7 +573,7 @@ def generatePassTableAndSaveFiles(satellites, qth, verbose=True):
 
 
 def file_read(filename):
-    with codecs.open(filename, 'r', encoding='utf-8') as f:
+    with codecs.open(filename, 'r', encoding='utf-8', errors='replace') as f:
         lines = f.read()
     linesBr = "<br />".join( lines.split("\n") )
     return linesBr
@@ -577,13 +584,22 @@ def homepage():
     logfile = logFile(loggingDir)
     logs = file_read(logfile)
 
+    body =""
     # log window
-    body = "<h3>Recent logs</h3><p><strong>File</strong>: %s</p><pre style='height: 400px;' id='logWindow' class='pre-scrollable small text-nowrap'>%s</pre>" % (logfile, logs)
+    body += "<h3>Recent logs</h3><p><strong>File</strong>: %s</p><pre style='height: 400px;' id='logWindow' class='pre-scrollable small text-nowrap'>%s</pre>" % (logfile, logs)
+
+    # next pass table
+    passTable = genPassTable(satellites, qth)
+    body += "<h3>Next passes</h3><span id='nextPassWindow'>%s</span>" % ( listNextPasesHtml(passTable, 10) )
     return render_template('index.html', title="Home page", body=body)
 
 @socketio.on('my event')
 def handle_my_custom_event(text):
     socketio.emit('my response', { 'tekst': text } )
+
+@socketio.on('next pass table')
+def handle_next_pass_list(text):
+    socketio.emit('response next pass table', { 'tekst': text } )
 
 
 #
@@ -601,6 +617,8 @@ def passTable():
 # --------------------------------------------------------------------------- #
 
 def mainLoop():
+    dongleShift = getDefaultDongleShift()
+
     while True:
 
         # recalculate table of next passes
@@ -613,11 +631,12 @@ def mainLoop():
         log("Next five passes:")
         listNextPases(passTable, 5)
 
+        # pass table for webserver
+        handle_next_pass_list(listNextPasesHtml(passTable, 10))
+
         # get the very next pass
         satelitePass = passTable[0]
-
         satellite, start, duration, peak, azimuth = satelitePass
-
         satelliteNoSpaces = satellite.replace(" ", "-") #remove spaces from the satellite name
 
         freq = satellitesData[satellite]['freq']
@@ -632,6 +651,10 @@ def mainLoop():
             peak, azimuth, freq, processWith))
 
         towait = int(start - time.time())
+
+        if cleanupRtl:
+            log("Killing all remaining rtl_* processes...")
+            justRun(["bin/kill_rtl.sh"], loggingDir)
 
         # test if SDR dongle is available
         if towait > 15: # if we have time to perform the test?
