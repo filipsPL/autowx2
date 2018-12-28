@@ -23,4 +23,5 @@ if __name__ == "__main__":
         t1.start()
         # app.run(debug=True, port=webInterfacePort)
 
-        socketio.run(app, port=webInterfacePort, debug=True)
+        socketio.run(app, port=webInterfacePort, debug=False)
+        

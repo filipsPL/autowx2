@@ -18,14 +18,14 @@
     <script type="text/javascript" src="{{ url_for('static',filename='socket.io.slim.js') }}"></script>
 
     <script type="text/javascript">
+    console.log( "Start!" )
     var socket = io.connect('http://' + document.domain + ':' + location.port);
     // log window //
      socket.on( 'my response', function( msg ) {
        console.log( msg )
         $('#logWindow').append( msg.tekst );
         var psconsole = $('#logWindow');
-        if(psconsole.length)
-          psconsole.scrollTop(psconsole[0].scrollHeight - psconsole.height());
+        if(psconsole.length) psconsole.scrollTop(psconsole[0].scrollHeight - psconsole.height());
            })
      // Pass Table in Html //
      socket.on( 'response next pass table', function( msg ) {

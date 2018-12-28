@@ -243,8 +243,13 @@ def runForDuration(cmdline, duration, loggingDir):
     # print cmdline
     try:
         p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        handle_my_custom_event(p1.stdout)
-        _ = subprocess.Popen(teeCommand, stdin=p1.stdout)
+        p2 = subprocess.Popen(teeCommand, stdin=p1.stdout)
+
+        # result1 = p1.communicate()[0]
+        # handle_my_custom_event(result1)
+
+        result = p2.communicate()[0]
+        return result
 
         time.sleep(duration)
         p1.terminate()
@@ -262,14 +267,14 @@ def justRun(cmdline, loggingDir):
     try:
         p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         p2 = subprocess.Popen(teeCommand, stdin=p1.stdout, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-	result = p2.communicate()[0]
+        result = p2.communicate()[0]
         return result
     except OSError as e:
         log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
         log("✖ OS Error: " + e.strerror, style=bc.FAIL)
 
 
-def runTest(duration=2):
+def runTest(duration=3):
     '''Check, if RTL_SDR dongle is connected'''
     child = subprocess.Popen('rtl_test', stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
@@ -694,7 +699,7 @@ def mainLoop():
                         (t2humanMS(towait - 1)))
                     log("Running: %s for %ss" %
                         (scriptToRunInFreeTime, t2humanMS(towait - 1)))
-                    runForDuration(
+                    _ =     runForDuration(
                         [scriptToRunInFreeTime,
                          towait - 1,
                          dongleShift],
