@@ -117,3 +117,9 @@ source $scriptDir/noaa_process.sh
 #
 
 source $scriptDir/noaa_gallery.sh
+
+#
+# generate static pages
+#
+
+bin/gen-static-page.sh
