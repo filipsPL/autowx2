@@ -122,4 +122,4 @@ source $scriptDir/noaa_gallery.sh
 # generate static pages
 #
 
-bin/gen-static-page.sh
+$baseDir/bin/gen-static-page.sh
