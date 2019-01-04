@@ -13,7 +13,7 @@ source $baseDir/_listvars.sh
 
 #### microconfiguration
 
-radiosondeBin="/home/filips/bin/radiosonde_auto_rx/auto_rx"
+radiosondeBin="/home/filips/progs/radiosonde_auto_rx/auto_rx"
 logfile="$recordingDir/radiosonde/log/$(date +"%Y%m%d").txt"
 mkdir -p "$recordingDir/radiosonde/log/"
 

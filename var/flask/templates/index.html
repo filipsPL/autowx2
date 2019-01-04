@@ -30,7 +30,7 @@
      // Pass Table in Html //
      socket.on( 'response next pass table', function( msg ) {
        console.log( msg )
-        $('#nextPassWindow').val( msg.tekst );
+        $('#nextPassWindow').html( msg.tekst ); //text
            })
     </script>
 

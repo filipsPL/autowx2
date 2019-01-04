@@ -18,6 +18,7 @@ source $baseDir/_listvars.sh
 #### microconfiguration
 
 recdir="$recordingDir/iss/rec/"$(date +"%Y/%m/")
+sample="44000"
 
 ### doing the job
 
@@ -41,8 +42,7 @@ echo "azimuth=$azimuth"
 echo "freq=$freq"
 
 
-
-# fixed values for tests
+### fixed values for tests
 # freq="98988000"
 # duration="10s"
 # fileNameCore="ISS"

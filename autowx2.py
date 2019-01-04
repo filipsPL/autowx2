@@ -17,6 +17,10 @@ from autowx2_functions import * # all functions and magic hidden here
 if __name__ == "__main__":
     log("⚡ Program start")
 
+    if cleanupRtl:
+        log("Killing all remaining rtl_* processes...")
+        justRun(["bin/kill_rtl.sh"], loggingDir)
+
     while True:
         t1 = Thread(target = mainLoop)
         t1.setDaemon(True)
@@ -24,4 +28,3 @@ if __name__ == "__main__":
         # app.run(debug=True, port=webInterfacePort)
 
         socketio.run(app, port=webInterfacePort, debug=False)
-        
