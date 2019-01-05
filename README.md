@@ -1,9 +1,27 @@
-# autowx2
+autowx2
+==============
 
 **autowx2** is the python program for schedule satellite and ground recordings with SDR dongle. Bundled plugins include scripts for processing weather APT images from NOAA satellites and ISS voice communication recordings.
 
 ![image](docs/NOAA19-HVCT.jpg) ![image](docs/NOAA19-therm.jpg)
 
+<!-- TOC depthFrom:1 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [Introduction](#introduction)
+	- [used libraries and acknowledgements](#used-libraries-and-acknowledgements)
+- [hardware requirements](#hardware-requirements)
+- [system requirements](#system-requirements)
+- [installation](#installation)
+	- [x86 and amd64](#x86-and-amd64)
+- [configuration files and other programs](#configuration-files-and-other-programs)
+	- [files, subprograms and configs](#files-subprograms-and-configs)
+- [Static web pages](#static-web-pages)
+- [Webserver](#webserver)
+- [Issues? Comments? Suggestions?](#issues-comments-suggestions)
+
+<!-- /TOC -->
+
+# Introduction
 
 This is a rewritten and fine-tuned version of tools for the automatic weather satellite images capturing. Most directly it bases on cyber-atomus' [autowx](https://github.com/cyber-atomus/autowx) and my fork of autowx. The main differences between this project **autowx2** and previously created tools:
 - **high modularity** - all recording and processing are done by separate scripts (modules? plugins?), which can be easily configured to meet one's needs. The main module (called *noaa*) is devoted to the capture of weather data from the NOAA satellites, but with other modules (i.e., *ISS* voice) one can record voice communication from the satellite (tested for ISS :tada: !).
