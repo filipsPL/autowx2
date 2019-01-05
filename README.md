@@ -17,6 +17,7 @@ autowx2
 	- [files, subprograms and configs](#files-subprograms-and-configs)
 - [Static web pages](#static-web-pages)
 - [Webserver](#webserver)
+- [Working instances of autowx2](#working-instances-of-autowx2)
 - [Issues? Comments? Suggestions?](#issues-comments-suggestions)
 
 <!-- /TOC -->
@@ -259,7 +260,7 @@ www/                - stuff for static webpages; templates and output data
 
 Modules may generate static webpages - snippets (see: noaa `noaa_gallery.sh` script). Then, the `bin/gen-static-page.sh` script collects these snippets and build a static webpage with all the data.
 
-![static web page](docs/www-static.jpg)
+![static web page](docs/www-static+shadow.jpg)
 
 The web page is generated into `/var/www/` (the default location).
 
@@ -267,9 +268,16 @@ The web page is generated into `/var/www/` (the default location).
 
 autowx2 is equipped with a simple flask webserver showing what is going on - displaying current logs (with some limitations, i.e., not showing logs of external programs - solution needed) and updated pass list.
 
-![static web page](docs/www-dynamic.png)
+![static web page](docs/www-dynamic+shadow.jpg)
 
 The default address is `http://localhost:5010/` (the port may be changed in the config file via `webInterfacePort` variable)
+
+# Working instances of autowx2
+
+If you have a working and publically accesible autowx2 instance, please share with us!
+
+- [Tim SA7BNT](https://sa7bnt.funkerportal.de/autowx2/)
+
 
 # Issues? Comments? Suggestions?
 
