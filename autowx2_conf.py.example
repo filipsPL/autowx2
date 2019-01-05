@@ -93,7 +93,7 @@ dongleGain = '49.6'
 #
 # Kill all rtl_ related processes after/berofr recordings?
 # This should be enabled when the user doesn't use another instances which may run rtl software
-# 
+#
 
 cleanupRtl = True
 
@@ -130,7 +130,10 @@ ganttNextPassList = wwwDir + 'nextpass.png'
 
 wwwRootPath='/'
 
-
+#
+# port at which webserver will be listening
+#
+webInterfacePort = 5010
 
 # script tha will be used whle waiting for the next pass; set False if we just want to sleep
 # by default, this script will get the parameter of duration of the time to be run and the recent dongleShift
