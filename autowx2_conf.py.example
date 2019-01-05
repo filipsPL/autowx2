@@ -91,6 +91,14 @@ dongleGain = '49.6'
 
 
 #
+# Kill all rtl_ related processes after/berofr recordings?
+# This should be enabled when the user doesn't use another instances which may run rtl software
+# 
+
+cleanupRtl = True
+
+
+#
 # where to place the www data (static html pages)
 #
 wwwDir=baseDir + 'var/www/'
@@ -106,7 +114,7 @@ recordingDir = wwwDir + "recordings/"		# will go to www dir
 #
 # location of the HTML file with a list of next passes
 #
-htmlNextPassList = wwwDir + 'nextpass.html'
+htmlNextPassList = wwwDir + 'nextpass.tmp'
 
 #
 # location of the Gantt chart file with a plot of next passes; PNG or SVG file extension possible

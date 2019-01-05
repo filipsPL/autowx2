@@ -11,9 +11,10 @@ recordings
 bin/pymultimonaprs.confs/
 bin/heatmap.py
 var/www/nextpass.png
-var/www/nextpass.html
 autowx2_conf.py
 git-merge-devel.sh
 git-wyslij-github.sh
 var/dongleshift.txt
 var/gsm_channel.txt
+var/www/*.html
+var/www/*.tmp

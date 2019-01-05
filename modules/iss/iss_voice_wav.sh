@@ -47,6 +47,7 @@ echo "freq=$freq"
 # duration="10s"
 # fileNameCore="ISS"
 
+
 ### RECORDING TO WAV, for further processing, eg, for SSTV
 echo "Recording to wav"
 timeout $duration rtl_fm -f $freq -s $sample -g $dongleGain -F 9 -A fast -E offset -p $dongleShift $recdir/$fileNameCore.raw | tee -a $logFile
