@@ -18,7 +18,6 @@ from time import strftime
 import subprocess
 import os
 from _crontab import *
-from tendo import singleton # avoid two instancess WARNING do we need it? :# QUESTION:
 import re
 import sys
 
@@ -33,7 +32,7 @@ from matplotlib.dates import DateFormatter
 import numpy as np
 
 # webserver
-from flask import Flask, render_template
+from flask import render_template, Flask
 from flask_socketio import SocketIO, emit
 import codecs
 from threading import Thread
@@ -41,7 +40,7 @@ from threading import Thread
 
 # configuration
 from autowx2_conf import *
-from autowx2_webserver import *
+# from autowx2_webserver import *
 
 
 
@@ -576,6 +575,8 @@ def generatePassTableAndSaveFiles(satellites, qth, verbose=True):
 # --------- THE WEBSERVER --------------------------------------------------- #
 # --------------------------------------------------------------------------- #
 
+app = Flask(__name__, template_folder="var/flask/templates/", static_folder='var/flask/static')
+socketio = SocketIO(app)
 
 def file_read(filename):
     with codecs.open(filename, 'r', encoding='utf-8', errors='replace') as f:
