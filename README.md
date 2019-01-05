@@ -182,6 +182,7 @@ pymultimonaprs.sh   - aprs iGate launcher (pymultimonaprs must be installed)
 kalibruj_initial.sh - calibrating script - initialization
 kalibruj.sh         - calibrating script - getting the drift
 update-keps.sh      - keplers updated; can/should be run from cron
+crontab/            - proposal of scripts to be run periodicaly
 ```
 
 ### modules
@@ -189,9 +190,10 @@ update-keps.sh      - keplers updated; can/should be run from cron
 Modules/plugins to capture various types of data. Can be customized by any type of script (here bash scripts were used in most cases).
 
 ```
-fm      - sample module to record FM radio to mp3 file
-iss     - module for capturing voice data from ISS and others. Tested and works for ISS :tada:
-noaa    - module for capturing weather data from NOAA satellites (see below)
+fm         - sample module to record FM radio to mp3 file
+iss        - module for capturing voice data from ISS and others. Tested and works for ISS :tada:
+noaa       - module for capturing weather data from NOAA satellites (see below)
+radiosonde - module for running the radiosonde scanner (to be installed separately)
 ```
 
 #### /modules/noaa
@@ -203,7 +205,21 @@ noaa.sh             - the main module file (bash) - launches below files:
 noaa_record.sh      - recordinf of a sound via rtl_fm
 noaa_process.sh     - processing of the recorded wav file, generates maps etc.
 
+_loop_noaa_gallery.sh - generate gallery
+noaa_gallery.sh       - generate gallery
+
 tests               - directory with a test data
+```
+
+
+#### /modules/iss
+
+Generic module to capture various audio and raw packages (e.g., from ISS, but not only):
+
+```
+iss_voice_iq.sh   - record audio in iq/raw format
+iss_voice_mp3.sh  - record audio in mp3 format
+iss_voice_wav.sh  - record audio in wav format
 ```
 
 ### var directory
@@ -213,17 +229,30 @@ Variable data.
 ```
 dongleshift.txt     - current dongle shift
 nextpass.*          - list and plot of the next passes
-tle                 - directory with tle data
+tle/                - directory with tle data
+flask/              - flask webserver stuff (see flask documentation):
+   static/          - css, js
+   templates/       - html template(s)
+www/                - stuff for static webpages; templates and output data
+   css/             - css, js
 ```
 
-# to do
+# Static web pages
 
-- moved to the [issues section](https://github.com/filipsPL/autowx2/issues/)
+Modules may generate static webpages - snippets (see: noaa `noaa_gallery.sh` script). Then, the `bin/gen-static-page.sh` script collects these snippets and build a static webpage with all the data.
 
-# random notes
+![static web page](docs/www-static.jpg)
 
-- `autopep8 --in-place --aggressive --aggressive foo.py`
+The web page is generated into `/var/www/` (the default location).
 
+# Webserver
 
-## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2?ref=badge_large)
+autowx2 is equipped with a simple flask webserver showing what is going on - displaying current logs (with some limitations, i.e., not showing logs of external programs - solution needed) and updated pass list.
+
+![static web page](docs/www-dynamic.png)
+
+The default address is `http://localhost:5010/` (the port may be changed in the config file via `webInterfacePort` variable)
+
+# Issues? Comments? Suggestions?
+
+- [Report an issue here](https://github.com/filipsPL/autowx2/issues/)
