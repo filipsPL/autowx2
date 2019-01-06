@@ -37,12 +37,8 @@ from flask_socketio import SocketIO, emit
 import codecs
 from threading import Thread
 
-
 # configuration
 from autowx2_conf import *
-# from autowx2_webserver import *
-
-
 
 # ---------------------------------------------------------------------------- #
 

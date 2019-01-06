@@ -9,7 +9,7 @@
 # https://github.com/filipsPL/autowx2/
 #
 
-from autowx2_conf import *  # configuration
+# from autowx2_conf import *  # configuration
 from autowx2_functions import * # all functions and magic hidden here
 
 # ------------------------------------------------------------------------------------------------------ #
