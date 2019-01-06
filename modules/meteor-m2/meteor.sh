@@ -44,9 +44,9 @@ echo "freq=$freq"
 
 
 # fixed values for tests
-freq=137.9M
-duration="120"
-fileNameCore="meteor"
+# freq=137.9M
+# duration="120"
+# fileNameCore="meteor"
 
 #
 # mlrpt [-f frequency -s hhmm-hhmm -t sec -qihv]
@@ -58,10 +58,11 @@ fileNameCore="meteor"
 #        -h: Print this usage information and exit.
 #        -v: Print version number and exit.
 
+### WARNING: all dates and times must be in the UTC!
+
 startT=$(date +%H%M -d "$DATE + 1 min" -u)
 stopT=$(date +%H%M -d "$DATE + $duration sec" -u)
 
 echo $startT-$stopT
 
 mlrpt -f $freq -s $startT-$stopT
-# mlrpt -f $freq -s 0801-0803
