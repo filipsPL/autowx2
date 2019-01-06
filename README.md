@@ -8,13 +8,13 @@ autowx2
 <!-- TOC depthFrom:1 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Introduction](#introduction)
-	- [used libraries and acknowledgements](#used-libraries-and-acknowledgements)
-- [hardware requirements](#hardware-requirements)
-- [system requirements](#system-requirements)
-- [installation](#installation)
+	- [Used libraries and acknowledgements](#used-libraries-and-acknowledgements)
+- [Hardware requirements](#hardware-requirements)
+- [System requirements](#system-requirements)
+- [Installation](#installation)
 	- [x86 and amd64](#x86-and-amd64)
-- [configuration files and other programs](#configuration-files-and-other-programs)
-	- [files, subprograms and configs](#files-subprograms-and-configs)
+- [Configuration files and other programs](#configuration-files-and-other-programs)
+	- [Files, subprograms and configs](#files-subprograms-and-configs)
 - [Static web pages](#static-web-pages)
 - [Webserver](#webserver)
 - [Working instances of autowx2](#working-instances-of-autowx2)
@@ -49,7 +49,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 - [x] Radiosonde monitoring with [radiosonde_auto_rx](https://github.com/projecthorus/radiosonde_auto_rx/wiki)
 
 
-## used libraries and acknowledgements
+## Used libraries and acknowledgements
 
 - [autowx](https://github.com/cyber-atomus/autowx) by cyber-atomus
 - [parse-crontab](https://github.com/josiahcarlson/parse-crontab) - the python crontab parser
@@ -70,12 +70,12 @@ These scripts may be used by the autowx2 in the free time, e.g., to track airpla
 - [radiosonde_auto_rx](https://github.com/projecthorus/radiosonde_auto_rx/wiki) - Radiosonde monitoring
 
 
-# hardware requirements
+# Hardware requirements
 
 - usb dvbt dongle, like RTL2832 DVB-T tuner
 - antenna good enough to capture the signal of your interest. For antenna dedicated for capturing NOAAs telemetry, see a [simple 137 MHz V-Dipole](https://www.rtl-sdr.com/simple-noaameteor-weather-satellite-antenna-137-mhz-v-dipole/), for example. If you want to use the script _also_ for other applications (capturing APRS signals, using `dump1090` for tracking airplanes), any broadband antenna should be good.
 
-# system requirements
+# System requirements
 
 - python 2.7 and bash (sh, csh will be also OK)
 - installed and working DVB-T dongle; to make this long story short:
@@ -91,7 +91,7 @@ echo "blacklist dvb_usb_rtl28xxu" >>  /etc/modprobe.d/rtl-sdr-blacklist.conf
 - for more details, [see here](http://www.instructables.com/id/rtl-sdr-on-Ubuntu/)
 - for installation script on the Debian, Debian-like systems and Raspberry Pi, see [the installation script](install.sh) :warning: use with care! inspect and tune before execution!
 
-# installation
+# Installation
 
 :warning: Tested for x86, amd64 and [Raspberry Pi](https://github.com/filipsPL/autowx2/issues/29)
 
@@ -107,9 +107,9 @@ echo "blacklist dvb_usb_rtl28xxu" >>  /etc/modprobe.d/rtl-sdr-blacklist.conf
 6. Run the main program `autowx2.py`, wait for the next transit and marvel at the beautiful images (or other recordings)
 
 
-# configuration files and other programs
+# Configuration files and other programs
 
-## files, subprograms and configs
+## Files, subprograms and configs
 
 ### autowx.py
 
