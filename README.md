@@ -1,7 +1,7 @@
 autowx2
 ==============
 
-**autowx2** is the python program for schedule satellite and ground recordings with SDR dongle. Bundled plugins include scripts for processing weather APT images from NOAA satellites and ISS voice communication recordings.
+**autowx2** is a set of programs and scripts for schedule satellite and ground recordings with SDR dongle. Bundled plugins include scripts for processing weather APT images from NOAA satellites and ISS voice communication recordings.
 
 ![image](docs/NOAA19-HVCT.jpg) ![image](docs/NOAA19-therm.jpg)
 
