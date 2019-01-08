@@ -62,7 +62,14 @@ echo "freq=$freq"
 
 startT=$(date +%H%M -d "$DATE + 1 min" -u)
 stopT=$(date +%H%M -d "$DATE + $duration sec" -u)
+durationMin=$(bc <<< "$duration/60 +1")
 
-echo $startT-$stopT
+echo "$startT-$stopT, duration: $durationMin min"
 
-mlrpt -f $freq -s $startT-$stopT
+mlrpt -f $freq -s $startT-$stopT -t $durationMin
+
+## Testing values, HHMM in UTC
+# startT="2139"
+# stopT="2140"
+# durationMin="1" # in minutes!
+# mlrpt -f $freq -s $startT-$stopT -t $durationMin
