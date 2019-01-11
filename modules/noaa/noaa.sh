@@ -32,7 +32,7 @@ wavrate='11025'
 dongleIndex='0'
 
 # enchancements to apply to the pocessed images. See wxtoimg manual for available options
-enchancements=('MCIR-precip' 'HVC' 'MSA' 'therm' 'HVCT-precip')
+enchancements=('MCIR-precip' 'HVC' 'MSA' 'therm' 'HVCT-precip', 'NO')
 
 
 
