@@ -235,17 +235,10 @@ def runForDuration(cmdline, duration, loggingDir):
     teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
 
     cmdline = [str(x) for x in cmdline]
-    # print cmdline
+    print cmdline
     try:
         p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        p2 = subprocess.Popen(teeCommand, stdin=p1.stdout)
-
-        # result1 = p1.communicate()[0]
-        # handle_my_custom_event(result1)
-
-        result = p2.communicate()[0]
-        return result
-
+        _ = subprocess.Popen(teeCommand, stdin=p1.stdout)
         time.sleep(duration)
         p1.terminate()
     except OSError as e:
@@ -262,7 +255,7 @@ def justRun(cmdline, loggingDir):
     try:
         p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         p2 = subprocess.Popen(teeCommand, stdin=p1.stdout, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        result = p2.communicate()[0]
+        result = p1.communicate()[0]
         return result
     except OSError as e:
         log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
@@ -682,7 +675,7 @@ def mainLoop():
                 peak,
                 azimuth,
                 freq]
-            justRun(processCmdline, loggingDir)
+            print justRun(processCmdline, loggingDir)
             time.sleep(10.0)
 
         # still some time before recording
