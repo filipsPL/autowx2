@@ -11,7 +11,7 @@ source $baseDir/_listvars.sh
 
 #
 # read configuration file
-# 
+#
 source $scriptDir/noaa.conf
 
 ##################################################

@@ -154,6 +154,16 @@ loggingDir = recordingDir + "/logs/"
 # Dongle PPM shift, hopefully this will change to reflect different PPM on freq
 dongleShift = '0'
 
+
+#
+# wether to turn bias t power on (i.e., for LNA)
+# see: rtl_fm --help | grep "-T"
+# biast=""
+# biast="-T"
+#
+biast=""
+
+
 #
 tleDir = baseDir + 'var/tle/'
 tleFile = 'all.txt'
