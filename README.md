@@ -1,7 +1,7 @@
 autowx2
 ==============
 
-**autowx2** is a set of programs and scripts for schedule satellite and ground recordings with SDR dongle. Bundled plugins include scripts for processing weather APT images from NOAA satellites and ISS voice communication recordings.
+**autowx2** is a set of programs and scripts for schedule satellite and ground recordings with SDR dongle. Bundled plugins include scripts for processing weather APT images from NOAA or METEOR satellites, ISS voice communication recordings and some others.
 
 ![image](docs/NOAA19-HVCT.jpg) ![image](docs/NOAA19-therm.jpg)
 
@@ -38,6 +38,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 **autowx2** was tested and successfully applied to schedule recordings of:
 - [x] NOAA weather satellites
+- [x] METEOR-M2 weather satellite :balloon:
 - [x] ISS transmissions (voice, [SSTV](https://github.com/filipsPL/autowx2/issues/35))
 - [x] Fox-1B satellite transmissions
 - [x] Fixed-time radiosondes (meteo baloons) observations (with [radiosonde_auto_rx](https://github.com/projecthorus/radiosonde_auto_rx/wiki))
@@ -213,6 +214,7 @@ fm         - sample module to record FM radio to mp3 file
 iss        - module for capturing voice data from ISS and others. Tested and works for ISS :tada:
 noaa       - module for capturing weather data from NOAA satellites (see below)
 radiosonde - module for running the radiosonde scanner (to be installed separately)
+meteor-m2	 - module for running the meteor m2 capturing and processing programm
 ```
 
 #### /modules/noaa
@@ -240,6 +242,11 @@ iss_voice_iq.sh   - record audio in iq/raw format
 iss_voice_mp3.sh  - record audio in mp3 format
 iss_voice_wav.sh  - record audio in wav format
 ```
+
+#### /modules/meteor-m2
+
+- see: [wiki page](https://github.com/filipsPL/autowx2/wiki/meteor-m2)
+
 
 ### var directory
 
