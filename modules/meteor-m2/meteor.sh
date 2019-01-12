@@ -17,6 +17,9 @@ source $scriptDir/meteor.conf
 
 mkdir -p $imgdir
 
+#
+# Assigning variables
+#
 
 fileNameCore="$1"
 satellite="$2"
@@ -26,25 +29,19 @@ peak="$5"
 azimuth="$6"
 freq="$7"
 
-echo "fileNameCore=$fileNameCore"
-echo "satellite=$satellite"
-echo "start=$start"
-echo "duration=$duration"
-echo "peak=$peak"
-echo "azimuth=$azimuth"
-echo "freq=$freq"
-
-
-
 #
-# mlrpt [-f frequency -s hhmm-hhmm -t sec -qihv]
-#        -f: Specify SDR Receiver Frequency (in kHz).
-#        -s: Start and Stop Time in hhmm of Operation.
-#        -t: Duration in min of Operation.
-#        -q: Run in Quite mode (no messages printed).
-#        -i: Invert (flip) Images. Useful for South to North passes.
-#        -h: Print this usage information and exit.
-#        -v: Print version number and exit.
+# Saving to log file
+#
+
+logFile=$imgdir/$fileNameCore.log
+
+date > $logFile   # initialize log file
+echo $fileNameCore >> $logFile
+echo $satellite >> $logFile
+echo $start >> $logFile
+echo $duration >> $logFile
+echo $peak >> $logFile
+echo $freq >> $logFile
 
 ### WARNING: all dates and times must be in the UTC!
 
