@@ -55,7 +55,7 @@ cat <<EOF
     <div class="container">
 
 <h1>$htmlTitle</h1>
-Generated: $currentDate
+Generated: $currentDate | version: $autowx2version
 
 $htmlBody
     </div>
