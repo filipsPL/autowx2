@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # main file for recording and processing NOAA telementry data
+# for configuration, see noaa.conf
+
 
 
 # read the global configuration file autowx2_conf.py via the bash/python configuration parser

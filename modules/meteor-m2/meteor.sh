@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# test file to record fm radio for a given period of time
-
+# module to record meteor m2 transmission
+# for configuration, see meteor.conf
 
 # read the global configuration file autowx2_conf.py via the bash/python configuration parser
 # do not change the following three lines
@@ -9,21 +9,13 @@ scriptDir="$(dirname "$(realpath "$0")")"
 source $scriptDir/basedir_conf.py
 source $baseDir/_listvars.sh
 
+# read module config
 
-################## FINE TUNING #####################
-
-# directory with noaa stuff
-meteorDir="$recordingDir/meteor/"
-
-# directory for generated images
-imgdir="$meteorDir/img/"$(date +"%Y/%m/%d/")
-
-# directory for recorded raw and wav files
-recdir="$meteorDir/rec/"$(date +"%Y/%m/%d/")
+source $scriptDir/meteor.conf
 
 ### doing the job
 
-mkdir -p $recdir $imgdir
+mkdir -p $imgdir
 
 
 fileNameCore="$1"
@@ -43,10 +35,6 @@ echo "azimuth=$azimuth"
 echo "freq=$freq"
 
 
-# fixed values for tests
-# freq=137.9M
-# duration="120"
-# fileNameCore="meteor"
 
 #
 # mlrpt [-f frequency -s hhmm-hhmm -t sec -qihv]
@@ -64,13 +52,14 @@ startT=$(date +%H%M -d "$DATE + 1 min" -u)
 stopT=$(date +%H%M -d "$DATE + $duration sec" -u)
 durationMin=$(bc <<< "$duration/60 +2")
 
+#
+# recording
+#
 echo "$startT-$stopT, duration: $durationMin min"
-
-# mlrpt -f $freq -s $startT-$stopT -t $durationMin
 mlrpt -s $startT-$stopT -t $durationMin
 
-## Testing values, HHMM in UTC
-# startT="2139"
-# stopT="2140"
-# durationMin="1" # in minutes!
-# mlrpt -f $freq -s $startT-$stopT -t $durationMin
+
+#
+# moving recorded images to the appropriate final dir
+#
+mv $rawImageDir/*.jpg $imgdir/
