@@ -3,8 +3,6 @@
 # NOAA sat pass gallery preparation
 # generates a single html snippet with a current pass
 
-enchancements=('MCIR-precip' 'HVC' 'MSA' 'therm' 'HVCT-precip')
-
 # fileNameCore="$1"
 # satellite="$2"
 # start="$3"
@@ -22,6 +20,10 @@ enchancements=('MCIR-precip' 'HVC' 'MSA' 'therm' 'HVCT-precip')
 #wwwRootPath='file:///home/filips/github/autowx2/var/www/'
 
 
+#
+# config file
+#
+source $scriptDir/noaa.conf
 
 # prorgam itself - variables
 outHtml="$imgdir/$fileNameCore.html"  # html for this single pass

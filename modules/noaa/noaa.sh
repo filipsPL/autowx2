@@ -9,32 +9,10 @@ scriptDir="$(dirname "$(realpath "$0")")"
 source $scriptDir/basedir_conf.py
 source $baseDir/_listvars.sh
 
-################## FINE TUNING #####################
-
-# directory with noaa stuff
-noaaDir="$recordingDir/noaa/"
-
-# directory for generated images
-imgdir="$noaaDir/img/"$(date +"%Y/%m/%d/")
-
-# directory for recorded raw and wav files
-recdir="$noaaDir/rec/"$(date +"%Y/%m/%d/")
-
-
 #
-# Sample rate, width of recorded signal - should include few kHz for doppler shift
-sample='48000'
-# Sample rate of the wav file. Shouldn't be changed
-wavrate='11025'
-
-#
-# Dongle index, is there any rtl_fm allowing passing serial of dongle?
-dongleIndex='0'
-
-# enchancements to apply to the pocessed images. See wxtoimg manual for available options
-enchancements=('MCIR-precip' 'HVC' 'MSA' 'therm' 'HVCT-precip', 'NO')
-
-
+# read configuration file
+# 
+source $scriptDir/noaa.conf
 
 ##################################################
 
