@@ -31,12 +31,14 @@ echo "" > $dirList
 
 # ---- NOAA list all dates and times  -------------------------------------------------#
 
+function gallery_noaa {
+
 echo "<h2>NOAA recordings</h2>" >> $dirList
 echo "<h4>Recent pass</h4>" >> $dirList
 echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-therm+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
 echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-MCIR-precip+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
 echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-HVC+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
-
+# echo "<a href='$(cat $wwwDir/noaa-last-recording.tmp).html'>see more</a>" >> $dirList
 
 echo "<h4>Archive</h4>" >> $dirList
 echo "<ul>" >> $dirList
@@ -57,8 +59,10 @@ do
 done
 echo "</ul>" >> $dirList
 
+}
 
 # ---- ISS loop all dates and times  -------------------------------------------------#
+function gallery_iss {
 
 echo "<h2>ISS recordings</h2>" >> $dirList
 echo "<ul>" >> $dirList
@@ -73,22 +77,35 @@ do
 done
 echo "</ul>" >> $dirList
 
+}
+
 # ---- LOGS  -------------------------------------------------#
 
-echo "<h2>Logs</h2>" >> $dirList
-echo "<ul><li>(All) <a href='$wwwRootPath/recordings/logs/'>Logs</a></li></ul>" >> $dirList
-
+function gallery_logs {
+  echo "<h2>Logs</h2>" >> $dirList
+  echo "<ul><li>(All) <a href='$wwwRootPath/recordings/logs/'>Logs</a></li></ul>" >> $dirList
+}
 
 # ---- dump1090  -------------------------------------------------#
 
-#echo "<h2>dump1090 heatmap</h2>" >> $dirList
-#echo "<img src='$wwwRootPath/recordings/dump1090/heatmap-osm.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
-#echo "<img src='$wwwRootPath/recordings/dump1090/heatmap-osm2.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
-
+function gallery_dump1090 {
+  echo "<h2>dump1090 heatmap</h2>" >> $dirList
+  echo "<img src='$wwwRootPath/recordings/dump1090/heatmap-osm.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
+  echo "<img src='$wwwRootPath/recordings/dump1090/heatmap-osm2.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
+}
 
 
 # ------------------------------------------template engine --------------------- #
 
+# ----- RENDER APPROPRIATE PAGES ---- #
+
+gallery_noaa
+gallery_logs
+gallery_iss
+
+# ----- MAIN PAGE ---- #
+
+autowx2version=$(git describe --tags)
 htmlTitle="Main page"
 htmlBody=$(cat $dirList)
 source $htmlTemplate > $htmlOutput
