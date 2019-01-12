@@ -79,10 +79,10 @@ skipLast = 20
 
 # staion information
 # lon: positive values for W, negative for E
-stationLat = '52.34'
-stationLon = '-21.06'
-stationAlt = '110'
-stationName = 'Warsaw'
+stationLat = '50.34'
+stationLon = '-22.06'
+stationAlt = '179'
+stationName = 'San Escobar'
 
 #
 # dongle gain
