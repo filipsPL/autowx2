@@ -19,3 +19,4 @@ var/gsm_channel.txt
 var/www/*.html
 var/www/*.tmp
 modules/noaa/noaa.conf
+modules/meteor-m2/meteor.conf
