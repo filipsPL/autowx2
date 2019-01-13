@@ -105,7 +105,7 @@ gallery_iss
 
 # ----- MAIN PAGE ---- #
 
-autowx2version=$(git describe --tags)
+autowx2version=$(cd $baseDir && git describe --tags)
 htmlTitle="Main page"
 htmlBody=$(cat $dirList)
 source $htmlTemplate > $htmlOutput
