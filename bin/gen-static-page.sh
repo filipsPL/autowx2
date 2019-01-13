@@ -10,6 +10,8 @@ source $baseDir/_listvars.sh
 
 ################## FINE TUNING #####################
 
+# $recordingDir - real path on the system
+# $wwwRootPath/recordings/logs/ - www path
 
 # static values for tests
 # imgdir=/home/filips/github/autowx2/recordings/noaa/img/2018/09/08/
@@ -45,7 +47,7 @@ echo "<p></p>" >> $dirList
 
 echo "<h4>Archive</h4>" >> $dirList
 echo "<ul>" >> $dirList
-echo "<li><a href='$noaaDir/img/$(date +"%Y/%m/%d")/index.html'>Today</a> <span class='badge badge-pill badge-light'>$howManyToday</span> </li>" >> $dirList
+echo "<li><a href='$wwwRootPath/recordings/noaa/img/$(date +"%Y/%m/%d")/index.html'>Today</a> <span class='badge badge-pill badge-light'>$howManyToday</span> </li>" >> $dirList
 
 for y in $(ls $noaaDir/img/ | sort -rn)
 do
@@ -73,16 +75,16 @@ echo "</ul>" >> $dirList
 # ---- ISS loop all dates and times  -------------------------------------------------#
 function gallery_iss {
 
-howManyToday=$(ls $wwwRootPath/recordings/iss/rec/$(date +"%Y/%m/%d")/*.log 2> /dev/null| wc -l)
+howManyToday=$(ls $recordingDir/iss/rec/$(date +"%Y/%m/")/*.log 2> /dev/null| wc -l)
 
 echo "<h2>ISS recordings</h2>" >> $dirList
 echo "<ul>" >> $dirList
-echo "<li><a href='$wwwRootPath/recordings/iss/rec/$(date +"%Y/%m/%d")'>Today</a> <span class='badge badge-pill badge-light'>$howManyToday</span>" >> $dirList
+echo "<li><a href='$wwwRootPath/recordings/iss/rec/$(date +"%Y/%m/")'>Current month</a> <span class='badge badge-pill badge-light'>$howManyToday</span>" >> $dirList
 
-for y in $(ls $noaaDir/img/ | sort -rn)
+for y in $(ls $recordingDir/iss/rec/ | sort -rn)
 do
   echo "<li>($y) " >> $dirList
-  for m in $(ls $noaaDir/img/$y | sort -rn)
+  for m in $(ls $recordingDir/iss/rec/$y | sort -rn)
   do
     echo "<a href='$wwwRootPath/recordings/iss/rec/$y/$m/'>$m</a> " >> $dirList
   done
