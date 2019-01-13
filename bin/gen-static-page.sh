@@ -25,23 +25,28 @@ htmlOutputTable="$wwwDir/table.html"
 
 currentDate=$(date)
 echo $currentDate
-
-
 echo "" > $dirList
+
+
 
 # ---- NOAA list all dates and times  -------------------------------------------------#
 
 function gallery_noaa {
+
+howManyToday=$(ls $noaaDir/img/$(date +"%Y/%m/%d")/*.log 2> /dev/null| wc -l)
 
 echo "<h2>NOAA recordings</h2>" >> $dirList
 echo "<h4>Recent pass</h4>" >> $dirList
 echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-therm+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
 echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-MCIR-precip+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
 echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-HVC+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
-# echo "<a href='$(cat $wwwDir/noaa-last-recording.tmp).html'>see more</a>" >> $dirList
+
+echo "<p></p>" >> $dirList
 
 echo "<h4>Archive</h4>" >> $dirList
 echo "<ul>" >> $dirList
+echo "<li><a href='$noaaDir/img/$(date +"%Y/%m/%d")/index.html'>Today</a> <span class='badge badge-pill badge-light'>$howManyToday</span> </li>" >> $dirList
+
 for y in $(ls $noaaDir/img/ | sort -rn)
 do
   echo "<li>$y</li><ul>" >> $dirList
@@ -59,13 +64,21 @@ do
 done
 echo "</ul>" >> $dirList
 
-}
+} # end function gallery noaa
+
+# ---- METEOR list all dates and times  -------------------------------------------------#
+
+# to be done!
 
 # ---- ISS loop all dates and times  -------------------------------------------------#
 function gallery_iss {
 
+howManyToday=$(ls $wwwRootPath/recordings/iss/rec/$(date +"%Y/%m/%d")/*.log 2> /dev/null| wc -l)
+
 echo "<h2>ISS recordings</h2>" >> $dirList
 echo "<ul>" >> $dirList
+echo "<li><a href='$wwwRootPath/recordings/iss/rec/$(date +"%Y/%m/%d")'>Today</a> <span class='badge badge-pill badge-light'>$howManyToday</span>" >> $dirList
+
 for y in $(ls $noaaDir/img/ | sort -rn)
 do
   echo "<li>($y) " >> $dirList
@@ -82,8 +95,13 @@ echo "</ul>" >> $dirList
 # ---- LOGS  -------------------------------------------------#
 
 function gallery_logs {
+
+
   echo "<h2>Logs</h2>" >> $dirList
-  echo "<ul><li>(All) <a href='$wwwRootPath/recordings/logs/'>Logs</a></li></ul>" >> $dirList
+  echo "<ul>"  >> $dirList
+  echo "<li><a href='$wwwRootPath/recordings/logs/$(date +"%Y-%m-%d").txt'>Today</a></li>" >> $dirList
+  echo "<li><a href='$wwwRootPath/recordings/logs/'>All logs</a></li>" >> $dirList
+  echo "</ul>"  >> $dirList
 }
 
 # ---- dump1090  -------------------------------------------------#
@@ -102,6 +120,7 @@ function gallery_dump1090 {
 gallery_noaa
 gallery_logs
 gallery_iss
+# gallery_dump1090
 
 # ----- MAIN PAGE ---- #
 
