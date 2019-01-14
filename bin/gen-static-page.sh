@@ -132,7 +132,7 @@ if [ "$includeGalleryISS" = '1' ]; then
 fi
 
 if [ "$includeGalleryDump1090" = '1' ]; then
-  gallery_dump1090
+  gallery_dump1090  
 fi
 
 
