@@ -49,13 +49,13 @@ echo "<h4>Archive</h4>" >> $dirList
 echo "<ul>" >> $dirList
 echo "<li><a href='$wwwRootPath/recordings/noaa/img/$(date +"%Y/%m/%d")/index.html'>Today</a> <span class='badge badge-pill badge-light'>$howManyToday</span> </li>" >> $dirList
 
-for y in $(ls $noaaDir/img/ | sort -rn)
+for y in $(ls $noaaDir/img/ | sort -n)
 do
   echo "<li>$y</li><ul>" >> $dirList
-  for m in $(ls $noaaDir/img/$y | sort -rn)
+  for m in $(ls $noaaDir/img/$y | sort -n)
   do
     echo "<li>($m)" >> $dirList
-    for d in $(ls $noaaDir/img/$y/$m/ | sort -rn)
+    for d in $(ls $noaaDir/img/$y/$m/ | sort -n)
     do
       # collect info about files in the directory
       echo "<a href='$wwwRootPath/recordings/noaa/img/$y/$m/$d/index.html'>$d</a> " >> $dirList
@@ -81,10 +81,10 @@ echo "<h2>ISS recordings</h2>" >> $dirList
 echo "<ul>" >> $dirList
 echo "<li><a href='$wwwRootPath/recordings/iss/rec/$(date +"%Y/%m/")'>Current month</a> <span class='badge badge-pill badge-light'>$howManyToday</span>" >> $dirList
 
-for y in $(ls $recordingDir/iss/rec/ | sort -rn)
+for y in $(ls $recordingDir/iss/rec/ | sort -n)
 do
   echo "<li>($y) " >> $dirList
-  for m in $(ls $recordingDir/iss/rec/$y | sort -rn)
+  for m in $(ls $recordingDir/iss/rec/$y | sort -n)
   do
     echo "<a href='$wwwRootPath/recordings/iss/rec/$y/$m/'>$m</a> " >> $dirList
   done
@@ -132,7 +132,7 @@ if [ "$includeGalleryISS" = '1' ]; then
 fi
 
 if [ "$includeGalleryDump1090" = '1' ]; then
-  gallery_dump1090  
+  gallery_dump1090
 fi
 
 
