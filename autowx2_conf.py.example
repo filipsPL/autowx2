@@ -130,6 +130,19 @@ ganttNextPassList = wwwDir + 'nextpass.png'
 
 wwwRootPath='/'
 
+
+#
+# galleries to include in the static index page
+# 1 = inclcude, 0 = don't include
+#
+includeGalleryNoaa=1        # NOAA recordings
+includeGalleryISS=0         # ISS recordings
+includeGalleryMeteor=0      # Meteor recordings
+includeGalleryLogs=1        # logs in plain text
+includeGalleryDump1090=0    # dump1090 data
+
+
+
 #
 # port at which webserver will be listening
 #

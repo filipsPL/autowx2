@@ -119,20 +119,30 @@ function gallery_dump1090 {
 
 # ----- RENDER APPROPRIATE PAGES ---- #
 
-gallery_noaa
-gallery_logs
-gallery_iss
-# gallery_dump1090
+if [ "$includeGalleryNoaa" = '1' ]; then
+  gallery_noaa
+fi
+
+if [ "$includeGalleryLogs" = '1' ]; then
+  gallery_logs
+fi
+
+if [ "$includeGalleryISS" = '1' ]; then
+  gallery_iss
+fi
+
+if [ "$includeGalleryDump1090" = '1' ]; then
+  gallery_dump1090
+fi
+
 
 # ----- MAIN PAGE ---- #
 
-autowx2version=$(cd $baseDir && git describe --tags)
 htmlTitle="Main page"
 htmlBody=$(cat $dirList)
 source $htmlTemplate > $htmlOutput
 
 # ----- PASS LIST ---- #
-
 
 htmlTitle="Pass table"
 htmlBody=$(cat $htmlNextPassList)
