@@ -1,31 +1,10 @@
-#!/bin/bash
-
-# NOAA sat pass gallery preparation
-# generates a single html snippet with a current pass
-
-# fileNameCore="$1"
-# satellite="$2"
-# start="$3"
-# duration="$4"
-# peak="$5"
-# azimuth="$6"
-# freq="$7"
-
-# static values for tests
-# imgdir=/home/filips/bin/autowx2/var/www/recordings/noaa/img/2018/09/08/
-#imgdir=/home/filips/github/autowx2/var/www/recordings/noaa/img/2018/09/08/
-#fileNameCore="20181114-1818_NOAA-18"
-#fileNameCore=20180908-1626_NOAA-19
-#wwwDir="/home/filips/github/autowx2/var/www/"
-#wwwRootPath='file:///home/filips/github/autowx2/var/www/'
-
-
 #
-# config file
+# moving recorded images to the appropriate final dir
 #
-source $scriptDir/noaa.conf
+# mv $rawImageDir/*.jpg $imgdir/
+# fileNameCore="20190118-1012_METEOR-M2"
 
-# prorgam itself - variables
+
 outHtml="$imgdir/$fileNameCore.html"  # html for this single pass
 indexHtml="$imgdir/index.html"        # main index file for a given day
 htmlTemplate="$wwwDir/index.tpl"
@@ -42,7 +21,7 @@ makethumb() {
 
 # -----------------------------------------------------------------------------#
 
-logFile="$imgdir/$fileNameCore.log"   # log file to read from
+logFile="$rawImageDir/$fileNameCore.log"   # log file to read from
 
 varDate=$(sed '1q;d' $logFile)
 varSat=$(sed '3q;d' $logFile)
@@ -53,28 +32,32 @@ varFreq=$(sed '7q;d' $logFile)
 
 dateTime=$(date -d @$varStart +"%Y-%m-%d")
 dateTimeDir=$(date -d @$varStart +"%Y/%m/%d")  # directory format of date, eg. 2018/11/22/
-wwwPath=$wwwRootPath/recordings/noaa/img/$dateTimeDir
+wwwPath=$wwwRootPath/recordings/meteor/img/$dateTimeDir
 
-echo $wwwPath/$fileNameCore > $wwwDir/noaa-last-recording.tmp
+echo $wwwPath/$fileNameCore > $wwwDir/meteor-last-recording.tmp
 
-cd $imgdir
 
-echo "<h2>$varSat | $varDate</h2>" > $outHtml
-echo "<p>f=${varFreq}Hz, peak: ${varPeak}°, duration: ${varDur}s</p>" >> $outHtml
+# -----------------------------------------------------------------------------#
 
-for enchancement in "${enchancements[@]}"
+
+cd $rawImageDir
+
+for obrazek in *.jpg
 do
-    echo "**** $enchancement"
-    obrazek="$fileNameCore-$enchancement+map.jpg"
+		echo $obrazek
+		base=$(basename $obrazek .jpg)
     sizeof=$(du -sh "$obrazek" | cut -f 1)
     # generate thumbnail
     thumbnail=$(makethumb "$obrazek")
+		echo $thumbnail
     echo "<a data-fancybox='gallery' data-caption='$varSat | $varDate | $enchancement ($sizeof)' href='$wwwPath/$obrazek'><img src='$wwwPath/$thumbnail' alt='$enchancement' title='$enchancement | $sizeof' class='img-thumbnail' /></a> " >> $outHtml
 done
 
-thumbnail=$(makethumb "$fileNameCore-spectrogram.jpg")
-echo "<a data-fancybox='gallery' data-caption='spectrogram' href='$wwwPath/$fileNameCore-spectrogram.jpg'><img src='$wwwPath/$thumbnail' alt='spectrogram' class='img-thumbnail' /></a>" >> $outHtml
 
+# move images to their destination
+
+mv $rawImageDir/* $imgdir/
+# cp $rawImageDir/* $imgdir/
 
 
 # ----consolidate data from the given day ------------------------------------#
@@ -91,7 +74,7 @@ done
 currentDate=$(date)
 echo $currentDate
 
-htmlTitle="NOAA images | $dateTime"
+htmlTitle="METEOR-M2 images | $dateTime"
 htmlBody=$(cat $indexHtml.tmp)
 
 source $htmlTemplate > $indexHtml

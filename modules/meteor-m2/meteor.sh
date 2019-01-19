@@ -34,6 +34,7 @@ freq="$7"
 #
 
 logFile=$imgdir/$fileNameCore.log
+echo $logFile
 
 date > $logFile   # initialize log file
 echo $fileNameCore >> $logFile
@@ -43,20 +44,25 @@ echo $duration >> $logFile
 echo $peak >> $logFile
 echo $freq >> $logFile
 
-### WARNING: all dates and times must be in the UTC!
 
-startT=$(date +%H%M -d "$DATE + 1 min" -u)
-stopT=$(date +%H%M -d "$DATE + $duration sec" -u)
-durationMin=$(bc <<< "$duration/60 +2")
+echo "fileNameCore=$fileNameCore"
+echo "satellite=$satellite"
+echo "start=$start"
+echo "duration=$duration"
+echo "peak=$peak"
+echo "azimuth=$azimuth"
+echo "freq=$freq"
 
-#
-# recording
-#
-echo "$startT-$stopT, duration: $durationMin min"
-mlrpt -s $startT-$stopT -t $durationMin
 
 
 #
-# moving recorded images to the appropriate final dir
+# recording sumbodule
 #
-mv $rawImageDir/*.jpg $imgdir/
+
+source $scriptDir/module_record.sh
+
+#
+# meteor gallery
+#
+
+source $scriptDir/meteor_gallery.sh
