@@ -3,7 +3,8 @@
 #
 # moving recorded images to the appropriate final dir
 #
-# mv $rawImageDir/*.jpg $imgdir/
+
+# value for some tests:
 # fileNameCore="20190118-1012_METEOR-M2"
 
 
@@ -36,7 +37,7 @@ dateTime=$(date -d @$varStart +"%Y-%m-%d")
 dateTimeDir=$(date -d @$varStart +"%Y/%m/%d")  # directory format of date, eg. 2018/11/22/
 wwwPath=$wwwRootPath/recordings/meteor/img/$dateTimeDir
 
-echo $wwwPath/$fileNameCore > $wwwDir/meteor-last-recording.tmp
+
 
 
 # -----------------------------------------------------------------------------#
@@ -54,6 +55,13 @@ if [ "$resizeimageto" != "" ]; then
 fi
 
 #
+# some headers
+#
+
+echo "<h2>$varSat | $varDate</h2>" > $outHtml
+echo "<p>f=${varFreq}Hz, peak: ${varPeak}°, duration: ${varDur}s</p>" >> $outHtml
+
+#
 # loop over images and generate thumbnails
 #
 
@@ -69,7 +77,12 @@ do
 done
 
 
+#
+# get image core name
+#
 
+meteorcorename=$(ls *.jpg | head -1 | cut -d "-" -f 1-2)
+echo $wwwPath/$meteorcorename > $wwwDir/meteor-last-recording.tmp
 
 #
 # move images to their destination

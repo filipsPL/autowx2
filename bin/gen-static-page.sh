@@ -22,7 +22,9 @@ source $baseDir/_listvars.sh
 # wwwDir="/home/filips/github/autowx2/var/www/"
 
 
-noaaDir=$recordingDir/noaa/
+noaaDir=$recordingDir/noaa
+meteorDir=$recordingDir/meteor
+
 dirList="$wwwDir/noaa_dirlist.tmp"
 htmlTemplate="$wwwDir/index.tpl"
 htmlOutput="$wwwDir/index.html"
@@ -88,7 +90,44 @@ echo "</ul>" >> $dirList
 
 # ---- METEOR list all dates and times  -------------------------------------------------#
 
-# to be done!
+
+function gallery_meteor {
+
+howManyToday=$(ls $meteorDir/img/$(date +"%Y/%m/%d")/*.log 2> /dev/null| wc -l)
+
+echo "<h2>METEOR-M2 recordings</h2>" >> $dirList
+echo "<h4>Recent pass</h4>" >> $dirList
+echo "<img src='$(cat $wwwDir/meteor-last-recording.tmp)-Ch0.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
+echo "<img src='$(cat $wwwDir/meteor-last-recording.tmp)-Ch0.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
+echo "<img src='$(cat $wwwDir/meteor-last-recording.tmp)-Ch0.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
+echo "<img src='$(cat $wwwDir/meteor-last-recording.tmp)-Combo.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
+
+echo "<p></p>" >> $dirList
+
+echo "<h4>Archive</h4>" >> $dirList
+echo "<ul>" >> $dirList
+echo "<li><a href='$wwwRootPath/recordings/meteor/img/$(date +"%Y/%m/%d")/index.html'>Today</a> <span class='badge badge-pill badge-light'>$howManyToday</span> </li>" >> $dirList
+
+for y in $(ls $meteorDir/img/ | grep -v 'raw' | sort -n)
+do
+  echo "<li>$y<ul>" >> $dirList
+  for m in $(ls $meteorDir/img/$y | sort -n)
+  do
+    echo "<li>($m)" >> $dirList
+    for d in $(ls $meteorDir/img/$y/$m/ | sort -n)
+    do
+      # collect info about files in the directory
+      echo "<a href='$wwwRootPath/recordings/meteor/img/$y/$m/$d/index.html'>$d</a> " >> $dirList
+    done
+    echo "</li>" >> $dirList
+  done
+  echo "</ul></li>" >> $dirList
+done
+echo "</ul>" >> $dirList
+
+} # end function gallery meteor
+
+
 
 # ---- ISS loop all dates and times  -------------------------------------------------#
 function gallery_iss {
@@ -139,6 +178,10 @@ function gallery_dump1090 {
 
 if [ "$includeGalleryNoaa" = '1' ]; then
   gallery_noaa
+fi
+
+if [ "$includeGalleryMeteor" = '1' ]; then
+  gallery_meteor
 fi
 
 if [ "$includeGalleryLogs" = '1' ]; then
