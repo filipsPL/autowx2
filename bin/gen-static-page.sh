@@ -25,7 +25,7 @@ htmlTemplate="$wwwDir/index.tpl"
 htmlOutput="$wwwDir/index.html"
 htmlOutputTable="$wwwDir/table.html"
 
-currentDate=$(date)
+currentDate=$(date -R)
 echo $currentDate
 echo "" > $dirList
 
