@@ -58,7 +58,7 @@ cat <<EOF
   <div class="col-md-12">
   <h1>$htmlTitle</h1>
   Page generated: $currentDate<br />
-  Keplers updated: $lastkeps<br />
+  Keplers updated: $lastkeps ($keplerDays days old) $keplerInfo<br />
   Software version: $autowx2version<br />
 
   $htmlBody

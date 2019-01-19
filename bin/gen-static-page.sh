@@ -29,8 +29,15 @@ currentDate=$(date -R)
 echo $currentDate
 echo "" > $dirList
 
-lastkeps=$(cat "$wwwDir/keps.tmp")
 
+##### keplers updated? #####
+lastkeps=$(cat "$wwwDir/keps.tmp")
+lastkepsU=$(cat "$wwwDir/kepsU.tmp")
+
+keplerDays=$(echo "(($(date +"%s") - $lastkepsU ) / (60*60*24))" | bc )
+echo $keplerDays
+if [ $keplerDays -le 7 ]; then keplerInfo="<span class='badge badge-pill badge-success'>OK</span>"
+else keplerInfo="<span class='badge badge-pill badge-danger'>outdated</span>"; fi
 echo "lastkeps: $lastkeps"
 
 # ---- NOAA list all dates and times  -------------------------------------------------#
@@ -44,6 +51,7 @@ echo "<h4>Recent pass</h4>" >> $dirList
 echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-therm+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
 echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-MCIR-precip+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
 echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-HVC+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
+echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-NO+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
 
 echo "<p></p>" >> $dirList
 

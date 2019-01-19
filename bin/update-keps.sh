@@ -34,4 +34,5 @@ cat $TLEDIR/*.txt > $TLEDIR/all.txt
 echo "$wwwDir"
 date
 date -R > $wwwDir/keps.tmp
+date +"%s" > $wwwDir/kepsU.tmp
 echo Updated
