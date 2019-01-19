@@ -42,6 +42,19 @@ echo $wwwPath/$fileNameCore > $wwwDir/meteor-last-recording.tmp
 
 cd $rawImageDir
 
+#
+# should we resize images?
+#
+
+if [ "$resizeimageto" != "" ]; then
+  echo "Resizing images to $resizeimageto px"
+  mogrify -resize ${resizeimageto}x${resizeimageto}\> *.jpg
+fi
+
+#
+# loop over images and generate thumbnails
+#
+
 for obrazek in *.jpg
 do
 		echo $obrazek
@@ -54,7 +67,11 @@ do
 done
 
 
+
+
+#
 # move images to their destination
+#
 
 mv $rawImageDir/* $imgdir/
 # cp $rawImageDir/* $imgdir/

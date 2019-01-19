@@ -10,15 +10,25 @@
 #
 wxmap -T "$satellite" -a -H $tleFileName -o -O $duration -L "$latlonalt" $start $imgdir/$fileNameCore-mapa.png | tee -a $logFile
 
+#
+# should we resize images?
+#
 
+if [ "$resizeimageto" != "" ]; then
+  echo "Resizing images to $resizeimageto px"
+  resizeSwitch="-resize ${resizeimageto}x${resizeimageto}\> *.jpg"
+fi
+
+#
 # process wav file with various enchancements
+#
 
-for enchancement in "${enchancements[@]}"    
+for enchancement in "${enchancements[@]}"
 do
     echo "**** $enchancement"
 #     wxtoimg -e $enchancement $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}.png | tee -a $logFile
     wxtoimg -e $enchancement -m $imgdir/$fileNameCore-mapa.png $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}+map.png | tee -a $logFile
-    convert -quality 93 $imgdir/$fileNameCore-${enchancement}+map.png $imgdir/$fileNameCore-${enchancement}+map.jpg
+    convert -quality 91 $resizeSwitch $imgdir/$fileNameCore-${enchancement}+map.png $imgdir/$fileNameCore-${enchancement}+map.jpg
     rm $imgdir/$fileNameCore-${enchancement}+map.png
 done
 

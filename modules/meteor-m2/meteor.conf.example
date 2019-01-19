@@ -13,3 +13,6 @@ meteorDir="$recordingDir/meteor/"
 
 # directory where the images finally will go
 imgdir="$meteorDir/img/"$(date +"%Y/%m/%d/")
+
+# resize images to the given size to avoid growing of the repository; in px
+resizeimageto=1024
