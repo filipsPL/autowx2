@@ -45,6 +45,9 @@ else keplerInfo="<span class='badge badge-pill badge-danger'>outdated</span>"; f
 # export "$keplerInfo"
 echo "lastkeps: $lastkeps"
 
+keplerInfo="Keplers updated: $lastkeps ($keplerDays days old) $keplerInfo<br />"
+
+
 # ---- NOAA list all dates and times  -------------------------------------------------#
 
 function gallery_noaa {
