@@ -40,7 +40,7 @@ cat <<EOF
                 <span class="sr-only">(current)</span>
               </a>
             </li>
-            <li class="nav-item"> 
+            <li class="nav-item">
             <a class="nav-link" href="$wwwRootPath/table.html">Pass table</a>
           </li>
             <li class="nav-item">
@@ -57,7 +57,9 @@ cat <<EOF
 <div class="row">
   <div class="col-md-12">
   <h1>$htmlTitle</h1>
-  Generated: $currentDate | version: $autowx2version
+  Page generated: $currentDate<br />
+  Keplers updated: $lastkeps<br />
+  Software version: $autowx2version<br />
 
   $htmlBody
   </div>
@@ -65,8 +67,6 @@ cat <<EOF
 
     </div>
     <!-- /.container -->
-
-
 
     <!-- Bootstrap core JavaScript -->
     <script src="$wwwRootPath/css/jquery.min.js"></script>
