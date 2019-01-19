@@ -4,6 +4,7 @@
 # do not change the following three lines
 scriptDir="$(dirname "$(realpath "$0")")"
 source $scriptDir/basedir_conf.py
+source $baseDir/_listvars.sh
 
 ###
 
@@ -29,5 +30,8 @@ wget -r http://www.pe0sat.vgnet.nl/kepler/mykepler.txt -O $TLEDIR/multi.txt
 rm $TLEDIR/all.txt
 cat $TLEDIR/*.txt > $TLEDIR/all.txt
 
+
+echo "$wwwDir"
 date
+date -R > $wwwDir/keps.tmp
 echo Updated
