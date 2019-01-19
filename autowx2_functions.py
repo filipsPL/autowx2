@@ -692,7 +692,7 @@ def mainLoop():
                         (t2humanMS(towait - 1)))
                     log("Running: %s for %ss" %
                         (scriptToRunInFreeTime, t2humanMS(towait - 1)))
-                    _ =     runForDuration(
+                    runForDuration(
                         [scriptToRunInFreeTime,
                          towait - 1,
                          dongleShift],

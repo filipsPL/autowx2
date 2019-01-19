@@ -19,6 +19,8 @@ done
 
 echo $stationName
 
+#
 # add some environmental variables
+#
 
-autowx2version=$(cd $baseDir && git describe --tags)
+export autowx2version=$(cd $baseDir && git describe --tags)

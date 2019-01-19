@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #
 # moving recorded images to the appropriate final dir
 #

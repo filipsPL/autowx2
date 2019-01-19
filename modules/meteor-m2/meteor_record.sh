@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ### WARNING: all dates and times must be in the UTC!
 
 startT=$(date +%H%M -d "$DATE + 1 min" -u)
