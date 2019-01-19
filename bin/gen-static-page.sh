@@ -29,7 +29,9 @@ currentDate=$(date -R)
 echo $currentDate
 echo "" > $dirList
 
+lastkeps=$(cat "$wwwDir/keps.tmp")
 
+echo "lastkeps: $lastkeps"
 
 # ---- NOAA list all dates and times  -------------------------------------------------#
 
@@ -51,7 +53,7 @@ echo "<li><a href='$wwwRootPath/recordings/noaa/img/$(date +"%Y/%m/%d")/index.ht
 
 for y in $(ls $noaaDir/img/ | sort -n)
 do
-  echo "<li>$y</li><ul>" >> $dirList
+  echo "<li>$y<ul>" >> $dirList
   for m in $(ls $noaaDir/img/$y | sort -n)
   do
     echo "<li>($m)" >> $dirList
@@ -62,7 +64,7 @@ do
     done
     echo "</li>" >> $dirList
   done
-  echo "</ul>" >> $dirList
+  echo "</ul></li>" >> $dirList
 done
 echo "</ul>" >> $dirList
 

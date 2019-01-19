@@ -40,8 +40,8 @@ cat <<EOF
                 <span class="sr-only">(current)</span>
               </a>
             </li>
-            <a class="nav-link" href="$wwwRootPath/table.html">Pass table
-            </a>
+            <li class="nav-item"> 
+            <a class="nav-link" href="$wwwRootPath/table.html">Pass table</a>
           </li>
             <li class="nav-item">
               <a class="nav-link" href="https://github.com/filipsPL/autowx2">Source code</a>
@@ -54,12 +54,19 @@ cat <<EOF
     <!-- Page Content -->
     <div class="container">
 
-<h1>$htmlTitle</h1>
-Generated: $currentDate | version: $autowx2version
+<div class="row">
+  <div class="col-md-12">
+  <h1>$htmlTitle</h1>
+  Generated: $currentDate | version: $autowx2version
 
-$htmlBody
+  $htmlBody
+  </div>
+</div>
+
     </div>
     <!-- /.container -->
+
+
 
     <!-- Bootstrap core JavaScript -->
     <script src="$wwwRootPath/css/jquery.min.js"></script>
