@@ -2,6 +2,9 @@
 
 # loop over dirs, crate list of files, generates static file
 
+# disable the warning
+# shellcheck disable=SC2034
+
 # read the global configuration file autowx2_conf.py via the bash/python configuration parser
 # do not change the following three lines
 scriptDir="$(dirname "$(realpath "$0")")"
@@ -38,6 +41,8 @@ keplerDays=$(echo "(($(date +"%s") - $lastkepsU ) / (60*60*24))" | bc )
 echo $keplerDays
 if [ $keplerDays -le 7 ]; then keplerInfo="<span class='badge badge-pill badge-success'>OK</span>"
 else keplerInfo="<span class='badge badge-pill badge-danger'>outdated</span>"; fi
+
+# export "$keplerInfo"
 echo "lastkeps: $lastkeps"
 
 # ---- NOAA list all dates and times  -------------------------------------------------#
