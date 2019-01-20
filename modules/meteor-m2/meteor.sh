@@ -59,7 +59,7 @@ echo "freq=$freq"
 # recording sumbodule
 #
 
-source $scriptDir/module_record.sh
+source $scriptDir/meteor_record.sh
 
 #
 # meteor gallery
