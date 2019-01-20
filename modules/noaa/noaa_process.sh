@@ -28,7 +28,7 @@ do
     echo "**** $enchancement"
 #     wxtoimg -e $enchancement $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}.png | tee -a $logFile
     wxtoimg -e $enchancement -m $imgdir/$fileNameCore-mapa.png $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}+map.png | tee -a $logFile
-    convert -quality 91 "$resizeSwitch" $imgdir/$fileNameCore-${enchancement}+map.png $imgdir/$fileNameCore-${enchancement}+map.jpg
+    convert -quality 91 $resizeSwitch $imgdir/$fileNameCore-${enchancement}+map.png $imgdir/$fileNameCore-${enchancement}+map.jpg
     rm $imgdir/$fileNameCore-${enchancement}+map.png
 done
 
