@@ -16,7 +16,7 @@ wxmap -T "$satellite" -a -H $tleFileName -o -O $duration -L "$latlonalt" $start 
 
 if [ "$resizeimageto" != "" ]; then
   echo "Resizing images to $resizeimageto px"
-  resizeSwitch="-resize ${resizeimageto}x${resizeimageto}\> *.jpg"
+  resizeSwitch="-resize ${resizeimageto}x${resizeimageto}\>"
 fi
 
 #
