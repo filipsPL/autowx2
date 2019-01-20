@@ -51,7 +51,7 @@ cd $rawImageDir
 
 if [ "$resizeimageto" != "" ]; then
   echo "Resizing images to $resizeimageto px"
-  mogrify -resize ${resizeimageto}x${resizeimageto}\> *.jpg
+  mogrify -resize ${resizeimageto}x${resizeimageto}> *.jpg
 fi
 
 #
