@@ -38,75 +38,83 @@ dateTimeDir=$(date -d @$varStart +"%Y/%m/%d")  # directory format of date, eg. 2
 wwwPath=$wwwRootPath/recordings/meteor/img/$dateTimeDir
 
 
-
-
 # -----------------------------------------------------------------------------#
 
 
 cd $rawImageDir
 
-#
-# should we resize images?
-#
+if [ $(ls *.jpg 2> /dev/null | wc -l) = 0 ];
+then
+  echo "no images";
+else
 
-if [ "$resizeimageto" != "" ]; then
-  echo "Resizing images to $resizeimageto px"
-  mogrify -resize ${resizeimageto}x${resizeimageto}> *.jpg
-fi
+  #
+  # should we resize images?
+  #
 
-#
-# some headers
-#
+  if [ "$resizeimageto" != "" ]; then
+    echo "Resizing images to $resizeimageto px"
+    mogrify -resize ${resizeimageto}x${resizeimageto}> *.jpg
+  fi
 
-echo "<h2>$varSat | $varDate</h2>" > $outHtml
-echo "<p>f=${varFreq}Hz, peak: ${varPeak}°, duration: ${varDur}s</p>" >> $outHtml
+  #
+  # some headers
+  #
 
-#
-# loop over images and generate thumbnails
-#
+  echo "<h2>$varSat | $varDate</h2>" > $outHtml
+  echo "<p>f=${varFreq}Hz, peak: ${varPeak}°, duration: ${varDur}s</p>" >> $outHtml
 
-for obrazek in *.jpg
-do
-		echo $obrazek
-		base=$(basename $obrazek .jpg)
-    sizeof=$(du -sh "$obrazek" | cut -f 1)
-    # generate thumbnail
-    thumbnail=$(makethumb "$obrazek")
-		echo $thumbnail
-    echo "<a data-fancybox='gallery' data-caption='$varSat | $varDate | $enchancement ($sizeof)' href='$wwwPath/$obrazek'><img src='$wwwPath/$thumbnail' alt='$enchancement' title='$enchancement | $sizeof' class='img-thumbnail' /></a> " >> $outHtml
-done
+  #
+  # loop over images and generate thumbnails
+  #
 
 
-#
-# get image core name
-#
 
-meteorcorename=$(ls *.jpg | head -1 | cut -d "-" -f 1-2)
-echo $wwwPath/$meteorcorename > $wwwDir/meteor-last-recording.tmp
-
-#
-# move images to their destination
-#
-
-mv $rawImageDir/* $imgdir/
-# cp $rawImageDir/* $imgdir/
+  for obrazek in *.jpg
+  do
+  		echo $obrazek
+  		base=$(basename $obrazek .jpg)
+      sizeof=$(du -sh "$obrazek" | cut -f 1)
+      # generate thumbnail
+      thumbnail=$(makethumb "$obrazek")
+  		echo $thumbnail
+      echo "<a data-fancybox='gallery' data-caption='$varSat | $varDate | $enchancement ($sizeof)' href='$wwwPath/$obrazek'><img src='$wwwPath/$thumbnail' alt='$enchancement' title='$enchancement | $sizeof' class='img-thumbnail' /></a> " >> $outHtml
+  done
 
 
-# ----consolidate data from the given day ------------------------------------#
-# generates neither headers nor footer of the html file
+  #
+  # get image core name
+  #
 
-echo "" > $indexHtml.tmp
-for htmlfile in $(ls $imgdir/*.html | grep -v "index.html")
-do
-  cat $htmlfile >> $indexHtml.tmp
-done
+  meteorcorename=$(ls *.jpg | head -1 | cut -d "-" -f 1-2)
+  echo $wwwPath/$meteorcorename > $wwwDir/meteor-last-recording.tmp
 
-# ---------- generates pages according to the template file -------------------
+  #
+  # move images to their destination
+  #
 
-currentDate=$(date)
-echo $currentDate
+  mv $rawImageDir/* $imgdir/
+  # cp $rawImageDir/* $imgdir/
 
-htmlTitle="METEOR-M2 images | $dateTime"
-htmlBody=$(cat $indexHtml.tmp)
 
-source $htmlTemplate > $indexHtml
+  # ----consolidate data from the given day ------------------------------------#
+  # generates neither headers nor footer of the html file
+
+  echo "" > $indexHtml.tmp
+  for htmlfile in $(ls $imgdir/*.html | grep -v "index.html")
+  do
+    cat $htmlfile >> $indexHtml.tmp
+  done
+
+  # ---------- generates pages according to the template file -------------------
+
+  currentDate=$(date)
+  echo $currentDate
+
+  htmlTitle="METEOR-M2 images | $dateTime"
+  htmlBody=$(cat $indexHtml.tmp)
+
+  source $htmlTemplate > $indexHtml
+
+
+fi # there are images
