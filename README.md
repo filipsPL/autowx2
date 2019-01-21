@@ -38,10 +38,10 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 **autowx2** was tested and successfully applied to schedule recordings of:
 - [x] NOAA weather satellites
-- [x] METEOR-M2 weather satellite :balloon:
+- [x] METEOR-M2 weather satellite :globe_with_meridians:
 - [x] ISS transmissions (voice, [SSTV](https://github.com/filipsPL/autowx2/issues/35))
 - [x] Fox-1B satellite transmissions
-- [x] Fixed-time radiosondes (meteo baloons) observations (with [radiosonde_auto_rx](https://github.com/projecthorus/radiosonde_auto_rx/wiki))
+- [x] Fixed-time radiosondes (meteo baloons :balloon:) observations (with [radiosonde_auto_rx](https://github.com/projecthorus/radiosonde_auto_rx/wiki))
 - [x] Fixed-time FM recordings
 
 **autowx2** can be easily configured to do other useful things (with SDR dongle) while waiting for the next scheduled transmissions. Tested and available "plugins" include:
