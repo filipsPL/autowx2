@@ -93,7 +93,7 @@ echo "</ul>" >> $dirList
 
 function gallery_meteor {
 
-howManyToday=$(ls $meteorDir/img/$(date +"%Y/%m/%d")/*.log 2> /dev/null| wc -l)
+howManyToday=$(ls $meteorDir/img/$(date +"%Y/%m/%d")/*-Ch0.jpg 2> /dev/null| wc -l)
 
 echo "<h2>METEOR-M2 recordings</h2>" >> $dirList
 echo "<h4>Recent pass</h4>" >> $dirList
