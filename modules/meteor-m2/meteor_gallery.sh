@@ -6,6 +6,8 @@
 
 # value for some tests:
 # fileNameCore="20190118-1012_METEOR-M2"
+# rawImageDir="./"
+
 
 
 outHtml="$imgdir/$fileNameCore.html"  # html for this single pass
@@ -24,7 +26,7 @@ makethumb() {
 
 # -----------------------------------------------------------------------------#
 
-logFile="$rawImageDir/$fileNameCore.log"   # log file to read from
+logFile="$imgdir/$fileNameCore.log"   # log file to read from
 
 varDate=$(sed '1q;d' $logFile)
 varSat=$(sed '3q;d' $logFile)
@@ -36,6 +38,8 @@ varFreq=$(sed '7q;d' $logFile)
 dateTime=$(date -d @$varStart +"%Y-%m-%d")
 dateTimeDir=$(date -d @$varStart +"%Y/%m/%d")  # directory format of date, eg. 2018/11/22/
 wwwPath=$wwwRootPath/recordings/meteor/img/$dateTimeDir
+
+
 
 
 # -----------------------------------------------------------------------------#
@@ -54,7 +58,7 @@ else
 
   if [ "$resizeimageto" != "" ]; then
     echo "Resizing images to $resizeimageto px"
-    mogrify -resize ${resizeimageto}x${resizeimageto}> *.jpg
+    mogrify -resize ${resizeimageto}x${resizeimageto}\> *.jpg
   fi
 
   #
@@ -72,13 +76,13 @@ else
 
   for obrazek in *.jpg
   do
-  		echo $obrazek
+  		echo "Thumb for $obrazek"
   		base=$(basename $obrazek .jpg)
       sizeof=$(du -sh "$obrazek" | cut -f 1)
       # generate thumbnail
       thumbnail=$(makethumb "$obrazek")
   		echo $thumbnail
-      echo "<a data-fancybox='gallery' data-caption='$varSat | $varDate | $enchancement ($sizeof)' href='$wwwPath/$obrazek'><img src='$wwwPath/$thumbnail' alt='$enchancement' title='$enchancement | $sizeof' class='img-thumbnail' /></a> " >> $outHtml
+      echo "<a data-fancybox='gallery' data-caption='$varSat | $varDate ($sizeof)' href='$wwwPath/$obrazek'><img src='$wwwPath/$thumbnail' alt='meteor image' title='$sizeof' class='img-thumbnail' /></a> " >> $outHtml
   done
 
 
