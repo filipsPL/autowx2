@@ -98,8 +98,8 @@ howManyToday=$(ls $meteorDir/img/$(date +"%Y/%m/%d")/*-Ch0.jpg 2> /dev/null| wc 
 echo "<h2>METEOR-M2 recordings</h2>" >> $dirList
 echo "<h4>Recent pass</h4>" >> $dirList
 echo "<img src='$(cat $wwwDir/meteor-last-recording.tmp)-Ch0.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
-echo "<img src='$(cat $wwwDir/meteor-last-recording.tmp)-Ch0.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
-echo "<img src='$(cat $wwwDir/meteor-last-recording.tmp)-Ch0.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
+echo "<img src='$(cat $wwwDir/meteor-last-recording.tmp)-Ch1.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
+echo "<img src='$(cat $wwwDir/meteor-last-recording.tmp)-Ch2.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
 echo "<img src='$(cat $wwwDir/meteor-last-recording.tmp)-Combo.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
 
 echo "<p></p>" >> $dirList
