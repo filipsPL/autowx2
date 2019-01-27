@@ -187,9 +187,9 @@ satellitesData = {
 
 A utility to generate transit plan for the next few hours. Two elements are generated:
 - a static html page (or actually the html table to be included in the page), [see example](docs/nextpass.html)
-- a static png (or svg) image showing the transit plan in the form of the Gantt chart. An example:
+- a static png (or svg) image showing the transit plan in the form of the Gantt chart; this, combined with above gives beautiful pass info page (glued together by `gen-static-page.sh` to `autowx2/var/www/table.html`):
 
-![image](docs/nextpass.png)
+![image](docs/passtable.jpg)
 
 
 ### bin directory
