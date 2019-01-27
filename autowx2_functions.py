@@ -388,6 +388,34 @@ def _create_date(timestamp):
     return mdate
 
 
+def assignColorsToEvent(uniqueEvents):
+    ''' returns dict of event -> color'''
+
+    eventsColors = {'METEOR-M2': 'red',
+                    'NOAA-15': '#0040FF',
+                    'NOAA-18': '#0890FF',
+                    'NOAA-19': '#07CAFF',
+                    'ISS': '#38FF06',
+                    }
+
+    colors = ['#F646FF', 'yellow', 'orange', 'silver', 'magenta', 'red', 'white', '#FF2894', '#FF6E14']
+
+    fixedColorsEvents = [event for event in eventsColors]     # events that have assigned fixed colors
+
+    # generate list of events with not assigned fixed color
+    uniqueEventsToAssignColors = []
+    for uniqueEvent in uniqueEvents:
+        if uniqueEvent not in  fixedColorsEvents:
+            uniqueEventsToAssignColors += [uniqueEvent]
+
+    # assign colors to the events with not assigne fixed colrs and add them to dict
+    for event, color in zip(uniqueEventsToAssignColors, colors):
+        eventsColors[event] = color
+
+
+    return eventsColors
+
+
 def CreateGanttChart(listNextPasesListList):
     """
         Create gantt charts with matplotlib
@@ -405,16 +433,30 @@ def CreateGanttChart(listNextPasesListList):
         customDates.append([_create_date(startdate), _create_date(enddate)])
         i += 1
 
+    now = _create_date(time.time())
+
+    uniqueEvents = list(set([x[0] for x in listNextPasesListList])) # unique list of satellites
+    colorDict = assignColorsToEvent(uniqueEvents)
+
     ilen = len(ylabels)
     pos = np.arange(0.5, ilen * 0.5 + 0.5, 0.5)
     task_dates = {}
     for i, task in enumerate(ylabels):
         task_dates[task] = customDates[i]
-    fig = plt.figure(figsize=(8, 5))
+    fig = plt.figure(figsize=(10, 5))
     ax = fig.add_subplot(111)
     for i, ylabel in enumerate(ylabels):
         ylabelIN, startdateIN, enddateIN = listNextPasesListList[i]
         start_date, end_date = task_dates[ylabels[i]]
+
+        if i < (ilen/2):
+            labelAlign = 'left'
+            factor = 1
+        else:
+            labelAlign = 'right'
+            factor = -1
+
+
         ax.barh(
             (i * 0.5) + 0.5,
             end_date - start_date,
@@ -422,23 +464,24 @@ def CreateGanttChart(listNextPasesListList):
             height=0.3,
             align='center',
             edgecolor='black',
-            color='navy',
+            color=colorDict[ylabelIN],
             label='',
             alpha=0.95)
         ax.text(
             end_date,
             (i * 0.5) + 0.55,
-            ' %s | %s' % (t2humanHM(startdateIN),
+            ' %s | %s    ' % (t2humanHM(startdateIN),
                           ylabelIN),
-            ha='left',
+            ha=labelAlign,
             va='center',
-            fontsize=7,
-            color='gray')
+            fontsize=8,
+            color='#7B7B7B')
 
     locsy, labelsy = plt.yticks(pos, ylabels)
     plt.setp(labelsy, fontsize=8)
     ax.axis('tight')
     ax.set_ylim(ymin=-0.1, ymax=ilen * 0.5 + 0.5)
+    ax.set_xlim(xmin=now)
     ax.grid(color='silver', linestyle=':')
     ax.xaxis_date()
 
@@ -470,13 +513,20 @@ def listNextPasesHtml(passTable, howmany):
     output = "<table class='table small'>\n"
     output += "<tr><th>#</th><th>satellite</th><th>start</th><th>duration</th><th>peak</th><th>azimuth</th><th>freq</th><th>process with</th><tr>\n"
 
+    # uniqueEvents
+    # colorDict = assignColorsToEvent(listNextPasesListList)
+    # print passTable[0:howmany]
+    uniqueEvents = list(set([x[0] for x in passTable[0:howmany]])) # unique list of satellites
+    colorDict = assignColorsToEvent(uniqueEvents)
+
     for satelitePass in passTable[0:howmany]:
         satellite, start, duration, peak, azimuth = satelitePass
         freq = satellitesData[satellite]['freq']
         processWith = satellitesData[satellite]['processWith']
 
-        output += "<tr><td>%i</td><td>%s</td><td>%s</td><td>%s</td><td>%s°</td><td>%s° (%s)</td><td>%sHz</td><td>%s</td><tr>\n" % (
-            i, satellite, t2human(start), t2humanMS(duration), peak, azimuth, azimuth2dir(azimuth), freq, processWith)
+        color = colorDict[satellite]
+        output += "<tr><td style='background-color: %s'>%i</td><td>%s</td><td>%s</td><td>%s</td><td>%s°</td><td>%s° (%s)</td><td>%sHz</td><td>%s</td><tr>\n" % (
+            color, i, satellite, t2human(start), t2humanMS(duration), peak, azimuth, azimuth2dir(azimuth), freq, processWith)
         i += 1
 
     output += "</table>\n"
