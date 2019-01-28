@@ -158,6 +158,8 @@ scriptToRunInFreeTime = baseDir + "bin/aprs.sh" 	# APRS monitor
 # pymultimonaprs must be installed, see: https://github.com/asdil12/pymultimonaprs/
 #scriptToRunInFreeTime = baseDir + "bin/dump1090.sh"
 
+scriptToRunInFreeTime = baseDir + "bin/rtl_433.sh" 	# monitor traffic on 433 MHz; see: rtl_433
+
 
 ### Logging to file (enter the path) or False to disable
 # loggingDir = False
