@@ -253,8 +253,8 @@ def justRun(cmdline, loggingDir):
 
     cmdline = [str(x) for x in cmdline]
     try:
-        p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        p2 = subprocess.Popen(teeCommand, stdin=p1.stdout, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
+        p2 = subprocess.Popen(teeCommand, stdin=p1.stdout, close_fds=True) # stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         result = p1.communicate()[0]
         return result
     except OSError as e:
