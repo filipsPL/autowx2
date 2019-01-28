@@ -6,10 +6,10 @@ cat <<EOF
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="autowx2 atomated satellite receiving station">
+    <meta name="description" content="autowx2 atomated satellite receiving station $stationName">
     <meta name="author" content="filipsPL@github">
 
-    <title>autowx2 atomated satellite receiving station :: $htmlTitle</title>
+    <title>autowx2 atomated satellite receiving station $stationName :: $htmlTitle</title>
 
     <!-- Bootstrap core CSS -->
     <link href="$wwwRootPath/css/bootstrap.min.css" rel="stylesheet">
@@ -28,7 +28,7 @@ cat <<EOF
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
         <a class="navbar-brand" href="$wwwRootPath">
-          autowx2 | automatic receiving station
+          autowx2 | automatic receiving station $stationName
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
