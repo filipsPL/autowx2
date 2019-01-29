@@ -44,19 +44,20 @@ echo $keplerDays
 if [ $keplerDays -le 7 ]; then keplerInfo="<span class='badge badge-pill badge-success'>OK</span>"
 else keplerInfo="<span class='badge badge-pill badge-danger'>outdated</span>"; fi
 
-# export "$keplerInfo"
 echo "lastkeps: $lastkeps"
 
 keplerInfo="Keplers updated: $lastkeps ($keplerDays days old) $keplerInfo<br />"
 
-##### autowx2 uptime
+##### autowx2 uptime ########
 
 autowxStart=$(cat "$wwwDir/start.tmp")
 
 autowxUptimeH=$(echo "(($(date +"%s") - $autowxStart ) / (60*60))" | bc )
+autowxUptimeD=$(echo "(($(date +"%s") - $autowxStart ) / (60*60*24))" | bc )
+
 echo $autowxUptimeH
 
-autowxUptime="autowx2 uptime: $autowxUptimeH h<br />"
+autowxUptime="autowx2 uptime: $autowxUptimeH h (~$autowxUptimeD d)<br />"
 
 
 # ---- NOAA list all dates and times  -------------------------------------------------#
@@ -65,13 +66,16 @@ function gallery_noaa {
 
 howManyToday=$(ls $noaaDir/img/$(date +"%Y/%m/%d")/*.log 2> /dev/null| wc -l)
 
+noaaLastDir=$(dirname $(cat $wwwDir/noaa-last-recording.tmp))
+
 echo "<h2>NOAA recordings</h2>" >> $dirList
 echo "<h4>Recent pass</h4>" >> $dirList
+echo "<a href='$noaaLastDir/index.html'>" >> $dirList
 echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-therm+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
 echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-MCIR-precip+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
 echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-HVC+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
 echo "<img src='$(cat $wwwDir/noaa-last-recording.tmp)-NO+map.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
-
+echo "</a>" >> $dirList
 echo "<p></p>" >> $dirList
 
 echo "<h4>Archive</h4>" >> $dirList
@@ -103,13 +107,17 @@ echo "</ul>" >> $dirList
 function gallery_meteor {
 
 howManyToday=$(ls $meteorDir/img/$(date +"%Y/%m/%d")/*-Ch0.jpg 2> /dev/null| wc -l)
+meteorLastDir=$(dirname $(cat $wwwDir/meteor-last-recording.tmp))
+
 
 echo "<h2>METEOR-M2 recordings</h2>" >> $dirList
 echo "<h4>Recent pass</h4>" >> $dirList
+echo "<a href='$meteorLastDir/index.html'>" >> $dirList
 echo "<img src='$(cat $wwwDir/meteor-last-recording.tmp)-Ch0.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
 echo "<img src='$(cat $wwwDir/meteor-last-recording.tmp)-Ch1.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
 echo "<img src='$(cat $wwwDir/meteor-last-recording.tmp)-Ch2.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
 echo "<img src='$(cat $wwwDir/meteor-last-recording.tmp)-Combo.th.jpg' alt='recent recording' class='img-thumbnail' />" >> $dirList
+echo "</a>" >> $dirList
 
 echo "<p></p>" >> $dirList
 
