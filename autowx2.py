@@ -16,6 +16,7 @@ from autowx2_functions import * # all functions and magic hidden here
 
 if __name__ == "__main__":
     log("⚡ Program start")
+    saveToFile("%s/start.tmp" % (wwwDir), str(time.time())) # saves program start date to file
 
     if cleanupRtl:
         log("Killing all remaining rtl_* processes...")

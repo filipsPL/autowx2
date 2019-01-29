@@ -59,6 +59,7 @@ cat <<EOF
   <h1>$htmlTitle</h1>
   Page generated: $currentDate<br />
   $keplerInfo
+  $autowxUptime
   Software version: $autowx2version<br />
 
   $htmlBody

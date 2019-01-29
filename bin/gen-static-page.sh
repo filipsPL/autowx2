@@ -49,6 +49,15 @@ echo "lastkeps: $lastkeps"
 
 keplerInfo="Keplers updated: $lastkeps ($keplerDays days old) $keplerInfo<br />"
 
+##### autowx2 uptime
+
+autowxStart=$(cat "$wwwDir/start.tmp")
+
+autowxUptimeH=$(echo "(($(date +"%s") - $autowxStart ) / (60*60))" | bc )
+echo $autowxUptimeH
+
+autowxUptime="autowx2 uptime: $autowxUptimeH h<br />"
+
 
 # ---- NOAA list all dates and times  -------------------------------------------------#
 
