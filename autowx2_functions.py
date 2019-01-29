@@ -572,6 +572,17 @@ def listNextPasesTxt(passTable, howmany):
 
     return output
 
+def listNextPasesShort(passTable, howmany=4):
+    ''' list next passes in a sentence '''
+
+    output = ""
+
+    for satelitePass in passTable[0:howmany]:
+        satellite, start, duration, peak, azimuth = satelitePass
+
+        output += "%s (%s); " % (satellite, strftime('%H:%M', time.localtime(start)) )
+
+    return output
 
 def listNextPasesList(passTable, howmany):
     output = []
@@ -601,6 +612,8 @@ def generatePassTableAndSaveFiles(satellites, qth, verbose=True):
     passTable = genPassTable(satellites, qth, howmany=50)
     listNextPasesHtmlOut = listNextPasesHtml(passTable, 100)
     saveToFile(htmlNextPassList, listNextPasesHtmlOut)
+
+    saveToFile(wwwDir + 'nextpassshort.tmp', listNextPasesShort(passTable, 6))
 
     listNextPasesListList = listNextPasesList(passTable, 20)
     CreateGanttChart(listNextPasesListList)

@@ -59,6 +59,10 @@ echo $autowxUptimeH
 
 autowxUptime="autowx2 uptime: $autowxUptimeH h (~$autowxUptimeD d)<br />"
 
+### short list of next passes
+
+shortlistofnextpassess="<br/>Next passes: $(cat "$wwwDir/nextpassshort.tmp")<br />"
+
 
 # ---- NOAA list all dates and times  -------------------------------------------------#
 

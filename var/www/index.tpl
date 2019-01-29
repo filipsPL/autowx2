@@ -61,7 +61,8 @@ cat <<EOF
   $keplerInfo
   $autowxUptime
   Software version: $autowx2version<br />
-
+  $shortlistofnextpassess
+  
   $htmlBody
   </div>
 </div>
