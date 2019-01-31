@@ -1,0 +1,44 @@
+# satellite config file for autowx2
+# put satellite name in [brackets], please make sure that this name is consistent
+# with one in the TLE file
+# for scheduled recordings (fixed time) the name can be anything
+
+[NOAA-18]
+freq: 137912500
+processwith: modules/noaa/noaa.sh
+priority: 2
+
+[NOAA-15]
+freq: 137620000
+processwith: modules/noaa/noaa.sh
+priority: 2
+
+[NOAA-19]
+freq: 137100000
+processwith: modules/noaa/noaa.sh
+priority: 2
+
+[METEOR-M2]
+freq: 137900000
+processwith: modules/meteor-m2/meteor.sh
+priority: 1
+
+[ISS]
+# FM VHF-1 downlink. Main Russian communications channel. Often active over Moskow
+# freq: 143625000
+# APRS -- AX.25 1200 Bd AFSK Packet Radio (Worldwide) Downlink
+freq: 145825000
+processwith: modules/iss/iss_voice_mp3.sh
+priority: 5
+
+### meteo radiosonde; record twice a day for 2 hours = 7200 seconds
+[Radiosonde]
+freq: 98796500
+processwith: modules/radiosonde/run_radiosonde_scanner.sh
+fixedtime: 20 0,12 * * *
+fixedduration: 7200
+priority: 3
+
+
+[fail]
+key: value 

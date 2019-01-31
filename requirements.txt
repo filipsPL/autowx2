@@ -1,3 +1,4 @@
+codecs
 pypredict
 matplotlib
 numpy

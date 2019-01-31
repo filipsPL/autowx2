@@ -37,14 +37,14 @@ from flask_socketio import SocketIO, emit
 import codecs
 from threading import Thread
 
+# config parser
+import configparser
+
 # configuration
 from autowx2_conf import *
 
-# ---------------------------------------------------------------------------- #
 
-satellites = list(satellitesData)
-qth = (stationLat, stationLon, stationAlt)
-
+# ---- LOGGING --------------------------------------------------------------- #
 
 def mkdir_p(outdir):
     ''' bash "mkdir -p" analog'''
@@ -68,6 +68,103 @@ class bc():
     GRAY = '\033[37m'
     UNDERLINE = '\033[4m'
 
+
+def escape_ansi(line):
+    '''remove ansi colors from the given string'''
+    ansi_escape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -/]*[@-~]')
+    return ansi_escape.sub('', line)
+
+
+def log(string, style=bc.CYAN):
+    # string = unicode(string)
+    # print string
+    # exit(1)
+    message = u"%s%s%s %s %s %s " % (
+        bc.BOLD,
+        datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M'),
+        bc.ENDC,
+        style,
+        # UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 0: ordinal not in range(128)
+        string,
+        bc.ENDC)
+    # socketio.emit('log', {'data': message}, namespace='/')
+    handle_my_custom_event(escape_ansi(message) + "<br />\n")
+    print message
+
+    # logging to file, if not Flase
+    if loggingDir:
+        logToFile(escape_ansi(message) + "\n", loggingDir)
+
+
+def logFile(logDir):
+    '''Create output logging dir, returns name of the logfile'''
+    mkdir_p(logDir)
+    outfile = "%s/%s.txt" % (
+        logDir,
+        datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d'))
+    return outfile
+
+
+def logToFile(message, logDir):
+    # save message to the file
+    outfile = logFile(logDir)
+    file_append(outfile, message)
+
+
+def file_append(filename, content):
+    f = codecs.open(filename, "a", "utf-8")
+    f.write(content)
+    f.close()
+
+
+# ---------------------------------------------------------------------------- #
+
+def parseSatConfig():
+    ''' parse satellite configuration and returns dictionary '''
+
+    floatOptions = ['fixedduration', 'priority']
+    mandatorySections = ['processwith', 'priority', 'freq']
+
+    configFile = "satellites.conf"
+    # !!! sprawdzić, czy configFile istnieje
+
+    config = configparser.ConfigParser()
+    config.read(configFile)
+
+    satellitesData = {}
+
+    for sat in config.sections():
+        satOptions = {}
+
+        # check for mandatory section(s)
+        sectionsErrors = False
+        for mandatorySection in mandatorySections:
+            if mandatorySection not in config.options(sat):
+                # log("Sat config parsing error: no mandatory section '%s' for [%s]!" % (mandatorySection, sat) , style=bc.FAIL)
+                sectionsErrors = True
+                break
+
+        # check in tle here?
+
+        # if no errors in parsing config file:
+        if sectionsErrors == False:
+            for option in config.options(sat):
+                value = config.get(sat, option)
+                if option in floatOptions:
+                    value = float(value)
+                satOptions[option] = value
+            satellitesData[sat] = satOptions
+
+    return satellitesData
+
+# ---------------------------------------------------------------------------- #
+
+# some global variables
+qth = (stationLat, stationLon, stationAlt)
+satellitesData = parseSatConfig()
+satellites = list(satellitesData)
+
+# ---------------------------------------------------------------------------- #
 
 def is_number(s):
     try:
@@ -103,15 +200,16 @@ def parseCron(cron):
 
 def getFixedRecordingTime(satellite):
     '''Reads from the config the fixed recording time'''
+
     try:
-        fixedTime = satellitesData[satellite]["fixedTime"]
-        fixedDuration = satellitesData[satellite]["fixedDuration"]
-        return {"fixedTime": parseCron(fixedTime), "fixedDuration": fixedDuration}
+        fixedtime = satellitesData[satellite]["fixedtime"]
+        fixedduration = satellitesData[satellite]["fixedduration"]
+        return {"fixedtime": parseCron(fixedtime), "fixedduration": fixedduration}
     except KeyError:
         return False
 
 
-def genPassTable(satellites, qth, howmany=20):
+def genPassTable(qth, howmany=20):
     '''generate a table with pass list, sorted'''
 
     passTable = {}
@@ -145,10 +243,10 @@ def genPassTable(satellites, qth, howmany=20):
                         ]
                     # transit.start - unix timestamp
 
-        elif 'fixedTime' in satellitesData[satellite]:                   # if ['fixedTime'] exists in satellitesData => time recording
-            # cron = getFixedRecordingTime(satellite)["fixedTime"]
-            cron = satellitesData[satellite]['fixedTime']
-            duration = getFixedRecordingTime(satellite)["fixedDuration"]
+        elif 'fixedtime' in satellitesData[satellite]:                   # if ['fixedtime'] exists in satellitesData => time recording
+            # cron = getFixedRecordingTime(satellite)["fixedtime"]
+            cron = satellitesData[satellite]['fixedtime']
+            duration = getFixedRecordingTime(satellite)["fixedduration"]
 
             delta = 0
             for i in range(0, howmany):
@@ -160,7 +258,7 @@ def genPassTable(satellites, qth, howmany=20):
                 passTable[start] = [
                     satellite, int(start), int(duration), '0', '0', priority]
         else:
-            log("✖ Can't find TLE data (in keplers) nor fixed time schedule (in config) for " +
+            log(u"✖ Can't find TLE data (in keplers) nor fixed time schedule (in config) for " +
                 satellite, style=bc.FAIL)
 
     # Sort pass table
@@ -210,13 +308,13 @@ def t2humanMS(seconds):
     return "%02i:%02i" % (mm, ss)
 
 
-def printPass(satellite, start, duration, peak, azimuth, freq, processWith):
-    return "● " + bc.OKGREEN + "%10s" % (satellite) + bc.ENDC + " :: " \
+def printPass(satellite, start, duration, peak, azimuth, freq, processwith):
+    return u"● " + bc.OKGREEN + "%10s" % (satellite) + bc.ENDC + " :: " \
         + bc.OKGREEN + t2human(start) + bc.ENDC + " to " + bc.OKGREEN  + t2human(start + int(duration)) + bc.ENDC \
         + ", dur: " + t2humanMS(duration) \
-        + ", max el. " + str(int(peak)) + "°" + "; azimuth: " + str(int(azimuth)) + \
-                         "° (" + azimuth2dir(azimuth) + ") f=" + str(
-                             freq) + "Hz; Decoding: " + str(processWith)
+        + ", max el. " + str(int(peak)) + u"°" + "; azimuth: " + str(int(azimuth)) #+ \
+                         # "° (" + azimuth2dir(azimuth) + ") f=" + str(
+                             # freq) + "Hz; Decoding: " + str(processwith)
 
 
 def listNextPases(passTable, howmany):
@@ -224,9 +322,9 @@ def listNextPases(passTable, howmany):
     for satelitePass in passTable[0:howmany]:
         satellite, start, duration, peak, azimuth = satelitePass
         freq = satellitesData[satellite]['freq']
-        processWith = satellitesData[satellite]['processWith']
+        processwith = satellitesData[satellite]['processwith']
         log(printPass(satellite, start, duration,
-            peak, azimuth, freq, processWith))
+            peak, azimuth, freq, processwith))
         i += 1
 
 
@@ -242,8 +340,8 @@ def runForDuration(cmdline, duration, loggingDir):
         time.sleep(duration)
         p1.terminate()
     except OSError as e:
-        log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
-        log("✖ OS Error: " + e.strerror, style=bc.FAIL)
+        log(u"✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
+        log(u"✖ OS Error: " + e.strerror, style=bc.FAIL)
 
 
 def justRun(cmdline, loggingDir):
@@ -258,8 +356,8 @@ def justRun(cmdline, loggingDir):
         result = p1.communicate()[0]
         return result
     except OSError as e:
-        log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
-        log("✖ OS Error: " + e.strerror, style=bc.FAIL)
+        log(u"✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
+        log(u"✖ OS Error: " + e.strerror, style=bc.FAIL)
 
 
 def runTest(duration=3):
@@ -274,7 +372,7 @@ def runTest(duration=3):
     # 'RTL2838UHIDIR,',...
     info = err.split()[0]
     if info == "No":
-        log("✖ No SDR device found!", style=bc.FAIL)
+        log(u"✖ No SDR device found!", style=bc.FAIL)
         return False
     elif info == "Found":
         log("SDR device found!")
@@ -320,58 +418,13 @@ def calibrate(dongleShift=dongleShift):
 
 def azimuth2dir(azimuth):
     ''' convert azimuth in degrees to wind rose directions (16 wings)'''
-    dirs = ["N↑", "NNE↑↗", "NE↗", "ENE→↗",
-            "E→", "ESE→↘", "SE↘", "SSE↓↘",
-            "S↓", "SSW↓↙", "SW↙", "WSW←↙",
-            "W←", "WNW←↖", "NW↖", "NNW↑↖", ]
+    dirs = [u"N↑", u"NNE↑↗", u"NE↗", u"ENE→↗",
+            u"E→", u"ESE→↘", u"SE↘", u"SSE↓↘",
+            u"S↓", u"SSW↓↙", u"SW↙", u"WSW←↙",
+            u"W←", u"WNW←↖", u"NW↖", u"NNW↑↖", ]
 
     part = int(float(azimuth) / 360 * 16)
     return dirs[part]
-
-
-def escape_ansi(line):
-    '''remove ansi colors from the given string'''
-    ansi_escape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -/]*[@-~]')
-    return ansi_escape.sub('', line)
-
-
-def log(string, style=bc.CYAN):
-    message = "%s%s%s %s %s %s " % (
-        bc.BOLD,
-        datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M'),
-        bc.ENDC,
-        style,
-        str(string),
-        bc.ENDC)
-    # socketio.emit('log', {'data': message}, namespace='/')
-    handle_my_custom_event(escape_ansi(message) + "<br />\n")
-    print message
-
-    # logging to file, if not Flase
-    if loggingDir:
-        logToFile(escape_ansi(message) + "\n", loggingDir)
-
-
-def logFile(logDir):
-    '''Create output logging dir, returns name of the logfile'''
-    mkdir_p(logDir)
-    outfile = "%s/%s.txt" % (
-        logDir,
-        datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d'))
-    return outfile
-
-
-def logToFile(message, logDir):
-    # save message to the file
-    outfile = logFile(logDir)
-    file_append(outfile, message)
-
-
-def file_append(filename, content):
-    f = open(filename, 'a')
-    f.write(content)
-    f.close()
-
 
 # ------------ functions for generation of pass table, saving, png image etc...
 
@@ -509,9 +562,10 @@ def CreateGanttChart(listNextPasesListList):
 
 
 def listNextPasesHtml(passTable, howmany):
+
     i = 1
-    output = "<table class='table small'>\n"
-    output += "<tr><th>#</th><th>satellite</th><th>start</th><th>duration</th><th>peak</th><th>azimuth</th><th>freq</th><th>process with</th><tr>\n"
+    output = u"<table class='table small'>\n"
+    output += u"<tr><th>#</th><th>satellite</th><th>start</th><th>duration</th><th>peak</th><th>azimuth</th><th>freq</th><th>process with</th><tr>\n"
 
     # uniqueEvents
     # colorDict = assignColorsToEvent(listNextPasesListList)
@@ -522,23 +576,23 @@ def listNextPasesHtml(passTable, howmany):
     for satelitePass in passTable[0:howmany]:
         satellite, start, duration, peak, azimuth = satelitePass
         freq = satellitesData[satellite]['freq']
-        processWith = satellitesData[satellite]['processWith']
-
+        processwith = satellitesData[satellite]['processwith']
         color = colorDict[satellite]
-        output += "<tr><td style='background-color: %s'>%i</td><td>%s</td><td>%s</td><td>%s</td><td>%s°</td><td>%s° (%s)</td><td>%sHz</td><td>%s</td><tr>\n" % (
-            color, i, satellite, t2human(start), t2humanMS(duration), peak, azimuth, azimuth2dir(azimuth), freq, processWith)
+        output += u"<tr><td style='background-color: %s'>%i</td><td>%s</td><td>%s</td><td>%s</td><td>%s°</td><td>%s° (%s)</td><td>%sHz</td><td>%s</td><tr>\n" % (
+            color, i, satellite, t2human(start), t2humanMS(duration), peak, azimuth, azimuth2dir(azimuth), freq, processwith)
+
         i += 1
 
     output += "</table>\n"
 
-    return output.decode('utf-8')
+    return output
 
 
 def listNextPasesTxt(passTable, howmany):
 
     txtTemplate = "%3s\t%10s\t%16s\t%9s\t%4s\t%3s\t%6s\t%10s\t%20s\n"
 
-    i = 1
+    i =1
     output = ""
     output += txtTemplate % (
         "#",
@@ -554,7 +608,7 @@ def listNextPasesTxt(passTable, howmany):
     for satelitePass in passTable[0:howmany]:
         satellite, start, duration, peak, azimuth = satelitePass
         freq = satellitesData[satellite]['freq']
-        processWith = satellitesData[satellite]['processWith']
+        processwith = satellitesData[satellite]['processwith']
 
         output += txtTemplate % (
             i,
@@ -565,7 +619,7 @@ def listNextPasesTxt(passTable, howmany):
             azimuth,
             azimuth2dir(azimuth),
             freq,
-            processWith)
+            processwith)
         i += 1
 
     output += "\n"
@@ -589,7 +643,7 @@ def listNextPasesList(passTable, howmany):
     for satelitePass in passTable[0:howmany]:
         satellite, start, duration, peak, azimuth = satelitePass
         # freq = satellitesData[satellite]['freq']
-        # processWith = satellitesData[satellite]['processWith']
+        # processwith = satellitesData[satellite]['processwith']
 
         output.append([satellite, start, start + duration])
     if peak:
@@ -606,10 +660,10 @@ def saveToFile(filename, data):
     plik.close()
 
 
-def generatePassTableAndSaveFiles(satellites, qth, verbose=True):
+def generatePassTableAndSaveFiles(verbose=True):
     # recalculate table of next passes
     log("Recalculating the new pass table and saving to disk.")
-    passTable = genPassTable(satellites, qth, howmany=50)
+    passTable = genPassTable(qth, howmany=50)
     listNextPasesHtmlOut = listNextPasesHtml(passTable, 100)
     saveToFile(htmlNextPassList, listNextPasesHtmlOut)
 
@@ -647,7 +701,7 @@ def homepage():
     body += "<h3>Recent logs</h3><p><strong>File</strong>: %s</p><pre style='height: 400px;' id='logWindow' class='pre-scrollable small text-nowrap'>%s</pre>" % (logfile, logs)
 
     # next pass table
-    passTable = genPassTable(satellites, qth)
+    passTable = genPassTable(qth)
     body += "<h3>Next passes</h3><span id='nextPassWindow'>%s</span>" % ( listNextPasesHtml(passTable, 10) )
     return render_template('index.html', title="Home page", body=body)
 
@@ -679,14 +733,11 @@ def mainLoop():
 
     while True:
 
-        # each loop - reads the config file in case it has changed
-        from autowx2_conf import *  # configuration
-
         # recalculate table of next passes
-        passTable = genPassTable(satellites, qth)
+        passTable = genPassTable(qth)
 
         # save table to disk
-        generatePassTableAndSaveFiles(satellites, qth, verbose=False)
+        generatePassTableAndSaveFiles(verbose=False)
 
         # show next five passes
         log("Next five passes:")
@@ -701,7 +752,7 @@ def mainLoop():
         satelliteNoSpaces = satellite.replace(" ", "-") #remove spaces from the satellite name
 
         freq = satellitesData[satellite]['freq']
-        processWith = satellitesData[satellite]['processWith']
+        processwith = satellitesData[satellite]['processwith']
 
         fileNameCore = datetime.fromtimestamp(
             start).strftime(
@@ -709,7 +760,7 @@ def mainLoop():
 
         log("Next pass:")
         log(printPass(satellite, start, duration,
-            peak, azimuth, freq, processWith))
+            peak, azimuth, freq, processwith))
 
         towait = int(start - time.time())
 
@@ -727,10 +778,10 @@ def mainLoop():
         if towait <= 1 and duration > 0:
             # here the recording happens
             log("!! Recording " + printPass(satellite, start, duration,
-                peak, azimuth, freq, processWith), style=bc.WARNING)
+                peak, azimuth, freq, processwith), style=bc.WARNING)
 
             processCmdline = [
-                processWith,
+                processwith,
                 fileNameCore,
                 satellite,
                 start,
