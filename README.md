@@ -63,10 +63,6 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 These scripts may be used by the autowx2 in the free time, e.g., to track airplanes, capture APRS signals etc:
 
-- [dump1090](https://github.com/MalcolmRobb/dump1090) - tested with MalcolmRobb's fork
-- [dump1090-stream-parser.py](https://github.com/yanofsky/dump1090-stream-parser) by yanofsky
-- [heatmap](https://github.com/filipsPL/heatmap) a fork of the great heatmap by sethoscope, modified by filipsPL to support sqlite
-  - [osmviz](http://cbick.github.io/osmviz/html/)
 - [multimon-ng](https://github.com/sq5bpf/multimon-ng-stqc) fork by sq5bpf with STQC decoding support
 - [radiosonde_auto_rx](https://github.com/projecthorus/radiosonde_auto_rx/wiki) - Radiosonde monitoring
 
@@ -118,70 +114,61 @@ The main program to do all calculation, pass predictions and launch modules.
 
 ```
 autowx2.py          - the main program, the governor of all other programs and scripts
-autowx2_conf.py     - the config file
+autowx2_conf.py     - the config file: almost all variables
+satellites.conf			- the satellite/recordings config file
 ```
 
 ### autowx2_conf.py
 
-The config file of the main program, may be used also by the decoding modules. It is used by te *noaa* module.
+The config file of the main program, may be used also by the decoding modules.
 
-**satellitesData** - the dictionary (in the python style) of satellites to be observed and processed (eg., weather satellites) OR fixed times for recordings (eg., listening to the WeatherFax transmissions).
+### satellites.conf
+
+config file for satellites to be observed and processed (eg., weather satellites) OR fixed times for recordings (eg., listening to the WeatherFax transmissions). written in the standard ini/cfg/conf style.
+
+- each recoding task (eg satellite pass) is separated by the satellite name in square brackets [ ]
+- for satellites the name must be the name from TLE file, eg `[NOAA-18]`, `[ISS]` etc
+- for other tasks it can be anything, eg. `[radiosonde]`
 - for the *satellites*, three values must be set:
-  - the satellite name (eg., 'NOAA 18'), must be the same as one found in TLE file
   - `freq` - the frequency to listen at
   - `processWith` - the path to the script/module to run during the transit
   - `priority` - priority of the recording (if two or more overlaps); the lower number - the higher priority
 - for the fixed time recordings:
-  - the id of the entry (any arbitrary string is ok)
   - `freq` - the frequency to listen at
   - `processWith` - the path to the script/module to run
   - `fixedTime` - the fixed time of recording in the [cron](https://en.wikipedia.org/wiki/Cron#Overview) style.
   - `fixedDuration` - the duration of the recording
   - `priority` - priority of the recording (if two or more overlaps); the lower number - the higher priority
 
-Sample `satellitesData` dictionary:
+Sample `satellites.conf` file may be found in `satellites.conf.example`:
 
+```ini
+[NOAA-19]
+freq: 137100000
+processwith: modules/noaa/noaa.sh
+priority: 2
+
+[METEOR-M2]
+freq: 137900000
+processwith: modules/meteor-m2/meteor.sh
+priority: 1
+
+[ISS]
+# FM VHF-1 downlink. Main Russian communications channel. Often active over Moskow
+# freq: 143625000
+# APRS -- AX.25 1200 Bd AFSK Packet Radio (Worldwide) Downlink
+freq: 145825000
+processwith: modules/iss/iss_voice_mp3.sh
+priority: 5
+
+### meteo radiosonde; record twice a day for 2 hours = 7200 seconds
+[Radiosonde]
+freq: 98796500
+processwith: modules/radiosonde/run_radiosonde_scanner.sh
+fixedtime: 20 0,12 * * *
+fixedduration: 7200
+priority: 3
 ```
-satellitesData = {
-    'NOAA-18': {
-        'freq': '137912500',
-        'processWith': 'modules/noaa/noaa.sh',
-        'priority': 1},
-    'NOAA-15': {
-        'freq': '137620000',
-        'processWith': 'modules/noaa/noaa.sh',
-        'priority': 1},
-    'NOAA-19': {
-        'freq': '137100000',
-        'processWith': 'modules/noaa/noaa.sh',
-        'priority': 1},
-    'ISS': {  
-      # voice channel
-        'freq': '145800000',
-        'processWith': 'modules/iss/iss_voice_mp3.sh',
-        'priority': 5},
-    'PR3_NEWS': {
-        'freq': '98988000',
-        'processWith': 'modules/fm/fm.sh',
-        'fixedTime': '0 7-23 * * *',
-        'fixedDuration': 300,
-        'priority': 2},
-    'LILACSAT-1': {
-        'freq': '436510000',
-        'processWith': 'modules/iss/iss_voice_mp3.sh',
-        'priority': 3},
-    'Radiosonde': {	# twice a day watch for meteo balloons
-        'freq': '98796500',
-        'processWith': 'modules/radiosonde/run_radiosonde_scanner.sh',
-        'fixedTime': '20 0,12 * * *',
-        'fixedDuration': 12000,
-        'priority': 1},
-
-}
-
-```
-
-- :warning: TODO: dynamic priority calculation basing on the transit features, like azimuth or altitude.
 
 ### genpasstable.py
 

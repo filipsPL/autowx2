@@ -160,6 +160,7 @@ def parseSatConfig():
 # ---------------------------------------------------------------------------- #
 
 # some global variables
+# quick and dirty hack - one should find a more appropriate place to put it...
 qth = (stationLat, stationLon, stationAlt)
 satellitesData = parseSatConfig()
 satellites = list(satellitesData)
@@ -732,6 +733,10 @@ def mainLoop():
     dongleShift = getDefaultDongleShift()
 
     while True:
+
+        # read satellites data from .conf file
+        satellitesData = parseSatConfig()
+        satellites = list(satellitesData)
 
         # recalculate table of next passes
         passTable = genPassTable(qth)
