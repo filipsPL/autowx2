@@ -142,7 +142,7 @@ config file for satellites to be observed and processed (eg., weather satellites
 
 Sample `satellites.conf` file may be found in `satellites.conf.example`:
 
-```ini
+```git-config
 [NOAA-19]
 freq: 137100000
 processwith: modules/noaa/noaa.sh
@@ -189,6 +189,8 @@ pymultimonaprs.sh   - aprs iGate launcher (pymultimonaprs must be installed)
 kalibruj_initial.sh - calibrating script - initialization
 kalibruj.sh         - calibrating script - getting the drift
 update-keps.sh      - keplers updated; can/should be run from cron
+gen-static-page.sh	- generate static pages (index.html, table.html)
+kill_rtl.sh					- kill all instances of rtl_* programs
 crontab/            - proposal of scripts to be run periodicaly
 ```
 
