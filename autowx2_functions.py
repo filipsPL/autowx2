@@ -561,6 +561,7 @@ def CreateGanttChart(listNextPasesListList):
     if ylabel == enddateIN:
         print locsy  # "This is done only to satisfy the codacy.com. Sorry for that."
 
+    plt.close()
 
 def listNextPasesHtml(passTable, howmany):
 
