@@ -13,8 +13,9 @@ echo $MACHINE_TYPE
 
 bash ./configure.sh
 
-echo "copy sample config file, but don't overwrite"
+echo "copy sample config files, but don't overwrite"
 cp --no-clobber autowx2_conf.py.example autowx2_conf.py
+cp --no-clobber satellites.conf.example satellites.conf
 
 
 echo "basedir_conf.py:"
