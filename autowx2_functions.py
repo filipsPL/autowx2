@@ -35,7 +35,6 @@ import numpy as np
 from flask import render_template, Flask
 from flask_socketio import SocketIO, emit
 import codecs
-from threading import Thread
 
 # config parser
 import configparser
