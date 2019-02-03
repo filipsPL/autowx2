@@ -83,7 +83,8 @@ def log(string, style=bc.CYAN):
         datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M'),
         bc.ENDC,
         style,
-        # UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 0: ordinal not in range(128)
+        # UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position
+        # 0: ordinal not in range(128)
         string,
         bc.ENDC)
     # socketio.emit('log', {'data': message}, namespace='/')
@@ -139,7 +140,8 @@ def parseSatConfig():
         sectionsErrors = False
         for mandatorySection in mandatorySections:
             if mandatorySection not in config.options(sat):
-                # log("Sat config parsing error: no mandatory section '%s' for [%s]!" % (mandatorySection, sat) , style=bc.FAIL)
+                # log("Sat config parsing error: no mandatory section '%s' for
+                # [%s]!" % (mandatorySection, sat) , style=bc.FAIL)
                 sectionsErrors = True
                 break
 
@@ -165,6 +167,7 @@ satellitesData = parseSatConfig()
 satellites = list(satellitesData)
 
 # ---------------------------------------------------------------------------- #
+
 
 def is_number(s):
     try:
@@ -312,7 +315,8 @@ def printPass(satellite, start, duration, peak, azimuth, freq, processwith):
     return u"● " + bc.OKGREEN + "%10s" % (satellite) + bc.ENDC + " :: " \
         + bc.OKGREEN + t2human(start) + bc.ENDC + " to " + bc.OKGREEN  + t2human(start + int(duration)) + bc.ENDC \
         + ", dur: " + t2humanMS(duration) \
-        + ", max el. " + str(int(peak)) + u"°" + "; azimuth: " + str(int(azimuth)) #+ \
+        + ", max el. " + \
+            str(int(peak)) + u"°" + "; azimuth: " + str(int(azimuth))  # + \
                          # "° (" + azimuth2dir(azimuth) + ") f=" + str(
                              # freq) + "Hz; Decoding: " + str(processwith)
 
@@ -330,12 +334,16 @@ def listNextPases(passTable, howmany):
 
 def runForDuration(cmdline, duration, loggingDir):
     outLogFile = logFile(loggingDir)
-    teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
+    teeCommand = ['tee', '-a', outLogFile]
+        # quick and dirty hack to get log to file
 
     cmdline = [str(x) for x in cmdline]
     print cmdline
     try:
-        p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p1 = subprocess.Popen(
+            cmdline,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT)
         _ = subprocess.Popen(teeCommand, stdin=p1.stdout)
         time.sleep(duration)
         p1.terminate()
@@ -347,12 +355,20 @@ def runForDuration(cmdline, duration, loggingDir):
 def justRun(cmdline, loggingDir):
     '''Just run the command as long as necesary and return the output'''
     outLogFile = logFile(loggingDir)
-    teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
+    teeCommand = ['tee', '-a', outLogFile]
+        # quick and dirty hack to get log to file
 
     cmdline = [str(x) for x in cmdline]
     try:
-        p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
-        p2 = subprocess.Popen(teeCommand, stdin=p1.stdout, close_fds=True) # stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        p1 = subprocess.Popen(
+            cmdline,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            close_fds=True)
+        p2 = subprocess.Popen(
+            teeCommand,
+            stdin=p1.stdout,
+            close_fds=True)  # stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         result = p1.communicate()[0]
         return result
     except OSError as e:
@@ -451,20 +467,30 @@ def assignColorsToEvent(uniqueEvents):
                     'ISS': '#38FF06',
                     }
 
-    colors = ['#F646FF', 'yellow', 'orange', 'silver', 'magenta', 'red', 'white', '#FF2894', '#FF6E14']
+    colors = [
+        '#F646FF',
+        'yellow',
+     'orange',
+     'silver',
+     'magenta',
+     'red',
+     'white',
+     '#FF2894',
+     '#FF6E14']
 
-    fixedColorsEvents = [event for event in eventsColors]     # events that have assigned fixed colors
+    fixedColorsEvents = [event for event in eventsColors]
+        # events that have assigned fixed colors
 
     # generate list of events with not assigned fixed color
     uniqueEventsToAssignColors = []
     for uniqueEvent in uniqueEvents:
-        if uniqueEvent not in  fixedColorsEvents:
+        if uniqueEvent not in fixedColorsEvents:
             uniqueEventsToAssignColors += [uniqueEvent]
 
-    # assign colors to the events with not assigne fixed colrs and add them to dict
+    # assign colors to the events with not assigne fixed colrs and add them to
+    # dict
     for event, color in zip(uniqueEventsToAssignColors, colors):
         eventsColors[event] = color
-
 
     return eventsColors
 
@@ -488,7 +514,8 @@ def CreateGanttChart(listNextPasesListList):
 
     now = _create_date(time.time())
 
-    uniqueEvents = list(set([x[0] for x in listNextPasesListList])) # unique list of satellites
+    uniqueEvents = list(
+        set([x[0] for x in listNextPasesListList]))  # unique list of satellites
     colorDict = assignColorsToEvent(uniqueEvents)
 
     ilen = len(ylabels)
@@ -502,7 +529,7 @@ def CreateGanttChart(listNextPasesListList):
         ylabelIN, startdateIN, enddateIN = listNextPasesListList[i]
         start_date, end_date = task_dates[ylabels[i]]
 
-        if i < (ilen/2):
+        if i < (ilen / 2):
             labelAlign = 'left'
         else:
             labelAlign = 'right'
@@ -521,7 +548,7 @@ def CreateGanttChart(listNextPasesListList):
             end_date,
             (i * 0.5) + 0.55,
             ' %s | %s    ' % (t2humanHM(startdateIN),
-                          ylabelIN),
+                              ylabelIN),
             ha=labelAlign,
             va='center',
             fontsize=8,
@@ -572,7 +599,8 @@ def listNextPasesHtml(passTable, howmany):
     # uniqueEvents
     # colorDict = assignColorsToEvent(listNextPasesListList)
     # print passTable[0:howmany]
-    uniqueEvents = list(set([x[0] for x in passTable[0:howmany]])) # unique list of satellites
+    uniqueEvents = list(
+        set([x[0] for x in passTable[0:howmany]]))  # unique list of satellites
     colorDict = assignColorsToEvent(uniqueEvents)
 
     for satelitePass in passTable[0:howmany]:
@@ -594,7 +622,7 @@ def listNextPasesTxt(passTable, howmany):
 
     txtTemplate = "%3s\t%10s\t%16s\t%9s\t%4s\t%3s\t%6s\t%10s\t%20s\n"
 
-    i =1
+    i = 1
     output = ""
     output += txtTemplate % (
         "#",
@@ -628,6 +656,7 @@ def listNextPasesTxt(passTable, howmany):
 
     return output
 
+
 def listNextPasesShort(passTable, howmany=4):
     ''' list next passes in a sentence '''
 
@@ -636,9 +665,13 @@ def listNextPasesShort(passTable, howmany=4):
     for satelitePass in passTable[0:howmany]:
         satellite, start, duration, peak, azimuth = satelitePass
 
-        output += "%s (%s); " % (satellite, strftime('%H:%M', time.localtime(start)) )
+        output += "%s (%s); " % (
+            satellite,
+            strftime('%H:%M',
+                     time.localtime(start)))
 
     return output
+
 
 def listNextPasesList(passTable, howmany):
     output = []
@@ -677,18 +710,21 @@ def generatePassTableAndSaveFiles(verbose=True):
         print listNextPasesTxt(passTable, 100)
 
 
-
 # --------------------------------------------------------------------------- #
 # --------- THE WEBSERVER --------------------------------------------------- #
 # --------------------------------------------------------------------------- #
 
-app = Flask(__name__, template_folder="var/flask/templates/", static_folder='var/flask/static')
+app = Flask(
+    __name__,
+     template_folder="var/flask/templates/",
+     static_folder='var/flask/static')
 socketio = SocketIO(app)
+
 
 def file_read(filename):
     with codecs.open(filename, 'r', encoding='utf-8', errors='replace') as f:
         lines = f.read()
-    linesBr = "<br />".join( lines.split("\n") )
+    linesBr = "<br />".join(lines.split("\n"))
     return linesBr
 
 
@@ -697,22 +733,26 @@ def homepage():
     logfile = logFile(loggingDir)
     logs = file_read(logfile)
 
-    body =""
+    body = ""
     # log window
-    body += "<h3>Recent logs</h3><p><strong>File</strong>: %s</p><pre style='height: 400px;' id='logWindow' class='pre-scrollable small text-nowrap'>%s</pre>" % (logfile, logs)
+    body += "<h3>Recent logs</h3><p><strong>File</strong>: %s</p><pre style='height: 400px;' id='logWindow' class='pre-scrollable small text-nowrap'>%s</pre>" % (
+        logfile, logs)
 
     # next pass table
     passTable = genPassTable(qth)
-    body += "<h3>Next passes</h3><span id='nextPassWindow'>%s</span>" % ( listNextPasesHtml(passTable, 10) )
+    body += "<h3>Next passes</h3><span id='nextPassWindow'>%s</span>" % (
+        listNextPasesHtml(passTable, 10))
     return render_template('index.html', title="Home page", body=body)
+
 
 @socketio.on('my event')
 def handle_my_custom_event(text):
-    socketio.emit('my response', { 'tekst': text } )
+    socketio.emit('my response', {'tekst': text})
+
 
 @socketio.on('next pass table')
 def handle_next_pass_list(text):
-    socketio.emit('response next pass table', { 'tekst': text } )
+    socketio.emit('response next pass table', {'tekst': text})
 
 
 #
@@ -721,7 +761,7 @@ def handle_next_pass_list(text):
 
 @app.route('/table')
 def passTable():
-    body=file_read(htmlNextPassList)
+    body = file_read(htmlNextPassList)
     return render_template('index.html', title="Pass table", body=body)
 
 
@@ -754,7 +794,9 @@ def mainLoop():
         # get the very next pass
         satelitePass = passTable[0]
         satellite, start, duration, peak, azimuth = satelitePass
-        satelliteNoSpaces = satellite.replace(" ", "-") #remove spaces from the satellite name
+        satelliteNoSpaces = satellite.replace(
+            " ",
+            "-")  # remove spaces from the satellite name
 
         freq = satellitesData[satellite]['freq']
         processwith = satellitesData[satellite]['processwith']
@@ -774,7 +816,7 @@ def mainLoop():
             justRun(["bin/kill_rtl.sh"], loggingDir)
 
         # test if SDR dongle is available
-        if towait > 15: # if we have time to perform the test?
+        if towait > 15:  # if we have time to perform the test?
             while not runTest():
                 log("Waiting for the SDR dongle...")
                 time.sleep(10)
@@ -802,7 +844,8 @@ def mainLoop():
             # recalculating waiting time
             if towait > 300:
                     log("Recalibrating the dongle...")
-                    dongleShift = calibrate(dongleShift)  # replace the global value
+                    dongleShift = calibrate(
+                        dongleShift)  # replace the global value
 
             towait = int(start - time.time())
             if scriptToRunInFreeTime:
