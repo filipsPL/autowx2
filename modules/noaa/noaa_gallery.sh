@@ -91,7 +91,7 @@ done
 currentDate=$(date)
 echo $currentDate
 
-htmlTitle="NOAA images | $dateTime"
-htmlBody=$(cat $indexHtml.tmp)
+export htmlTitle="NOAA images | $dateTime"
+export htmlBody=$(cat $indexHtml.tmp)
 
 source $htmlTemplate > $indexHtml

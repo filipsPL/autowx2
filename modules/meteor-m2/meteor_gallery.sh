@@ -77,7 +77,7 @@ else
   for obrazek in *.jpg
   do
   		echo "Thumb for $obrazek"
-  		base=$(basename $obrazek .jpg)
+  		# base=$(basename $obrazek .jpg)
       sizeof=$(du -sh "$obrazek" | cut -f 1)
       # generate thumbnail
       thumbnail=$(makethumb "$obrazek")
@@ -115,8 +115,8 @@ else
   currentDate=$(date)
   echo $currentDate
 
-  htmlTitle="METEOR-M2 images | $dateTime"
-  htmlBody=$(cat $indexHtml.tmp)
+  export htmlTitle="METEOR-M2 images | $dateTime"
+  export htmlBody=$(cat $indexHtml.tmp)
 
   source $htmlTemplate > $indexHtml
 

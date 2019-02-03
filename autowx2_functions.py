@@ -272,9 +272,9 @@ def genPassTable(qth, howmany=20):
     passTableSortedPrioritized = passTableSorted[:]
     passCount = len(passTableSorted)
     for i in range(0, passCount - 1):   # -1 or -2 :BUG?
-        satelliteI, startI, durationI, peakI, azimuthI, priorityI = passTableSorted[
+        satelliteI, startI, durationI, peakI, _, priorityI = passTableSorted[
             i]
-        satelliteJ, startJ, durationJ, peakJ, azimuthJ, priorityJ = passTableSorted[
+        satelliteJ, startJ, durationJ, peakJ, _, priorityJ = passTableSorted[
             i + 1]
         endTimeI = startI + durationI
 
@@ -505,11 +505,8 @@ def CreateGanttChart(listNextPasesListList):
 
         if i < (ilen/2):
             labelAlign = 'left'
-            factor = 1
         else:
             labelAlign = 'right'
-            factor = -1
-
 
         ax.barh(
             (i * 0.5) + 0.5,
@@ -643,13 +640,12 @@ def listNextPasesShort(passTable, howmany=4):
 def listNextPasesList(passTable, howmany):
     output = []
     for satelitePass in passTable[0:howmany]:
-        satellite, start, duration, peak, azimuth = satelitePass
+        satellite, start, duration, _, _ = satelitePass
         # freq = satellitesData[satellite]['freq']
         # processwith = satellitesData[satellite]['processwith']
 
         output.append([satellite, start, start + duration])
-    if peak:
-        print "This is a miracle!"  # codacy cheating, sorry.
+
     return output
 
 
