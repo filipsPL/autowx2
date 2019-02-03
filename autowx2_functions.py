@@ -555,10 +555,14 @@ def CreateGanttChart(listNextPasesListList):
     plt.tight_layout()
     plt.savefig(ganttNextPassList)
 
+    # plt.close()
+    fig.clf()
+
     if ylabel == enddateIN:
         print locsy  # "This is done only to satisfy the codacy.com. Sorry for that."
 
-    plt.close()
+    return 0
+
 
 def listNextPasesHtml(passTable, howmany):
 
