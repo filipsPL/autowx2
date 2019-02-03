@@ -554,8 +554,8 @@ def CreateGanttChart(listNextPasesListList):
     plt.tight_layout()
     plt.savefig(ganttNextPassList)
 
-    # plt.close()
     fig.clf()
+    plt.close()
 
     if ylabel == enddateIN:
         print locsy  # "This is done only to satisfy the codacy.com. Sorry for that."
