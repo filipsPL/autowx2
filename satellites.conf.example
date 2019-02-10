@@ -39,6 +39,3 @@ fixedtime: 20 0,12 * * *
 fixedduration: 7200
 priority: 3
 
-
-[fail]
-key: value 
