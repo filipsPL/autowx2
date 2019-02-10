@@ -26,9 +26,16 @@ priority: 1
 [ISS]
 # FM VHF-1 downlink. Main Russian communications channel. Often active over Moskow
 # freq: 143625000
+# processwith: modules/iss/iss_voice_mp3.sh
+
 # APRS -- AX.25 1200 Bd AFSK Packet Radio (Worldwide) Downlink
-freq: 145825000
-processwith: modules/iss/iss_voice_mp3.sh
+# freq: 145825000
+# processwith: modules/iss/iss_voice_mp3.sh
+
+# SSTV images will be transmitted from the ISS at the frequency of 145.80 MHz using the SSTV mode of PD120
+freq: 145800000
+processwith: modules/iss/iss_voice_wav.sh
+
 priority: 5
 
 ### meteo radiosonde; record twice a day for 2 hours = 7200 seconds
@@ -38,4 +45,3 @@ processwith: modules/radiosonde/run_radiosonde_scanner.sh
 fixedtime: 20 0,12 * * *
 fixedduration: 7200
 priority: 3
-
