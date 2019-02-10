@@ -273,6 +273,7 @@ The default address is `http://localhost:5010/` (the port may be changed in the 
 If you have a working and publically accesible autowx2 instance, please share with us!
 
 - [Tim SA7BNT](https://sa7bnt.funkerportal.de/autowx2/)
+- [OK1SLM](http://www.ok1slm.cz/)
 
 
 # Issues? Comments? Suggestions?
