@@ -33,7 +33,7 @@ import numpy as np
 
 # webserver
 from flask import render_template, Flask
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
 import codecs
 
 # config parser
@@ -274,9 +274,9 @@ def genPassTable(qth, howmany=20):
     passTableSortedPrioritized = passTableSorted[:]
     passCount = len(passTableSorted)
     for i in range(0, passCount - 1):   # -1 or -2 :BUG?
-        satelliteI, startI, durationI, peakI, _, priorityI = passTableSorted[
+        satelliteI, startI, durationI, _, _, priorityI = passTableSorted[
             i]
-        satelliteJ, startJ, durationJ, peakJ, _, priorityJ = passTableSorted[
+        satelliteJ, startJ, durationJ, _, _, priorityJ = passTableSorted[
             i + 1]
         endTimeI = startI + durationI
 
@@ -365,7 +365,7 @@ def justRun(cmdline, loggingDir):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             close_fds=True)
-        p2 = subprocess.Popen(
+        _ = subprocess.Popen(
             teeCommand,
             stdin=p1.stdout,
             close_fds=True)  # stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -663,7 +663,8 @@ def listNextPasesShort(passTable, howmany=4):
     output = ""
 
     for satelitePass in passTable[0:howmany]:
-        satellite, start, duration, peak, azimuth = satelitePass
+        # satellite, start, duration, peak, azimuth
+        satellite, start, _, _, _ = satelitePass
 
         output += "%s (%s); " % (
             satellite,
