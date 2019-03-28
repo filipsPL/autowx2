@@ -154,6 +154,7 @@ webInterfacePort = 5010
 scriptToRunInFreeTime = baseDir + "bin/aprs.sh" 	# APRS monitor
 #scriptToRunInFreeTime = baseDir + "bin/radiosonde_auto_rx.sh" # radiosonde tracker, see https://github.com/projecthorus/radiosonde_auto_rx
 #scriptToRunInFreeTime = baseDir + "bin/pymultimonaprs.sh" # APRS iGate,
+#scriptToRunInFreeTime = baseDir + "bin/wspr.sh"      # Weak Signal Propagation Reporter
 
 # pymultimonaprs must be installed, see: https://github.com/asdil12/pymultimonaprs/
 #scriptToRunInFreeTime = baseDir + "bin/dump1090.sh"
