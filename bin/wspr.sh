@@ -16,6 +16,7 @@ gain="40"
 locator="JO77PP"
 hz="28.1246M"
 info_rx="Start reception 10 meters"
+sampling="0" #direct sampling [0,1,2] (default: 0 for Quadrature, 1 for I branch, 2 for Q branch)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ##
 
 logfile="$recordingDir/rtlsdr_wspr/"$(date +"%Y/%m")/$(date +"%Y%m%d")".txt"
@@ -39,4 +40,4 @@ mkdir -p $(dirname $logfile)
 
 
 cd ~/rtlsdr-wsprd
-timeout --kill-after=1 $duration ./rtlsdr_wsprd -p "$dongleShift" -f "$hz" -c "$call" -l "$locator" -g "$gain" | tee -a $logfile
+timeout --kill-after=1 $duration ./rtlsdr_wsprd -p "$dongleShift" -f "$hz" -c "$call" -l "$locator" -g "$gain" -d "$sampling" | tee -a $logfile
