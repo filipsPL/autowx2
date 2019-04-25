@@ -6,10 +6,10 @@ cat <<EOF
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="autowx2 atomated satellite receiving station $stationName">
+    <meta name="description" content="autowx2 automated satellite receiving station $stationName">
     <meta name="author" content="filipsPL@github">
 
-    <title>autowx2 atomated satellite receiving station $stationName :: $htmlTitle</title>
+    <title>autowx2 automated satellite receiving station $stationName :: $htmlTitle</title>
 
     <!-- Bootstrap core CSS -->
     <link href="$wwwRootPath/css/bootstrap.min.css" rel="stylesheet">
@@ -62,7 +62,7 @@ cat <<EOF
   $autowxUptime
   Software version: $autowx2version<br />
   $shortlistofnextpassess
-  
+
   $htmlBody
   </div>
 </div>
