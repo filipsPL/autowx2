@@ -128,6 +128,8 @@ def parseSatConfig():
     configFile = "satellites.conf"
     # !!! sprawdzić, czy configFile istnieje
 
+    print "Sat config parsing..."
+
     config = configparser.ConfigParser()
     config.read(configFile)
 
@@ -698,7 +700,7 @@ def saveToFile(filename, data):
 def generatePassTableAndSaveFiles(verbose=True):
     # recalculate table of next passes
     log("Recalculating the new pass table and saving to disk.")
-    passTable = genPassTable(qth, howmany=50)
+    passTable = genPassTable(qth, howmany=30)
     listNextPasesHtmlOut = listNextPasesHtml(passTable, 100)
     saveToFile(htmlNextPassList, listNextPasesHtmlOut)
 
