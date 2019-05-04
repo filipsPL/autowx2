@@ -33,7 +33,7 @@ sudo apt-get update
 sudo apt-get install -y rtl-sdr git libpulse-dev qt4-qmake fftw3 libc6 libfontconfig1 libx11-6 libxext6 libxft2 libusb-1.0-0-dev \
 libavahi-client-dev libavahi-common-dev libdbus-1-dev libfftw3-single3 libpulse-mainloop-glib0 librtlsdr0 librtlsdr-dev \
 libfftw3-dev libfftw3-double3 lame sox libsox-fmt-mp3 libtool automake python-pil python-imaging imagemagick python-dev \
-bc imagemagick
+bc imagemagick moreutils
 
 
 if [ ${MACHINE_TYPE} == 'armv6l' ] || [ ${MACHINE_TYPE} == 'armv7l' ]; then
