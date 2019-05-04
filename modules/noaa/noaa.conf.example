@@ -25,7 +25,7 @@ wavrate='11025'
 dongleIndex='0'
 
 # enchancements to apply to the pocessed images. See wxtoimg manual for available options
-enchancements=('MCIR-precip' 'HVC' 'MSA' 'therm' 'HVCT-precip' 'NO')
+enchancements=('MCIR-precip' 'HVC' 'MSA' 'therm' 'HVCT-precip' 'NO' 'sea')
 
 # resize images to the given size to avoid growing of the repository; in px
 # otherwise, comment out the line
