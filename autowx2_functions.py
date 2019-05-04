@@ -129,6 +129,7 @@ def parseSatConfig():
     # !!! sprawdzić, czy configFile istnieje
 
     print "Sat config parsing..."
+    # log("Sat config parsing...")
 
     config = configparser.ConfigParser()
     config.read(configFile)
@@ -156,6 +157,7 @@ def parseSatConfig():
                 if option in floatOptions:
                     value = float(value)
                 satOptions[option] = value
+                # print option, value
             satellitesData[sat] = satOptions
 
     return satellitesData
@@ -203,7 +205,7 @@ def parseCron(cron):
     return entry + time.time()  # timestamp of the next occurence
 
 
-def getFixedRecordingTime(satellite):
+def getFixedRecordingTime(satellite, satellitesData=satellitesData):
     '''Reads from the config the fixed recording time'''
 
     try:
@@ -214,8 +216,10 @@ def getFixedRecordingTime(satellite):
         return False
 
 
-def genPassTable(qth, howmany=20):
+def genPassTable(qth, satellitesData, howmany=20):
     '''generate a table with pass list, sorted'''
+
+    satellites = list(satellitesData)
 
     passTable = {}
     for satellite in satellites:
@@ -249,9 +253,8 @@ def genPassTable(qth, howmany=20):
                     # transit.start - unix timestamp
 
         elif 'fixedtime' in satellitesData[satellite]:                   # if ['fixedtime'] exists in satellitesData => time recording
-            # cron = getFixedRecordingTime(satellite)["fixedtime"]
             cron = satellitesData[satellite]['fixedtime']
-            duration = getFixedRecordingTime(satellite)["fixedduration"]
+            duration = getFixedRecordingTime(satellite, satellitesData=satellitesData)["fixedduration"]
 
             delta = 0
             for i in range(0, howmany):
@@ -323,7 +326,7 @@ def printPass(satellite, start, duration, peak, azimuth, freq, processwith):
                              # freq) + "Hz; Decoding: " + str(processwith)
 
 
-def listNextPases(passTable, howmany):
+def listNextPases(passTable, satellitesData, howmany):
     i = 1
     for satelitePass in passTable[0:howmany]:
         satellite, start, duration, peak, azimuth = satelitePass
@@ -592,7 +595,7 @@ def CreateGanttChart(listNextPasesListList):
     return 0
 
 
-def listNextPasesHtml(passTable, howmany):
+def listNextPasesHtml(passTable, satellitesData, howmany):
 
     i = 1
     output = u"<table class='table small'>\n"
@@ -697,11 +700,12 @@ def saveToFile(filename, data):
     plik.close()
 
 
-def generatePassTableAndSaveFiles(verbose=True):
+def generatePassTableAndSaveFiles(satellitesData, verbose=True):
     # recalculate table of next passes
     log("Recalculating the new pass table and saving to disk.")
-    passTable = genPassTable(qth, howmany=30)
-    listNextPasesHtmlOut = listNextPasesHtml(passTable, 100)
+
+    passTable = genPassTable(qth, satellitesData, howmany=50)
+    listNextPasesHtmlOut = listNextPasesHtml(passTable, satellitesData, 100)
     saveToFile(htmlNextPassList, listNextPasesHtmlOut)
 
     saveToFile(wwwDir + 'nextpassshort.tmp', listNextPasesShort(passTable, 6))
@@ -742,9 +746,9 @@ def homepage():
         logfile, logs)
 
     # next pass table
-    passTable = genPassTable(qth)
+    passTable = genPassTable(qth, satellitesData)
     body += "<h3>Next passes</h3><span id='nextPassWindow'>%s</span>" % (
-        listNextPasesHtml(passTable, 10))
+        listNextPasesHtml(passTable, satellitesData, 10))
     return render_template('index.html', title="Home page", body=body)
 
 
@@ -782,17 +786,17 @@ def mainLoop():
         satellites = list(satellitesData)
 
         # recalculate table of next passes
-        passTable = genPassTable(qth)
+        passTable = genPassTable(qth, satellitesData)
 
         # save table to disk
-        generatePassTableAndSaveFiles(verbose=False)
+        generatePassTableAndSaveFiles(satellitesData, verbose=False)
 
         # show next five passes
         log("Next five passes:")
-        listNextPases(passTable, 5)
+        listNextPases(passTable, satellitesData, 5)
 
         # pass table for webserver
-        handle_next_pass_list(listNextPasesHtml(passTable, 10))
+        handle_next_pass_list(listNextPasesHtml(passTable, satellitesData, 10))
 
         # get the very next pass
         satelitePass = passTable[0]
