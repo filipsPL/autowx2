@@ -23,4 +23,6 @@ echo $stationName
 # add some environmental variables
 #
 
-export autowx2version=$(cd $baseDir && git describe --tags)
+export autowx2version=$(cd $baseDir && git describe --all)
+
+echo "[DEBUG] _listvars.sh complete"

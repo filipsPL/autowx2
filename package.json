@@ -1,0 +1,23 @@
+{
+  "name": "express",
+  "version": "4.17.1",
+  "description": "Used to creat JS Express scripts.",
+  "main": "server.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/filipsPL/autowx2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/filipsPL/autowx2/issues"
+  },
+  "homepage": "https://github.com/filipsPL/autowx2#readme"
+}

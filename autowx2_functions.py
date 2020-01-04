@@ -11,15 +11,15 @@
 #
 
 # for autowx2 itself
-import predict
-import time
-from datetime import datetime
-from time import strftime
-import subprocess
-import os
 from _crontab import *
+from datetime import datetime
+import os
+import predict
 import re
+import subprocess
 import sys
+import time
+from time import strftime
 
 
 # for plotting
@@ -44,6 +44,8 @@ from autowx2_conf import *
 
 satellites = list(satellitesData)
 qth = (stationLat, stationLon, stationAlt)
+
+process = subprocess.Popen(["sh", "shell_scripts.sh"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True)
 
 
 def mkdir_p(outdir):
@@ -230,33 +232,51 @@ def listNextPases(passTable, howmany):
         i += 1
 
 
-def runForDuration(cmdline, duration, loggingDir):
-    outLogFile = logFile(loggingDir)
-    teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
+# def runForDuration(cmdline, duration, loggingDir):
+#     justRun(cmdline, loggingDir, duration)
+    
+#     outLogFile = logFile(loggingDir)
+#     teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
 
-    cmdline = [str(x) for x in cmdline]
-    print cmdline
-    try:
-        p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        _ = subprocess.Popen(teeCommand, stdin=p1.stdout)
-        time.sleep(duration)
-        p1.terminate()
-    except OSError as e:
-        log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
-        log("✖ OS Error: " + e.strerror, style=bc.FAIL)
+#     cmdline = [str(x) for x in cmdline]
+#     print cmdline
+
+#     try:
+#         p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+#         _ = subprocess.Popen(teeCommand, stdin=p1.stdout)
+#         time.sleep(duration)
+#         p1.terminate()
+#     except OSError as e:
+#         log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
+#         log("✖ OS Error: " + e.strerror, style=bc.FAIL)
 
 
-def justRun(cmdline, loggingDir):
+def justRun(cmdline, loggingDir, duration=-1):
     '''Just run the command as long as necesary and return the output'''
     outLogFile = logFile(loggingDir)
-    teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
+    teeCommand = "tee -a %s" % outLogFile # quick and dirty hack to get log to file
 
-    cmdline = [str(x) for x in cmdline]
+    cmdline = "%s | %s" % (' '.join([str(x) for x in cmdline]), teeCommand)
     try:
-        p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
-        p2 = subprocess.Popen(teeCommand, stdin=p1.stdout, close_fds=True) # stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-        result = p1.communicate()[0]
-        return result
+        if (duration != -1):
+            cmdline = "timeout %d %s" % (duration, cmdline)
+        print("Running command: %s" % cmdline)
+        process.stdin.write(cmdline + "\n")
+        lineText = ""
+        lines = ""
+        for line in process.stdout.readline():
+            lineText += line
+
+            # Check for unique string that signifies the task has completed
+            if lineText == "SQsw48V8JZLwGOscVeuO":
+                # We don't neet to print this
+                break
+
+            if line == "\n":
+                lines += lineText
+                lineText = ""
+                
+        return lines
     except OSError as e:
         log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
         log("✖ OS Error: " + e.strerror, style=bc.FAIL)
@@ -264,15 +284,30 @@ def justRun(cmdline, loggingDir):
 
 def runTest(duration=3):
     '''Check, if RTL_SDR dongle is connected'''
-    child = subprocess.Popen('rtl_test', stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
-    time.sleep(duration)
-    child.terminate()
-    _, err = child.communicate()
+    # TODO: Create a way of just adding executables to a pre-existing process, a process created at the beginning of the program.
+    # More information here: https://stackoverflow.com/a/9674162
+    # Error occurring: Cannot allocate memory
+    # 'subprocess.Popen' creates new process witht the same memory footprint as the calling script - https://stackoverflow.com/a/13329386
+    # SQsw48V8JZLwGOscVeuO - Unique characters
+
+    # child = subprocess.Popen('rtl_test', stdout=subprocess.PIPE,
+    #                          stderr=subprocess.PIPE)
+    # time.sleep(duration)
+    # child.terminate()
+    # _, err = child.communicate()
+
+    print('Check, if RTL_SDR dongle is connected')
+    time.sleep(5)
+    output = justRun(["timeout %d rtl_test" % duration], loggingDir, duration)
     # if no device: ['No', 'supported', 'devices', 'found.']
     # if OK: ['Found', '1', 'device(s):', '0:', 'Realtek,',
     # 'RTL2838UHIDIR,',...
-    info = err.split()[0]
+    print("Output received")
+    time.sleep(5)
+    split = output.split()
+    print("Split:")
+    print(split)
+    info = split[0]
     if info == "No":
         log("✖ No SDR device found!", style=bc.FAIL)
         return False
@@ -282,6 +317,11 @@ def runTest(duration=3):
     else:
         log("Not sure, if SDR device is there...")
         return True
+
+def killRtl():
+    log("Killing all remaining rtl_* processes...")
+    time.sleep(5)
+    justRun(["sh bin/kill_rtl.sh"], loggingDir)
 
 
 def getDefaultDongleShift(dongleShift=dongleShift):
@@ -675,6 +715,8 @@ def passTable():
 # --------------------------------------------------------------------------- #
 
 def mainLoop():
+    #Debug print
+    print("[DEBUG] Main loop started")
     dongleShift = getDefaultDongleShift()
 
     while True:
@@ -714,8 +756,7 @@ def mainLoop():
         towait = int(start - time.time())
 
         if cleanupRtl:
-            log("Killing all remaining rtl_* processes...")
-            justRun(["bin/kill_rtl.sh"], loggingDir)
+            killRtl()
 
         # test if SDR dongle is available
         if towait > 15: # if we have time to perform the test?
@@ -725,6 +766,10 @@ def mainLoop():
 
         # It's a high time to record!
         if towait <= 1 and duration > 0:
+            # Debug print
+            print("[DEBUG] Recording duration: " + str(duration))
+            # Debug print
+            print("[DEBUG] To wait: " + str(towait))
             # here the recording happens
             log("!! Recording " + printPass(satellite, start, duration,
                 peak, azimuth, freq, processWith), style=bc.WARNING)
@@ -738,7 +783,13 @@ def mainLoop():
                 peak,
                 azimuth,
                 freq]
-            print justRun(processCmdline, loggingDir)
+            # Debug print
+            print("[DEBUG] Process command line: ")
+            print(processCmdline)
+            cmdline_result = justRun(processCmdline, loggingDir)
+            # Debug print
+            print("[DEBUG] Command line result: ")
+            print(cmdline_result)
             time.sleep(10.0)
 
         # still some time before recording
@@ -755,11 +806,12 @@ def mainLoop():
                         (t2humanMS(towait - 1)))
                     log("Running: %s for %ss" %
                         (scriptToRunInFreeTime, t2humanMS(towait - 1)))
-                    runForDuration(
+                    justRun(
                         [scriptToRunInFreeTime,
                          towait - 1,
-                         dongleShift],
-                        towait - 1, loggingDir)
+                         dongleShift], 
+                        loggingDir,
+                        towait - 1)
                                    # scrript with run time and dongle shift as
                                    # arguments
                 else:
