@@ -45,7 +45,33 @@ from autowx2_conf import *
 satellites = list(satellitesData)
 qth = (stationLat, stationLon, stationAlt)
 
-process = subprocess.Popen(["sh", "shell_scripts.sh"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True)
+
+# Allow piping when running a shell/bash command.
+import signal
+def default_sigpipe():
+    signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+
+
+# Every time `subprocess.Popen` is called, a new process is created with the
+# same memory footprint as the calling script (source: 
+# https://stackoverflow.com/a/13329386). At some point in the future, while the
+# script is running), it will run out of memory. This will throw a "Cannot
+# allocate memory" error, which completely crashes the script, causing the
+# entire thing to stop running.
+#
+# `subprocess.Popen` is called here so that a new process is created with the
+# tiny initial memory footprint of the script at the beginning. This in theory
+# means that memory allocation errors shouldn't happen (or at least 
+# significantly reduced).
+#
+# A separate shell script is written to listen for inputs to call. This simply
+# is a way of just adding executables to a pre-existing process. More 
+# information here: https://stackoverflow.com/a/9674162
+process = subprocess.Popen(["sh", "shell_scripts.sh"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True, preexec_fn=default_sigpipe)
+
+
+def debugPrint(message):
+    print("[DEBUG] %s" % message)
 
 
 def mkdir_p(outdir):
@@ -232,25 +258,6 @@ def listNextPases(passTable, howmany):
         i += 1
 
 
-# def runForDuration(cmdline, duration, loggingDir):
-#     justRun(cmdline, loggingDir, duration)
-    
-#     outLogFile = logFile(loggingDir)
-#     teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
-
-#     cmdline = [str(x) for x in cmdline]
-#     print cmdline
-
-#     try:
-#         p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-#         _ = subprocess.Popen(teeCommand, stdin=p1.stdout)
-#         time.sleep(duration)
-#         p1.terminate()
-#     except OSError as e:
-#         log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
-#         log("✖ OS Error: " + e.strerror, style=bc.FAIL)
-
-
 def justRun(cmdline, loggingDir, duration=-1):
     '''Just run the command as long as necesary and return the output'''
     outLogFile = logFile(loggingDir)
@@ -260,22 +267,27 @@ def justRun(cmdline, loggingDir, duration=-1):
     try:
         if (duration != -1):
             cmdline = "timeout %d %s" % (duration, cmdline)
-        print("Running command: %s" % cmdline)
+        debugPrint("Running command: %s" % cmdline)
         process.stdin.write(cmdline + "\n")
+
         lineText = ""
         lines = ""
-        for line in process.stdout.readline():
-            lineText += line
+        # Keep reading the output until the output gives out a unique string
+        # that signifies the task has completed.
+        while lineText != "SQsw48V8JZLwGOscVeuO":
+            for line in process.stdout.readline():
+                lineText += line
 
-            # Check for unique string that signifies the task has completed
-            if lineText == "SQsw48V8JZLwGOscVeuO":
-                # We don't neet to print this
-                break
+                if lineText == "SQsw48V8JZLwGOscVeuO":
+                    # No need to check the remaining output. The task has
+                    # completed.
+                    break
 
-            if line == "\n":
-                lines += lineText
-                lineText = ""
+                if line == "\n":
+                    lines += lineText
+                    lineText = ""
                 
+        debugPrint("Process completed")
         return lines
     except OSError as e:
         log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
@@ -284,43 +296,37 @@ def justRun(cmdline, loggingDir, duration=-1):
 
 def runTest(duration=3):
     '''Check, if RTL_SDR dongle is connected'''
-    # TODO: Create a way of just adding executables to a pre-existing process, a process created at the beginning of the program.
-    # More information here: https://stackoverflow.com/a/9674162
-    # Error occurring: Cannot allocate memory
-    # 'subprocess.Popen' creates new process witht the same memory footprint as the calling script - https://stackoverflow.com/a/13329386
-    # SQsw48V8JZLwGOscVeuO - Unique characters
-
-    # child = subprocess.Popen('rtl_test', stdout=subprocess.PIPE,
-    #                          stderr=subprocess.PIPE)
-    # time.sleep(duration)
-    # child.terminate()
-    # _, err = child.communicate()
-
-    print('Check, if RTL_SDR dongle is connected')
-    time.sleep(5)
     output = justRun(["timeout %d rtl_test" % duration], loggingDir, duration)
-    # if no device: ['No', 'supported', 'devices', 'found.']
-    # if OK: ['Found', '1', 'device(s):', '0:', 'Realtek,',
-    # 'RTL2838UHIDIR,',...
-    print("Output received")
-    time.sleep(5)
-    split = output.split()
-    print("Split:")
-    print(split)
-    info = split[0]
-    if info == "No":
-        log("✖ No SDR device found!", style=bc.FAIL)
+    log(output)
+    
+    # `rtl_test` uses "fprintf" to print out most of its output, EXCEPT for the
+    # last line "lost at least XX bytes", which uses "printf". While all the
+    # output is displayed on the console, only this last line is picked up by
+    # the new shell script. It seems this is what denotes whether a dongle is
+    # present AND AVAILABLE. Source code at:
+    # https://github.com/osmocom/rtl-sdr/blob/b5af355b1d833b3c898a61cf1e072b59b0ea3440/src/rtl_test.c#L147
+    #
+    # NOTE: The output from `rtl_test` won't get saved to the log. This is due
+    # to the "fprintf" output mentioned above. It will however, be printed on
+    # the console. This may clutter the console, but the logs will stay "clean".
+    #
+    # `output` should appear as (or similar): lost at least 12 bytes
+    # `outputSplit` should appear as (or similar): ['lost', 'at, 'least', '12, 'bytes']
+    outputSplit = output.split()
+    if len(outputSplit) <= 0:
+        log("✖ Failed to find SDR device!", style=bc.FAIL)
         return False
-    elif info == "Found":
+
+    info = outputSplit[0]
+    if info == "lost":
         log("SDR device found!")
         return True
     else:
-        log("Not sure, if SDR device is there...")
-        return True
+        log("Not sure, if SDR device is there. Preventing access to potentially harmful devices.")
+        return False
 
 def killRtl():
     log("Killing all remaining rtl_* processes...")
-    time.sleep(5)
     justRun(["sh bin/kill_rtl.sh"], loggingDir)
 
 
@@ -715,8 +721,7 @@ def passTable():
 # --------------------------------------------------------------------------- #
 
 def mainLoop():
-    #Debug print
-    print("[DEBUG] Main loop started")
+    debugPrint("Main loop started.")
     dongleShift = getDefaultDongleShift()
 
     while True:
@@ -766,10 +771,8 @@ def mainLoop():
 
         # It's a high time to record!
         if towait <= 1 and duration > 0:
-            # Debug print
-            print("[DEBUG] Recording duration: " + str(duration))
-            # Debug print
-            print("[DEBUG] To wait: " + str(towait))
+            debugPrint("Recording duration: %d seconds" % duration)
+            debugPrint("Time to wait: %d seconds" % towait)
             # here the recording happens
             log("!! Recording " + printPass(satellite, start, duration,
                 peak, azimuth, freq, processWith), style=bc.WARNING)
@@ -783,13 +786,12 @@ def mainLoop():
                 peak,
                 azimuth,
                 freq]
-            # Debug print
-            print("[DEBUG] Process command line: ")
-            print(processCmdline)
+            debugPrint("Process command line: ")
+            debugPrint(processCmdline)
             cmdline_result = justRun(processCmdline, loggingDir)
-            # Debug print
-            print("[DEBUG] Command line result: ")
-            print(cmdline_result)
+            
+            debugPrint("Command line result: ")
+            debugPrint(cmdline_result)
             time.sleep(10.0)
 
         # still some time before recording

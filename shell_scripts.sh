@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Need an input parameter, which should come in the form of a shell
 input=""

@@ -17,7 +17,7 @@ from autowx2_functions import *  # all functions and magic hidden here
 
 def serverLoop():
     # Debug print
-    print("[DEBUG] Server started")
+    debugPrint("Server started")
     time.sleep(2)
     app.run(debug=True, port=webInterfacePort)
 
@@ -28,7 +28,7 @@ if __name__ == "__main__":
     saveToFile("%s/start.tmp" % (wwwDir), str(time.time()))
 
     # Debug print
-    print("[DEBUG] Main program started")
+    debugPrint("Main program started")
 #     t1 = Thread(target = serverLoop)
 #     t1.setDaemon(True)
 #     t1.start
@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
     while True:
         # Debug print
-        print("[DEBUG] Main loop started")
+        debugPrint("Main loop started")
         try:
             mainLoop()
         finally:
