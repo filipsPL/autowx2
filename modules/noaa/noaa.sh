@@ -89,7 +89,7 @@ echo $freq >> $logFile
 #
 # execute recordigng scriptDir and passing all arguments to the script
 #
-#echo "[DEBUG] recording..."
+echo "[DEBUG] recording..."
 source $scriptDir/noaa_record.sh
 
 #
@@ -101,11 +101,11 @@ source $scriptDir/noaa_process.sh
 #
 # generate gallery for a given pass
 #
-
+echo "[DEBUG] generating gallery..."
 source $scriptDir/noaa_gallery.sh
 
 #
 # generate static pages
 #
-
+echo "[DEBUG] generating static page..."
 $baseDir/bin/gen-static-page.sh
