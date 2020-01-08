@@ -35,8 +35,8 @@ htmlTemplate="$wwwDir/index.tpl"
 
 makethumb() {
     obrazek="$1"
-    local thumbnail=$(basename "$obrazek" .jpg)".th.jpg"
-    convert -define jpeg:size=200x200 "$obrazek" -thumbnail '200x200^' granite: +swap -gravity center -extent 200x200 -composite -quality 82 "$thumbnail"
+    local thumbnail=$(basename "$image" .png)".th.jpg"
+    convert -define jpeg:size=200x200 "$image" -thumbnail '200x200^' granite: +swap -gravity center -extent 200x200 -composite -quality 82 "$thumbnail"
     echo "$thumbnail"
     }
 
@@ -65,11 +65,11 @@ echo "<p>f=${varFreq}Hz, peak: ${varPeak}°, duration: ${varDur}s</p>" >> $outHt
 for enchancement in "${enchancements[@]}"
 do
     echo "**** $enchancement"
-    obrazek="$fileNameCore-$enchancement+map.jpg"
-    sizeof=$(du -sh "$obrazek" | cut -f 1)
+    image="$fileNameCore-$enchancement+map.png"
+    sizeof=$(du -sh "$image" | cut -f 1)
     # generate thumbnail
-    thumbnail=$(makethumb "$obrazek")
-    echo "<a data-fancybox='gallery' data-caption='$varSat | $varDate | $enchancement ($sizeof)' href='$wwwPath/$obrazek'><img src='$wwwPath/$thumbnail' alt='$enchancement' title='$enchancement | $sizeof' class='img-thumbnail' /></a> " >> $outHtml
+    thumbnail=$(makethumb "$image")
+    echo "<a data-fancybox='gallery' data-caption='$varSat | $varDate | $enchancement ($sizeof)' href='$wwwPath/$image'><img src='$wwwPath/$thumbnail' alt='$enchancement' title='$enchancement | $sizeof' class='img-thumbnail' /></a> " >> $outHtml
 done
 
 thumbnail=$(makethumb "$fileNameCore-spectrogram.jpg")

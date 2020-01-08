@@ -33,6 +33,7 @@ do
         wxtoimg -e $enchancement -m $imgdir/$fileNameCore-mapa.png $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}+map.png | tee -a $logFile
     fi
     convert -quality 91 $resizeSwitch $imgdir/$fileNameCore-${enchancement}+map.png $imgdir/$fileNameCore-${enchancement}+map.png
+#    rm $imdir/$fileNameCore-${endhancement}+map.png
 done
 
 sox $recdir/$fileNameCore.wav -n spectrogram -o $imgdir/$fileNameCore-spectrogram.png
