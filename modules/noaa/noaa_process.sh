@@ -6,9 +6,13 @@
 
 
 #
-# generate map
+# generate map - only if configured to do so
 #
-wxmap -T "$satellite" -a -H $tleFileName -o -O $duration -L "$latlonalt" $start $imgdir/$fileNameCore-mapa.png | tee -a $logFile
+if [ $mapOutline != 0 ]; then
+  wxmap -T "$satellite" -a -H $tleFileName -o -O $duration -L "$latlonalt" $start $imgdir/$fileNameCore-mapa.png | tee -a $logFile
+  withMapOutline="-m ${imgdir}/${fileNameCore}-mapa.png"
+  withMapExtension="+map"
+fi
 
 #
 # should we resize images?
@@ -26,13 +30,9 @@ fi
 for enchancement in "${enchancements[@]}"
 do
     echo "**** $enhancement"
-    if [ "$enhancement" = "RAW" ]; then
-        wxtoimg -m $imgdir/$fileNameCore-mapa.png $recdir/$fileNameCore.wav $imgdir/$fileNameCore-RAW+map.png | tee -a $logFile
-    else
 #     wxtoimg -e $enchancement $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}.png | tee -a $logFile
-        wxtoimg -e $enchancement -m $imgdir/$fileNameCore-mapa.png $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}+map.png | tee -a $logFile
-    fi
-    convert -quality 91 $resizeSwitch $imgdir/$fileNameCore-${enchancement}+map.png $imgdir/$fileNameCore-${enchancement}+map.png
+    wxtoimg -e $enchancement $withMapOutline $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}${withMapExtension}.png | tee -a $logFile
+    convert -quality 91 $resizeSwitch $imgdir/$fileNameCore-${enchancement}${withMapExtension}.png $imgdir/$fileNameCore-${enchancement}${withMapExtension}.png
 #    rm $imdir/$fileNameCore-${endhancement}+map.png
 done
 
