@@ -33,10 +33,14 @@ htmlTemplate="$wwwDir/index.tpl"
 
 # ---single gallery preparation------------------------------------------------#
 
+if [ "${imageExtension}" == "" ]; then
+    imageExtension = "jpg";
+fi
+
 makethumb() {
-    obrazek="$1"
-    local thumbnail=$(basename "$image" .png)".th.jpg"
-    convert -define jpeg:size=200x200 "$image" -thumbnail '200x200^' granite: +swap -gravity center -extent 200x200 -composite -quality 82 "$thumbnail"
+    localImage="$1"
+    local thumbnail=$(basename "$localImage" ".$imageExtension")".th.jpg"
+    convert -define jpeg:size=200x200 "$localImage" -thumbnail '200x200^' granite: +swap -gravity center -extent 200x200 -composite -quality 82 "$thumbnail"
     echo "$thumbnail"
     }
 
@@ -65,7 +69,7 @@ echo "<p>f=${varFreq}Hz, peak: ${varPeak}°, duration: ${varDur}s</p>" >> $outHt
 for enchancement in "${enchancements[@]}"
 do
     echo "**** $enchancement"
-    image="$fileNameCore-$enchancement+map.png"
+    image="$fileNameCore-${enchancement}${withMapExtension}.${imageExtension}"
     sizeof=$(du -sh "$image" | cut -f 1)
     # generate thumbnail
     thumbnail=$(makethumb "$image")

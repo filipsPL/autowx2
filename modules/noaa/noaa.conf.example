@@ -27,6 +27,13 @@ dongleIndex='0'
 # enchancements to apply to the pocessed images. See wxtoimg manual for available options
 enchancements=('MCIR-precip' 'HVC' 'MSA' 'therm' 'HVCT-precip' 'NO')
 
+# Option to show the map outline on the image output. Change to 0 to turn off map outline
+mapOutline=1
+
+# Option to save images as PNG or JPG (if neither, defaults to JPG)
+imageExtension="png"
+# imageExtension="jpg"
+
 # resize images to the given size to avoid growing of the repository; in px
 # otherwise, comment out the line
 resizeimageto=1024

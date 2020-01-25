@@ -6,6 +6,14 @@
 
 
 #
+# get the image file extension
+#
+
+if [ "$imageExtension" == "" ]; then
+  imageExtension = "jpg"
+fi
+
+#
 # generate map - only if configured to do so
 #
 if [ $mapOutline != 0 ]; then
@@ -30,10 +38,11 @@ fi
 for enchancement in "${enchancements[@]}"
 do
     echo "**** $enhancement"
-#     wxtoimg -e $enchancement $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}.png | tee -a $logFile
     wxtoimg -e $enchancement $withMapOutline $recdir/$fileNameCore.wav $imgdir/$fileNameCore-${enchancement}${withMapExtension}.png | tee -a $logFile
-    convert -quality 91 $resizeSwitch $imgdir/$fileNameCore-${enchancement}${withMapExtension}.png $imgdir/$fileNameCore-${enchancement}${withMapExtension}.png
-#    rm $imdir/$fileNameCore-${endhancement}+map.png
+    convert -quality 91 $resizeSwitch $imgdir/$fileNameCore-${enchancement}${withMapExtension}.png $imgdir/$fileNameCore-${enchancement}${withMapExtension}.${imageExtension}
+    if [ "$imageExtension" != "png" ]; then
+        rm $imdir/$fileNameCore-${endhancement}${withMapExtension}.png
+    fi
 done
 
 sox $recdir/$fileNameCore.wav -n spectrogram -o $imgdir/$fileNameCore-spectrogram.png
