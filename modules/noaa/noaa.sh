@@ -47,23 +47,15 @@ echo "enchancements=${enchancements}"
 #-------------------------------#
 # to test the processing part:
 # comment the recording part and uncomment the following part
-#echo "[DEBUG] Calling noaa.sh..."
-#./noaa.sh tests/20180118-1504_NOAA-19.wav tests/20180118-1504_NOAA-19 NOAA-19 1516284265 926
-#fileNameCore="20180118-1504_NOAA-19"
-#satellite="NOAA-19"
-#start="1516284265"
-#duration="926"
-#peak="82"
-#freq="144"
-#imgdir="tests/"
-#recdir="tests/"
-#echo "fileNameCore=$fileNameCore"
-#echo "satellite=$satellite"
-#echo "start=$start"
-#echo "duration=$duration"
-#echo "peak=$peak"
-#echo "azimuth=$azimuth"
-#echo "freq=$freq"
+# ./noaa.sh tests/20180118-1504_NOAA-19.wav tests/20180118-1504_NOAA-19 NOAA-19 1516284265 926
+# fileNameCore="20180118-1504_NOAA-19"
+# satellite="NOAA-19"
+# start="1516284265"
+# duration="926"
+# peak="82"
+# freq="144"
+# imgdir="tests/"
+# recdir="tests/"
 #-------------------------------#
 
 #

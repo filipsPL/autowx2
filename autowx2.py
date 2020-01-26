@@ -15,34 +15,19 @@ from autowx2_functions import *  # all functions and magic hidden here
 # ------------------------------------------------------------------------------------------------------ #
 
 
-def serverLoop():
-    # Debug print
-    debugPrint("Server started")
-    time.sleep(2)
-    app.run(debug=True, port=webInterfacePort)
-
-
 if __name__ == "__main__":
     log("⚡ Program start")
     # saves program start date to file
     saveToFile("%s/start.tmp" % (wwwDir), str(time.time()))
 
-    # Debug print
     debugPrint("Main program started")
-#     t1 = Thread(target = serverLoop)
-#     t1.setDaemon(True)
-#     t1.start
 
     if cleanupRtl:
         killRtl()
 
     while True:
-        # Debug print
         debugPrint("Main loop started")
         try:
             mainLoop()
         finally:
             print("[MAIN] Main loop exited for some reason. Check the logs.")
-        #app.run(debug=True, port=webInterfacePort)
-
-        #socketio.run(app, port=webInterfacePort, debug=False)

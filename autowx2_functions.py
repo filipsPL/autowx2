@@ -71,6 +71,7 @@ process = subprocess.Popen(["sh", "shell_scripts.sh"], stdin=subprocess.PIPE, st
 
 
 def debugPrint(message):
+    # Comment this out to stop printing debug messages
     print("[DEBUG] %s" % message)
 
 
@@ -389,8 +390,6 @@ def log(string, style=bc.CYAN):
         style,
         str(string),
         bc.ENDC)
-    # socketio.emit('log', {'data': message}, namespace='/')
-    handle_my_custom_event(escape_ansi(message) + "<br />\n")
     print message
 
     # logging to file, if not Flase
@@ -670,53 +669,6 @@ def generatePassTableAndSaveFiles(satellites, qth, verbose=True):
 
 
 # --------------------------------------------------------------------------- #
-# --------- THE WEBSERVER --------------------------------------------------- #
-# --------------------------------------------------------------------------- #
-
-app = Flask(__name__, template_folder="var/flask/templates/", static_folder='var/flask/static')
-socketio = SocketIO(app)
-
-def file_read(filename):
-    with codecs.open(filename, 'r', encoding='utf-8', errors='replace') as f:
-        lines = f.read()
-    linesBr = "<br />".join( lines.split("\n") )
-    return linesBr
-
-
-@app.route('/')
-def homepage():
-    logfile = logFile(loggingDir)
-    logs = file_read(logfile)
-
-    body =""
-    # log window
-    body += "<h3>Recent logs</h3><p><strong>File</strong>: %s</p><pre style='height: 400px;' id='logWindow' class='pre-scrollable small text-nowrap'>%s</pre>" % (logfile, logs)
-
-    # next pass table
-    passTable = genPassTable(satellites, qth)
-    body += "<h3>Next passes</h3><span id='nextPassWindow'>%s</span>" % ( listNextPasesHtml(passTable, 10) )
-    return render_template('index.html', title="Home page", body=body)
-
-@socketio.on('my event')
-def handle_my_custom_event(text):
-    socketio.emit('my response', { 'tekst': text } )
-
-@socketio.on('next pass table')
-def handle_next_pass_list(text):
-    socketio.emit('response next pass table', { 'tekst': text } )
-
-
-#
-# show pass table
-#
-
-@app.route('/table')
-def passTable():
-    body=file_read(htmlNextPassList)
-    return render_template('index.html', title="Pass table", body=body)
-
-
-# --------------------------------------------------------------------------- #
 # --------- THE MAIN LOOP --------------------------------------------------- #
 # --------------------------------------------------------------------------- #
 
@@ -738,9 +690,6 @@ def mainLoop():
         # show next five passes
         log("Next five passes:")
         listNextPases(passTable, 5)
-
-        # pass table for webserver
-        handle_next_pass_list(listNextPasesHtml(passTable, 10))
 
         # get the very next pass
         satelitePass = passTable[0]

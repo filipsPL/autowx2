@@ -7,14 +7,6 @@
 #
 # recording here
 #
-
-debugEcho "Recording duration= ${duration}"
-debugEcho "biast= ${biast}"
-debugEcho "freq= ${freq}"
-debugEcho "sample= ${sample}"
-debugEcho "dongleGain= ${dongleGain}"
-debugEcho "dongleShift= ${dongleShift}"
-
 debugEcho "Recording"
 timeout $duration rtl_fm $biast -f $freq -s $sample -g $dongleGain -F 9 -A fast -E offset -p $dongleShift $recdir/$fileNameCore.raw | tee -a $logFile
 
