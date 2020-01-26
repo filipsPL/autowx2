@@ -26,16 +26,10 @@ from time import strftime
 import matplotlib
 matplotlib.use('Agg')  # Force matplotlib to not use any Xwindows backend.
 import matplotlib.pyplot as plt
-# import matplotlib.font_manager as font_manager
 import matplotlib.dates
 from matplotlib.dates import DateFormatter
 import numpy as np
 
-# webserver
-from flask import render_template, Flask
-from flask_socketio import SocketIO, emit
-import codecs
-from threading import Thread
 
 # configuration
 from autowx2_conf import *

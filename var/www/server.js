@@ -12,7 +12,7 @@ const wwwDir = homeDir + wwwRootDir;
 const loggingDir = "/recordings/logs"
 const staticDir = "/css";
 const nextPassShort = wwwDir + "/nextpassshort.tmp";
-const mainIndexTemplate = homeDir + "/var/flask/node_templates/index.html";
+const mainIndexTemplate = homeDir + "/var/node/templates/index.html";
 
 function renderTemplate(templateFile, title, body, response) {
     var html = "";
