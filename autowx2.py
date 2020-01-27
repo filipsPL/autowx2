@@ -10,7 +10,8 @@
 #
 
 # from autowx2_conf import *  # configuration
-from autowx2_functions import *  # all functions and magic hidden here
+# all functions and magic hidden here
+from autowx2_functions import log, saveToFile, wwwDir, time, debugPrint, cleanupRtl, killRtl, mainLoop
 
 # ------------------------------------------------------------------------------------------------------ #
 

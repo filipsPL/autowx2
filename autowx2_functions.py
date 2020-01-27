@@ -30,9 +30,8 @@ import matplotlib.dates
 from matplotlib.dates import DateFormatter
 import numpy as np
 
-
 # configuration
-from autowx2_conf import *
+from autowx2_conf import tleFileName, satellitesData, stationLat, stationLon, stationAlt, skipFirst, skipLast, minElev, priorityTimeMargin, loggingDir, dongleShift, dongleShiftFile, stationName, ganttNextPassList, htmlNextPassList, wwwDir
 
 # ---------------------------------------------------------------------------- #
 
@@ -47,7 +46,7 @@ def default_sigpipe():
 
 
 # Every time `subprocess.Popen` is called, a new process is created with the
-# same memory footprint as the calling script (source: 
+# same memory footprint as the calling script (source:
 # https://stackoverflow.com/a/13329386). At some point in the future, while the
 # script is running), it will run out of memory. This will throw a "Cannot
 # allocate memory" error, which completely crashes the script, causing the
@@ -55,11 +54,11 @@ def default_sigpipe():
 #
 # `subprocess.Popen` is called here so that a new process is created with the
 # tiny initial memory footprint of the script at the beginning. This in theory
-# means that memory allocation errors shouldn't happen (or at least 
+# means that memory allocation errors shouldn't happen (or at least
 # significantly reduced).
 #
 # A separate shell script is written to listen for inputs to call. This simply
-# is a way of just adding executables to a pre-existing process. More 
+# is a way of just adding executables to a pre-existing process. More
 # information here: https://stackoverflow.com/a/9674162
 process = subprocess.Popen(["sh", "shell_scripts.sh"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True, preexec_fn=default_sigpipe)
 
@@ -384,7 +383,7 @@ def log(string, style=bc.CYAN):
         style,
         str(string),
         bc.ENDC)
-    print message
+    print(message)
 
     # logging to file, if not Flase
     if loggingDir:
@@ -544,7 +543,7 @@ def CreateGanttChart(listNextPasesListList):
     plt.savefig(ganttNextPassList)
 
     if ylabel == enddateIN:
-        print locsy  # "This is done only to satisfy the codacy.com. Sorry for that."
+        print(locsy)  # "This is done only to satisfy the codacy.com. Sorry for that."
 
 
 def listNextPasesHtml(passTable, howmany):
@@ -632,7 +631,7 @@ def listNextPasesList(passTable, howmany):
 
         output.append([satellite, start, start + duration])
     if peak:
-        print "This is a miracle!"  # codacy cheating, sorry.
+        print("This is a miracle!")  # codacy cheating, sorry.
     return output
 
 
@@ -658,7 +657,7 @@ def generatePassTableAndSaveFiles(satellites, qth, verbose=True):
     CreateGanttChart(listNextPasesListList)
 
     if verbose:
-        print listNextPasesTxt(passTable, 100)
+        print(listNextPasesTxt(passTable, 100))
 
 
 
@@ -732,7 +731,7 @@ def mainLoop():
             debugPrint("Process command line: ")
             debugPrint(processCmdline)
             cmdline_result = justRun(processCmdline, loggingDir)
-            
+
             debugPrint("Command line result: ")
             debugPrint(cmdline_result)
             time.sleep(10.0)
@@ -754,11 +753,10 @@ def mainLoop():
                     justRun(
                         [scriptToRunInFreeTime,
                          towait - 1,
-                         dongleShift], 
+                         dongleShift],
                         loggingDir,
                         towait - 1)
-                                   # scrript with run time and dongle shift as
-                                   # arguments
+                    # scrript with run time and dongle shift as arguments
                 else:
                     log("Sleeping for: " + t2humanMS(towait - 1) + "s")
                     time.sleep(towait - 1)
