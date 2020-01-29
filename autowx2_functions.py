@@ -30,8 +30,12 @@ import matplotlib.dates
 from matplotlib.dates import DateFormatter
 import numpy as np
 
-# configuration
-from autowx2_conf import tleFileName, satellitesData, stationLat, stationLon, stationAlt, skipFirst, skipLast, minElev, priorityTimeMargin, loggingDir, dongleShift, dongleShiftFile, stationName, ganttNextPassList, htmlNextPassList, wwwDir
+# configuration - multiple lines because Codacy complains of line too long
+from autowx2_conf import tleFileName, satellitesData, stationLat, stationLon
+from autowx2_conf import stationAlt, skipFirst, skipLast, minElev
+from autowx2_conf import priorityTimeMargin, loggingDir, dongleShift
+from autowx2_conf import dongleShiftFile, stationName, ganttNextPassList
+from autowx2_conf import htmlNextPassList, wwwDir, calibrationTool
 
 # ---------------------------------------------------------------------------- #
 
@@ -292,7 +296,7 @@ def runTest(duration=3):
     '''Check, if RTL_SDR dongle is connected'''
     output = justRun(["timeout %d rtl_test" % duration], loggingDir, duration)
     log(output)
-    
+
     # `rtl_test` uses "fprintf" to print out most of its output, EXCEPT for the
     # last line "lost at least XX bytes", which uses "printf". While all the
     # output is displayed on the console, only this last line is picked up by
