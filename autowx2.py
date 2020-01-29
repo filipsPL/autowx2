@@ -11,7 +11,9 @@
 
 # from autowx2_conf import *  # configuration
 # all functions and magic hidden here
-from autowx2_functions import log, saveToFile, wwwDir, time, debugPrint, cleanupRtl, killRtl, mainLoop
+from autowx2_conf import cleanupRtl
+from autowx2_functions import log, saveToFile, wwwDir, time, debugPrint
+from autowx2_functions import killRtl, mainLoop, process
 
 # ------------------------------------------------------------------------------------------------------ #
 
@@ -32,3 +34,4 @@ if __name__ == "__main__":
             mainLoop()
         finally:
             print("[MAIN] Main loop exited for some reason. Check the logs.")
+            process.terminate()

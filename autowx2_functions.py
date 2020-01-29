@@ -35,7 +35,8 @@ from autowx2_conf import tleFileName, satellitesData, stationLat, stationLon
 from autowx2_conf import stationAlt, skipFirst, skipLast, minElev
 from autowx2_conf import priorityTimeMargin, loggingDir, dongleShift
 from autowx2_conf import dongleShiftFile, stationName, ganttNextPassList
-from autowx2_conf import htmlNextPassList, wwwDir, calibrationTool
+from autowx2_conf import htmlNextPassList, wwwDir, calibrationTool, cleanupRtl
+from autowx2_conf import scriptToRunInFreeTime
 
 # ---------------------------------------------------------------------------- #
 
@@ -64,7 +65,7 @@ def default_sigpipe():
 # A separate shell script is written to listen for inputs to call. This simply
 # is a way of just adding executables to a pre-existing process. More
 # information here: https://stackoverflow.com/a/9674162
-process = subprocess.Popen(["sh", "shell_scripts.sh"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True, preexec_fn=default_sigpipe)
+process = subprocess.Popen("./shell_scripts.sh", stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True, preexec_fn=default_sigpipe)
 
 
 def debugPrint(message):
@@ -171,7 +172,8 @@ def genPassTable(satellites, qth, howmany=20):
                         ]
                     # transit.start - unix timestamp
 
-        elif 'fixedTime' in satellitesData[satellite]:                   # if ['fixedTime'] exists in satellitesData => time recording
+        # if ['fixedTime'] exists in satellitesData => time recording
+        elif 'fixedTime' in satellitesData[satellite]:
             # cron = getFixedRecordingTime(satellite)["fixedTime"]
             cron = satellitesData[satellite]['fixedTime']
             duration = getFixedRecordingTime(satellite)["fixedDuration"]
@@ -284,7 +286,7 @@ def justRun(cmdline, loggingDir, duration=-1):
                 if line == "\n":
                     lines += lineText
                     lineText = ""
-                
+
         debugPrint("Process completed")
         return lines
     except OSError as e:
@@ -674,10 +676,6 @@ def mainLoop():
     dongleShift = getDefaultDongleShift()
 
     while True:
-
-        # each loop - reads the config file in case it has changed
-        from autowx2_conf import *  # configuration
-
         # recalculate table of next passes
         passTable = genPassTable(satellites, qth)
 
