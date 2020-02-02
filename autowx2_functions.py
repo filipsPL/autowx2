@@ -65,7 +65,8 @@ def default_sigpipe():
 # A separate shell script is written to listen for inputs to call. This simply
 # is a way of just adding executables to a pre-existing process. More
 # information here: https://stackoverflow.com/a/9674162
-process = subprocess.Popen("./shell_scripts.sh", stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True, preexec_fn=default_sigpipe)
+shell_scripts = ["sh", "shell_scripts.sh"]
+process = subprocess.Popen(shell_scripts, stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True, preexec_fn=default_sigpipe)
 
 
 def debugPrint(message):
