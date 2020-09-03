@@ -31,6 +31,7 @@ satellitesData = {
         #'freq': '145800000',  # FM U/v VOICE Repeater (Worldwide) and FM SSTV downlink (Worldwide) [OK]
         'freq': '143625000',  # FM VHF-1 downlink. Main Russian communications channel. Often active over Moskow. [ ]
         #'freq': '145825000', # APRS -- AX.25 1200 Bd AFSK Packet Radio (Worldwide) Downlink [ ]
+        #'freq': '437800000', # Cross band FM amateur radio repeater with a downlink on 437.800 MHz at the International Space Station (Worldwide) Downlink [ ]
         'processWith': 'modules/iss/iss_voice.sh',
         'priority': 3},
 #    'PR3_NEWS': {
