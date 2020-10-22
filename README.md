@@ -256,7 +256,7 @@ Variable data.
 dongleshift.txt     - current dongle shift
 nextpass.*          - list and plot of the next passes
 tle/                - directory with tle data
-flask/              - flask webserver stuff (see flask documentation):
+node/               - NodeJS webserver stuff (see NodeJS documentation):
    static/          - css, js
    templates/       - html template(s)
 www/                - stuff for static webpages; templates and output data
@@ -273,7 +273,7 @@ The web page is generated into `/var/www/` (the default location).
 
 # Webserver
 
-autowx2 is equipped with a simple flask webserver showing what is going on - displaying current logs (with some limitations, i.e., not showing logs of external programs - solution needed) and updated pass list.
+autowx2 is equipped with a simple NodeJS webserver showing what is going on - displaying current logs (with some limitations, i.e., not showing logs of external programs - solution needed) and updated pass list.
 
 ![static web page](docs/www-dynamic+shadow.jpg)
 

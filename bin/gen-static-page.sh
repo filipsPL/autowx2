@@ -84,7 +84,7 @@ echo "<p></p>" >> $dirList
 
 echo "<h4>Archive</h4>" >> $dirList
 echo "<ul>" >> $dirList
-echo "<li><a href='$wwwRootPath/recordings/noaa/img/$(date +"%Y/%m/%d")/index.html'>Today</a> <span class='badge badge-pill badge-light'>$howManyToday</span> </li>" >> $dirList
+echo "<li><a href='${wwwRootPath}/recordings/noaa/img/$(date +"%Y/%m/%d")/index.html'>Today</a> <span class='badge badge-pill badge-light'>$howManyToday</span> </li>" >> $dirList
 
 for y in $(ls $noaaDir/img/ | sort -n)
 do
@@ -95,7 +95,7 @@ do
     for d in $(ls $noaaDir/img/$y/$m/ | sort -n)
     do
       # collect info about files in the directory
-      echo "<a href='$wwwRootPath/recordings/noaa/img/$y/$m/$d/index.html'>$d</a> " >> $dirList
+      echo "<a href='${wwwRootPath}/recordings/noaa/img/$y/$m/$d/index.html'>$d</a> " >> $dirList
     done
     echo "</li>" >> $dirList
   done
@@ -127,7 +127,7 @@ echo "<p></p>" >> $dirList
 
 echo "<h4>Archive</h4>" >> $dirList
 echo "<ul>" >> $dirList
-echo "<li><a href='$wwwRootPath/recordings/meteor/img/$(date +"%Y/%m/%d")/index.html'>Today</a> <span class='badge badge-pill badge-light'>$howManyToday</span> </li>" >> $dirList
+echo "<li><a href='${wwwRootPath}/recordings/meteor/img/$(date +"%Y/%m/%d")/index.html'>Today</a> <span class='badge badge-pill badge-light'>$howManyToday</span> </li>" >> $dirList
 
 for y in $(ls $meteorDir/img/ | grep -v 'raw' | sort -n)
 do
@@ -138,7 +138,7 @@ do
     for d in $(ls $meteorDir/img/$y/$m/ | sort -n)
     do
       # collect info about files in the directory
-      echo "<a href='$wwwRootPath/recordings/meteor/img/$y/$m/$d/index.html'>$d</a> " >> $dirList
+      echo "<a href='${wwwRootPath}/recordings/meteor/img/$y/$m/$d/index.html'>$d</a> " >> $dirList
     done
     echo "</li>" >> $dirList
   done
@@ -157,14 +157,14 @@ howManyToday=$(ls $recordingDir/iss/rec/$(date +"%Y/%m/")/*.log 2> /dev/null| wc
 
 echo "<h2>ISS recordings</h2>" >> $dirList
 echo "<ul>" >> $dirList
-echo "<li><a href='$wwwRootPath/recordings/iss/rec/$(date +"%Y/%m/")'>Current month</a> <span class='badge badge-pill badge-light'>$howManyToday</span>" >> $dirList
+echo "<li><a href='${wwwRootPath}/recordings/iss/rec/$(date +"%Y/%m/")'>Current month</a> <span class='badge badge-pill badge-light'>$howManyToday</span>" >> $dirList
 
 for y in $(ls $recordingDir/iss/rec/ | sort -n)
 do
   echo "<li>($y) " >> $dirList
   for m in $(ls $recordingDir/iss/rec/$y | sort -n)
   do
-    echo "<a href='$wwwRootPath/recordings/iss/rec/$y/$m/'>$m</a> " >> $dirList
+    echo "<a href='${wwwRootPath}/recordings/iss/rec/$y/$m/'>$m</a> " >> $dirList
   done
   echo "</li>" >> $dirList
 done
@@ -179,8 +179,8 @@ function gallery_logs {
 
   echo "<h2>Logs</h2>" >> $dirList
   echo "<ul>"  >> $dirList
-  echo "<li><a href='$wwwRootPath/recordings/logs/$(date +"%Y-%m-%d").txt'>Today</a></li>" >> $dirList
-  echo "<li><a href='$wwwRootPath/recordings/logs/'>All logs</a></li>" >> $dirList
+  echo "<li><a href='${wwwRootPath}/recordings/logs/$(date +"%Y-%m-%d").txt'>Today</a></li>" >> $dirList
+  echo "<li><a href='${wwwRootPath}/recordings/logs/'>All logs</a></li>" >> $dirList
   echo "</ul>"  >> $dirList
 }
 
@@ -188,8 +188,8 @@ function gallery_logs {
 
 function gallery_dump1090 {
   echo "<h2>dump1090 heatmap</h2>" >> $dirList
-  echo "<img src='$wwwRootPath/recordings/dump1090/heatmap-osm.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
-  echo "<img src='$wwwRootPath/recordings/dump1090/heatmap-osm2.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
+  echo "<img src='${wwwRootPath}/recordings/dump1090/heatmap-osm.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
+  echo "<img src='${wwwRootPath}/recordings/dump1090/heatmap-osm2.jpg' alt='dump1090 heatmap' class="img-thumbnail" />" >> $dirList
 }
 
 

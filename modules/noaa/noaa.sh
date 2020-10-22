@@ -10,6 +10,7 @@
 scriptDir="$(dirname "$(realpath "$0")")"
 source $scriptDir/basedir_conf.py
 source $baseDir/_listvars.sh
+source $baseDir/shell_functions.sh
 
 #
 # read configuration file
@@ -57,8 +58,6 @@ echo "enchancements=${enchancements}"
 # recdir="tests/"
 #-------------------------------#
 
-
-
 #
 # create directories
 #
@@ -83,23 +82,23 @@ echo $freq >> $logFile
 #
 # execute recordigng scriptDir and passing all arguments to the script
 #
-
+debugEcho "Recording..."
 source $scriptDir/noaa_record.sh
 
 #
 # execute processing script and passing all arguments to the script
 #
-
+debugEcho "Processing..."
 source $scriptDir/noaa_process.sh
 
 #
 # generate gallery for a given pass
 #
-
+debugEcho "Generating gallery..."
 source $scriptDir/noaa_gallery.sh
 
 #
 # generate static pages
 #
-
+debugEcho "Generating static page..."
 $baseDir/bin/gen-static-page.sh

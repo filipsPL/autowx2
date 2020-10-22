@@ -10,22 +10,28 @@
 #
 
 # from autowx2_conf import *  # configuration
-from autowx2_functions import * # all functions and magic hidden here
+# all functions and magic hidden here
+from autowx2_conf import cleanupRtl
+from autowx2_functions import log, saveToFile, wwwDir, time, debugPrint
+from autowx2_functions import killRtl, mainLoop, process
 
 # ------------------------------------------------------------------------------------------------------ #
 
+
 if __name__ == "__main__":
     log("⚡ Program start")
-    saveToFile("%s/start.tmp" % (wwwDir), str(time.time())) # saves program start date to file
+    # saves program start date to file
+    saveToFile("%s/start.tmp" % (wwwDir), str(time.time()))
+
+    debugPrint("Main program started")
 
     if cleanupRtl:
-        log("Killing all remaining rtl_* processes...")
-        justRun(["bin/kill_rtl.sh"], loggingDir)
+        killRtl()
 
     while True:
-        t1 = Thread(target = mainLoop)
-        t1.setDaemon(True)
-        t1.start()
-        # app.run(debug=True, port=webInterfacePort)
-
-        socketio.run(app, port=webInterfacePort, debug=False)
+        debugPrint("Main loop started")
+        try:
+            mainLoop()
+        finally:
+            print("[MAIN] Main loop exited for some reason. Check the logs.")
+            process.terminate()

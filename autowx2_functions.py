@@ -11,39 +11,67 @@
 #
 
 # for autowx2 itself
-import predict
-import time
-from datetime import datetime
-from time import strftime
-import subprocess
-import os
 from _crontab import *
+from datetime import datetime
+import os
+import predict
 import re
+import subprocess
 import sys
+import time
+from time import strftime
 
 
 # for plotting
 import matplotlib
 matplotlib.use('Agg')  # Force matplotlib to not use any Xwindows backend.
 import matplotlib.pyplot as plt
-# import matplotlib.font_manager as font_manager
 import matplotlib.dates
 from matplotlib.dates import DateFormatter
 import numpy as np
 
-# webserver
-from flask import render_template, Flask
-from flask_socketio import SocketIO, emit
-import codecs
-from threading import Thread
-
-# configuration
-from autowx2_conf import *
+# configuration - multiple lines because Codacy complains of line too long
+from autowx2_conf import tleFileName, satellitesData, stationLat, stationLon
+from autowx2_conf import stationAlt, skipFirst, skipLast, minElev
+from autowx2_conf import priorityTimeMargin, loggingDir, dongleShift
+from autowx2_conf import dongleShiftFile, stationName, ganttNextPassList
+from autowx2_conf import htmlNextPassList, wwwDir, calibrationTool, cleanupRtl
+from autowx2_conf import scriptToRunInFreeTime
 
 # ---------------------------------------------------------------------------- #
 
 satellites = list(satellitesData)
 qth = (stationLat, stationLon, stationAlt)
+
+
+# Allow piping when running a shell/bash command.
+import signal
+def default_sigpipe():
+    signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+
+
+# Every time `subprocess.Popen` is called, a new process is created with the
+# same memory footprint as the calling script (source:
+# https://stackoverflow.com/a/13329386). At some point in the future, while the
+# script is running), it will run out of memory. This will throw a "Cannot
+# allocate memory" error, which completely crashes the script, causing the
+# entire thing to stop running.
+#
+# `subprocess.Popen` is called here so that a new process is created with the
+# tiny initial memory footprint of the script at the beginning. This in theory
+# means that memory allocation errors shouldn't happen (or at least
+# significantly reduced).
+#
+# A separate shell script is written to listen for inputs to call. This simply
+# is a way of just adding executables to a pre-existing process. More
+# information here: https://stackoverflow.com/a/9674162
+shell_scripts = ["sh", "shell_scripts.sh"]
+process = subprocess.Popen(shell_scripts, shell=False, stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True, preexec_fn=default_sigpipe)
+
+
+def debugPrint(message):
+    # Comment this out to stop printing debug messages
+    print("[DEBUG] %s" % message)
 
 
 def mkdir_p(outdir):
@@ -145,7 +173,8 @@ def genPassTable(satellites, qth, howmany=20):
                         ]
                     # transit.start - unix timestamp
 
-        elif 'fixedTime' in satellitesData[satellite]:                   # if ['fixedTime'] exists in satellitesData => time recording
+        # if ['fixedTime'] exists in satellitesData => time recording
+        elif 'fixedTime' in satellitesData[satellite]:
             # cron = getFixedRecordingTime(satellite)["fixedTime"]
             cron = satellitesData[satellite]['fixedTime']
             duration = getFixedRecordingTime(satellite)["fixedDuration"]
@@ -230,33 +259,37 @@ def listNextPases(passTable, howmany):
         i += 1
 
 
-def runForDuration(cmdline, duration, loggingDir):
-    outLogFile = logFile(loggingDir)
-    teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
-
-    cmdline = [str(x) for x in cmdline]
-    print cmdline
-    try:
-        p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        _ = subprocess.Popen(teeCommand, stdin=p1.stdout)
-        time.sleep(duration)
-        p1.terminate()
-    except OSError as e:
-        log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
-        log("✖ OS Error: " + e.strerror, style=bc.FAIL)
-
-
-def justRun(cmdline, loggingDir):
+def justRun(cmdline, loggingDir, duration=-1):
     '''Just run the command as long as necesary and return the output'''
     outLogFile = logFile(loggingDir)
-    teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
+    teeCommand = "tee -a %s" % outLogFile # quick and dirty hack to get log to file
 
-    cmdline = [str(x) for x in cmdline]
+    cmdline = "%s | %s" % (' '.join([str(x) for x in cmdline]), teeCommand)
     try:
-        p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
-        p2 = subprocess.Popen(teeCommand, stdin=p1.stdout, close_fds=True) # stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-        result = p1.communicate()[0]
-        return result
+        if (duration != -1):
+            cmdline = "timeout %d %s" % (duration, cmdline)
+        debugPrint("Running command: %s" % cmdline)
+        process.stdin.write(cmdline + "\n")
+
+        lineText = ""
+        lines = ""
+        # Keep reading the output until the output gives out a unique string
+        # that signifies the task has completed.
+        while lineText != "SQsw48V8JZLwGOscVeuO":
+            for line in process.stdout.readline():
+                lineText += line
+
+                if lineText == "SQsw48V8JZLwGOscVeuO":
+                    # No need to check the remaining output. The task has
+                    # completed.
+                    break
+
+                if line == "\n":
+                    lines += lineText
+                    lineText = ""
+
+        debugPrint("Process completed")
+        return lines
     except OSError as e:
         log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
         log("✖ OS Error: " + e.strerror, style=bc.FAIL)
@@ -264,24 +297,38 @@ def justRun(cmdline, loggingDir):
 
 def runTest(duration=3):
     '''Check, if RTL_SDR dongle is connected'''
-    child = subprocess.Popen('rtl_test', stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
-    time.sleep(duration)
-    child.terminate()
-    _, err = child.communicate()
-    # if no device: ['No', 'supported', 'devices', 'found.']
-    # if OK: ['Found', '1', 'device(s):', '0:', 'Realtek,',
-    # 'RTL2838UHIDIR,',...
-    info = err.split()[0]
-    if info == "No":
-        log("✖ No SDR device found!", style=bc.FAIL)
+    output = justRun(["timeout %d rtl_test" % duration], loggingDir, duration)
+    log(output)
+
+    # `rtl_test` uses "fprintf" to print out most of its output, EXCEPT for the
+    # last line "lost at least XX bytes", which uses "printf". While all the
+    # output is displayed on the console, only this last line is picked up by
+    # the new shell script. It seems this is what denotes whether a dongle is
+    # present AND AVAILABLE. Source code at:
+    # https://github.com/osmocom/rtl-sdr/blob/b5af355b1d833b3c898a61cf1e072b59b0ea3440/src/rtl_test.c#L147
+    #
+    # NOTE: The output from `rtl_test` won't get saved to the log. This is due
+    # to the "fprintf" output mentioned above. It will however, be printed on
+    # the console. This may clutter the console, but the logs will stay "clean".
+    #
+    # `output` should appear as (or similar): lost at least 12 bytes
+    # `outputSplit` should appear as (or similar): ['lost', 'at, 'least', '12, 'bytes']
+    outputSplit = output.split()
+    if len(outputSplit) <= 0:
+        log("✖ Failed to find SDR device!", style=bc.FAIL)
         return False
-    elif info == "Found":
+
+    info = outputSplit[0]
+    if info == "lost":
         log("SDR device found!")
         return True
     else:
-        log("Not sure, if SDR device is there...")
-        return True
+        log("Not sure, if SDR device is there. Preventing access to potentially harmful devices.")
+        return False
+
+def killRtl():
+    log("Killing all remaining rtl_* processes...")
+    justRun(["sh bin/kill_rtl.sh"], loggingDir)
 
 
 def getDefaultDongleShift(dongleShift=dongleShift):
@@ -343,9 +390,7 @@ def log(string, style=bc.CYAN):
         style,
         str(string),
         bc.ENDC)
-    # socketio.emit('log', {'data': message}, namespace='/')
-    handle_my_custom_event(escape_ansi(message) + "<br />\n")
-    print message
+    print(message)
 
     # logging to file, if not Flase
     if loggingDir:
@@ -505,7 +550,7 @@ def CreateGanttChart(listNextPasesListList):
     plt.savefig(ganttNextPassList)
 
     if ylabel == enddateIN:
-        print locsy  # "This is done only to satisfy the codacy.com. Sorry for that."
+        print(locsy)  # "This is done only to satisfy the codacy.com. Sorry for that."
 
 
 def listNextPasesHtml(passTable, howmany):
@@ -593,7 +638,7 @@ def listNextPasesList(passTable, howmany):
 
         output.append([satellite, start, start + duration])
     if peak:
-        print "This is a miracle!"  # codacy cheating, sorry.
+        print("This is a miracle!")  # codacy cheating, sorry.
     return output
 
 
@@ -619,55 +664,8 @@ def generatePassTableAndSaveFiles(satellites, qth, verbose=True):
     CreateGanttChart(listNextPasesListList)
 
     if verbose:
-        print listNextPasesTxt(passTable, 100)
+        print(listNextPasesTxt(passTable, 100))
 
-
-
-# --------------------------------------------------------------------------- #
-# --------- THE WEBSERVER --------------------------------------------------- #
-# --------------------------------------------------------------------------- #
-
-app = Flask(__name__, template_folder="var/flask/templates/", static_folder='var/flask/static')
-socketio = SocketIO(app)
-
-def file_read(filename):
-    with codecs.open(filename, 'r', encoding='utf-8', errors='replace') as f:
-        lines = f.read()
-    linesBr = "<br />".join( lines.split("\n") )
-    return linesBr
-
-
-@app.route('/')
-def homepage():
-    logfile = logFile(loggingDir)
-    logs = file_read(logfile)
-
-    body =""
-    # log window
-    body += "<h3>Recent logs</h3><p><strong>File</strong>: %s</p><pre style='height: 400px;' id='logWindow' class='pre-scrollable small text-nowrap'>%s</pre>" % (logfile, logs)
-
-    # next pass table
-    passTable = genPassTable(satellites, qth)
-    body += "<h3>Next passes</h3><span id='nextPassWindow'>%s</span>" % ( listNextPasesHtml(passTable, 10) )
-    return render_template('index.html', title="Home page", body=body)
-
-@socketio.on('my event')
-def handle_my_custom_event(text):
-    socketio.emit('my response', { 'tekst': text } )
-
-@socketio.on('next pass table')
-def handle_next_pass_list(text):
-    socketio.emit('response next pass table', { 'tekst': text } )
-
-
-#
-# show pass table
-#
-
-@app.route('/table')
-def passTable():
-    body=file_read(htmlNextPassList)
-    return render_template('index.html', title="Pass table", body=body)
 
 
 # --------------------------------------------------------------------------- #
@@ -675,13 +673,10 @@ def passTable():
 # --------------------------------------------------------------------------- #
 
 def mainLoop():
+    debugPrint("Main loop started.")
     dongleShift = getDefaultDongleShift()
 
     while True:
-
-        # each loop - reads the config file in case it has changed
-        from autowx2_conf import *  # configuration
-
         # recalculate table of next passes
         passTable = genPassTable(satellites, qth)
 
@@ -691,9 +686,6 @@ def mainLoop():
         # show next five passes
         log("Next five passes:")
         listNextPases(passTable, 5)
-
-        # pass table for webserver
-        handle_next_pass_list(listNextPasesHtml(passTable, 10))
 
         # get the very next pass
         satelitePass = passTable[0]
@@ -714,8 +706,7 @@ def mainLoop():
         towait = int(start - time.time())
 
         if cleanupRtl:
-            log("Killing all remaining rtl_* processes...")
-            justRun(["bin/kill_rtl.sh"], loggingDir)
+            killRtl()
 
         # test if SDR dongle is available
         if towait > 15: # if we have time to perform the test?
@@ -725,6 +716,8 @@ def mainLoop():
 
         # It's a high time to record!
         if towait <= 1 and duration > 0:
+            debugPrint("Recording duration: %d seconds" % duration)
+            debugPrint("Time to wait: %d seconds" % towait)
             # here the recording happens
             log("!! Recording " + printPass(satellite, start, duration,
                 peak, azimuth, freq, processWith), style=bc.WARNING)
@@ -738,7 +731,12 @@ def mainLoop():
                 peak,
                 azimuth,
                 freq]
-            print justRun(processCmdline, loggingDir)
+            debugPrint("Process command line: ")
+            debugPrint(processCmdline)
+            cmdline_result = justRun(processCmdline, loggingDir)
+
+            debugPrint("Command line result: ")
+            debugPrint(cmdline_result)
             time.sleep(10.0)
 
         # still some time before recording
@@ -755,13 +753,13 @@ def mainLoop():
                         (t2humanMS(towait - 1)))
                     log("Running: %s for %ss" %
                         (scriptToRunInFreeTime, t2humanMS(towait - 1)))
-                    runForDuration(
+                    justRun(
                         [scriptToRunInFreeTime,
                          towait - 1,
                          dongleShift],
-                        towait - 1, loggingDir)
-                                   # scrript with run time and dongle shift as
-                                   # arguments
+                        loggingDir,
+                        towait - 1)
+                    # scrript with run time and dongle shift as arguments
                 else:
                     log("Sleeping for: " + t2humanMS(towait - 1) + "s")
                     time.sleep(towait - 1)

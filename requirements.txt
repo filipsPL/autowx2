@@ -1,5 +1,4 @@
 pypredict
 matplotlib
 numpy
-Flask
-Flask-SocketIO
+NodeJS

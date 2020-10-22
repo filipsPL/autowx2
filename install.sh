@@ -96,6 +96,8 @@ echo "******** Installing multimon-ng-stqc"
 echo
 echo
 
+sudo apt-get install libpulse-dev
+
 cd $baseDir/bin/sources/
 
 git clone https://github.com/sq5bpf/multimon-ng-stqc.git
