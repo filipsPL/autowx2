@@ -131,7 +131,7 @@ def genPassTable(satellites, qth, howmany=20):
             # exit(1)
 
             for i in range(1, howmany):
-                transit = p.next()
+                transit = next(p)
 
                 # transitEnd = transit.start + transit.duration() - skipLast
 
@@ -235,7 +235,7 @@ def runForDuration(cmdline, duration, loggingDir):
     teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
 
     cmdline = [str(x) for x in cmdline]
-    print cmdline
+    print(cmdline)
     try:
         p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         _ = subprocess.Popen(teeCommand, stdin=p1.stdout)
@@ -345,7 +345,7 @@ def log(string, style=bc.CYAN):
         bc.ENDC)
     # socketio.emit('log', {'data': message}, namespace='/')
     handle_my_custom_event(escape_ansi(message) + "<br />\n")
-    print message
+    print(message)
 
     # logging to file, if not Flase
     if loggingDir:
@@ -505,7 +505,7 @@ def CreateGanttChart(listNextPasesListList):
     plt.savefig(ganttNextPassList)
 
     if ylabel == enddateIN:
-        print locsy  # "This is done only to satisfy the codacy.com. Sorry for that."
+        print(locsy)  # "This is done only to satisfy the codacy.com. Sorry for that."
 
 
 def listNextPasesHtml(passTable, howmany):
@@ -593,7 +593,7 @@ def listNextPasesList(passTable, howmany):
 
         output.append([satellite, start, start + duration])
     if peak:
-        print "This is a miracle!"  # codacy cheating, sorry.
+        print("This is a miracle!")  # codacy cheating, sorry.
     return output
 
 
@@ -619,7 +619,7 @@ def generatePassTableAndSaveFiles(satellites, qth, verbose=True):
     CreateGanttChart(listNextPasesListList)
 
     if verbose:
-        print listNextPasesTxt(passTable, 100)
+        print(listNextPasesTxt(passTable, 100))
 
 
 
@@ -738,7 +738,7 @@ def mainLoop():
                 peak,
                 azimuth,
                 freq]
-            print justRun(processCmdline, loggingDir)
+            print(justRun(processCmdline, loggingDir))
             time.sleep(10.0)
 
         # still some time before recording
