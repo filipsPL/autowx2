@@ -1,0 +1,15 @@
+# run: conda env create --file environment.yml
+name: autowx2
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy
+  - matplotlib
+  - scikit-learn
+  - pip
+  - pip:
+    - Flask
+    - Flask-SocketIO
+    - pypredict

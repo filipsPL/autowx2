@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 ### created for and tested at the debian-like systems (tested on debian, ubuntu and mint)
 
 ### for installing the dongle
@@ -13,7 +12,7 @@ echo $MACHINE_TYPE
 
 bash ./configure.sh
 
-echo "copy sample config file, but don't overwrite"
+#echo "copy sample config file, but don't overwrite"
 cp --no-clobber autowx2_conf.py.example autowx2_conf.py
 
 
@@ -28,10 +27,10 @@ echo
 echo "******** Installing required packages"
 echo
 echo
-sudo apt-get update
-sudo apt-get install -y rtl-sdr git libpulse-dev qt4-qmake fftw3 libc6 libfontconfig1 libx11-6 libxext6 libxft2 libusb-1.0-0-dev \
+sudo apt update
+sudo apt install -y rtl-sdr git libpulse-dev fftw3 libc6 libfontconfig1 libx11-6 libxext6 libxft2 libusb-1.0-0-dev \
 libavahi-client-dev libavahi-common-dev libdbus-1-dev libfftw3-single3 libpulse-mainloop-glib0 librtlsdr0 librtlsdr-dev \
-libfftw3-dev libfftw3-double3 lame sox libsox-fmt-mp3 libtool automake python-pil python-imaging imagemagick python-dev \
+libfftw3-dev libfftw3-double3 lame sox libsox-fmt-mp3 libtool automake imagemagick \
 bc imagemagick
 
 
@@ -55,12 +54,17 @@ if [ ${MACHINE_TYPE} == 'armv6l' ] || [ ${MACHINE_TYPE} == 'armv7l' ]; then
   PIP_OPTIONS="--no-cache-dir"
 fi
 
-echo
-echo
-echo "******** Installing python requirements"
-echo
-echo
-pip $PIP_OPTIONS install -r requirements.txt
+# echo
+# echo
+# echo "******** Installing python requirements"
+# echo
+# echo
+
+# use pip:
+# pip $PIP_OPTIONS install -r requirements.txt
+
+# or conda:
+# conda env create --file environment.yml
 
 
 mkdir -p $baseDir/bin/sources/
@@ -75,14 +79,14 @@ echo
 
 if [ ${MACHINE_TYPE} == 'x86_64' ]; then
     echo "64-bit system"
-    wget https://wxtoimgrestored.xyz/downloads/wxtoimg-linux64-2.10.11-1.tar.gz
-    gunzip < wxtoimg-linux64-2.10.11-1.tar.gz | sudo sh -c "(cd /; tar -xvf -)"
+    wget https://wxtoimgrestored.xyz/beta/wxtoimg-linux-amd64-2.11.2-beta.tar.gz
+    gunzip < wxtoimg-linux-amd64-2.11.2-beta.tar.gz | sudo sh -c "(cd /; tar -xvf -)"
 elif [ ${MACHINE_TYPE} == 'armv6l' ] || [ ${MACHINE_TYPE} == 'armv7l' ]; then
     wget https://wxtoimgrestored.xyz/beta/wxtoimg-armhf-2.11.2-beta.deb
     sudo dpkg -i wxtoimg-armhf-2.11.2-beta.deb
 else
     echo "32-bit system"
-    wget https://wxtoimgrestored.xyz/downloads/wxtoimg_2.10.11-1_i386.deb
+    wget https://wxtoimgrestored.xyz/beta/wxtoimg-i386-2.11.2-beta.deb
     sudo dpkg -i wxtoimg_2.10.11-1_i386.deb	# may generate some dependencies errors; if not, stop here
     # sudo apt-get -f install
 fi
