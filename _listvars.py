@@ -11,4 +11,4 @@ for var in d:
     val=d[var]
     if not var.startswith("__"):		# not global variables
 	if not str(val).startswith( ("{", "<") ):	# not dictionary
-	    print "%s=%s" % (var, val)
+	    print("%s=%s" % (var, val))

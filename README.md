@@ -7,14 +7,24 @@ autowx2
 
 <!-- TOC depthFrom:1 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
 
+- [autowx2](#autowx2)
 - [Introduction](#introduction)
-	- [Used libraries and acknowledgements](#used-libraries-and-acknowledgements)
+  - [Used libraries and acknowledgements](#used-libraries-and-acknowledgements)
 - [Hardware requirements](#hardware-requirements)
 - [System requirements](#system-requirements)
 - [Installation](#installation)
-	- [x86 and amd64](#x86-and-amd64)
+  - [x86 and amd64](#x86-and-amd64)
 - [Configuration files and other programs](#configuration-files-and-other-programs)
-	- [Files, subprograms and configs](#files-subprograms-and-configs)
+  - [Files, subprograms and configs](#files-subprograms-and-configs)
+    - [autowx.py](#autowxpy)
+    - [autowx2\_conf.py](#autowx2_confpy)
+    - [genpasstable.py](#genpasstablepy)
+    - [bin directory](#bin-directory)
+    - [modules](#modules)
+      - [/modules/noaa](#modulesnoaa)
+      - [/modules/iss](#modulesiss)
+      - [/modules/meteor-m2](#modulesmeteor-m2)
+    - [var directory](#var-directory)
 - [Static web pages](#static-web-pages)
 - [Webserver](#webserver)
 - [Working instances of autowx2](#working-instances-of-autowx2)
@@ -34,7 +44,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 <!--- [![ghit.me](https://ghit.me/badge.svg?repo=filipsPL/autowx2)](https://ghit.me/repo/filipsPL/autowx2) -->
 
-[![badge-travis](https://api.travis-ci.org/filipsPL/autowx2.svg?branch=master)](https://travis-ci.org/filipsPL/autowx2) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bb77483f88414ef799621247bd186795)](https://www.codacy.com/app/filipsPL/autowx2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=filipsPL/autowx2&amp;utm_campaign=Badge_Grade) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2?ref=badge_shield)  [![Updates](https://pyup.io/repos/github/filipsPL/autowx2/shield.svg)](https://pyup.io/repos/github/filipsPL/autowx2/) ![Python 2.7](docs/Python-2.7-lightgreen.png) [![release version](https://img.shields.io/github/release/filipsPL/autowx2.svg)](https://github.com/filipsPL/autowx2/releases) ![badge-email](docs/badge-email.png)
+[![badge-travis](https://api.travis-ci.org/filipsPL/autowx2.svg?branch=master)](https://travis-ci.org/filipsPL/autowx2) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2?ref=badge_shield)  [![Updates](https://pyup.io/repos/github/filipsPL/autowx2/shield.svg)](https://pyup.io/repos/github/filipsPL/autowx2/) [![release version](https://img.shields.io/github/release/filipsPL/autowx2.svg)](https://github.com/filipsPL/autowx2/releases)
 
 **autowx2** was tested and successfully applied to schedule recordings of:
 - [x] NOAA weather satellites
@@ -78,7 +88,7 @@ These scripts may be used by the autowx2 in the free time, e.g., to track airpla
 
 # System requirements
 
-- python 2.7 and bash (sh, csh will be also OK)
+- python 3 and bash (sh, csh will be also OK)
 - installed and working DVB-T dongle; to make this long story short:
 - adding the following statement to `/etc/udev/rules.d/20.rtlsdr.rules`:
 

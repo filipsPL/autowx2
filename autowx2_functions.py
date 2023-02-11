@@ -531,7 +531,7 @@ def listNextPasesHtml(passTable, howmany):
 
     output += "</table>\n"
 
-    return output.decode('utf-8')
+    return output #.decode('utf-8')
 
 
 def listNextPasesTxt(passTable, howmany):
@@ -602,7 +602,7 @@ def saveToFile(filename, data):
     # print data
     # exit(1)
     plik = open(filename, "w")
-    plik.write(data.encode("utf-8"))
+    plik.write(data) # .encode("utf-8")
     plik.close()
 
 
@@ -680,7 +680,7 @@ def mainLoop():
     while True:
 
         # each loop - reads the config file in case it has changed
-        from autowx2_conf import *  # configuration
+        # from autowx2_conf import *  # configuration
 
         # recalculate table of next passes
         passTable = genPassTable(satellites, qth)
