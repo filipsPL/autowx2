@@ -16,7 +16,7 @@ autowx2
   - [x86 and amd64](#x86-and-amd64)
 - [Configuration files and other programs](#configuration-files-and-other-programs)
   - [Files, subprograms and configs](#files-subprograms-and-configs)
-    - [autowx.py](#autowxpy)
+    - [autowx2.py](#autowx2py)
     - [autowx2\_conf.py](#autowx2_confpy)
     - [genpasstable.py](#genpasstablepy)
     - [bin directory](#bin-directory)
@@ -88,7 +88,8 @@ These scripts may be used by the autowx2 in the free time, e.g., to track airpla
 
 # System requirements
 
-- python 3 and bash (sh, csh will be also OK)
+- python 3 - I recommend conda environment
+- bash (sh, csh will be also OK)
 - installed and working DVB-T dongle; to make this long story short:
 - adding the following statement to `/etc/udev/rules.d/20.rtlsdr.rules`:
 
@@ -112,6 +113,7 @@ echo "blacklist dvb_usb_rtl28xxu" >>  /etc/modprobe.d/rtl-sdr-blacklist.conf
 1. Fetch sources: `git clone --depth 1 git@github.com:filipsPL/autowx2.git`
   - alternatively: `git clone --depth 1 https://github.com/filipsPL/autowx2.git`
 2. Inspect the script `install.sh`, modify if needed. In most cases, it should work out of the box (for debian and debian-like systems; tested on debian, ubuntu, mint and travis debian like linux). Modify *wxtoimg* section to fetch sources that matches your architecture.
+  - uncomment section `pip` or `conda` depending on your preferences of installing python packages
 3. If you are fine with the above script, run it with `bash install.sh`. :warning: use at your own risk!
 4. Edit the main config file `autowx2_conf.py`
 5. Edit your system's crontab file and add the `bin/update-keps.sh` script to it, eg:<br/>`0 4 * * * path/to/autowx2/bin/update-keps.sh 1> /dev/null 2>/dev/null`<br/>you can also trigger it manually from time to time.
@@ -122,7 +124,7 @@ echo "blacklist dvb_usb_rtl28xxu" >>  /etc/modprobe.d/rtl-sdr-blacklist.conf
 
 ## Files, subprograms and configs
 
-### autowx.py
+### autowx2.py
 
 The main program to do all calculation, pass predictions and launch modules.
 
