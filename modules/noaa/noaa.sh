@@ -3,8 +3,6 @@
 # main file for recording and processing NOAA telementry data
 # for configuration, see noaa.conf
 
-
-
 # read the global configuration file autowx2_conf.py via the bash/python configuration parser
 # do not change the following three lines
 scriptDir="$(dirname "$(realpath "$0")")"
@@ -17,7 +15,6 @@ source $baseDir/_listvars.sh
 source $scriptDir/noaa.conf
 
 ##################################################
-
 
 #fileNameCore, satellite, start, duration+towait, peak, freq
 
@@ -42,7 +39,6 @@ echo "wavrate=$wavrate"
 echo "dongleIndex=$dongleIndex"
 echo "enchancements=${enchancements}"
 
-
 #-------------------------------#
 # to test the processing part:
 # comment the recording part and uncomment the following part
@@ -57,8 +53,6 @@ echo "enchancements=${enchancements}"
 # recdir="tests/"
 #-------------------------------#
 
-
-
 #
 # create directories
 #
@@ -71,14 +65,13 @@ mkdir -p $recdir
 #
 logFile=$imgdir/$fileNameCore.log
 
-date > $logFile   # initialize log file
-echo $fileNameCore >> $logFile
-echo $satellite >> $logFile
-echo $start >> $logFile
-echo $duration >> $logFile
-echo $peak >> $logFile
-echo $freq >> $logFile
-
+date >$logFile # initialize log file
+echo $fileNameCore >>$logFile
+echo $satellite >>$logFile
+echo $start >>$logFile
+echo $duration >>$logFile
+echo $peak >>$logFile
+echo $freq >>$logFile
 
 #
 # execute recordigng scriptDir and passing all arguments to the script
