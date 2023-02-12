@@ -680,7 +680,7 @@ def mainLoop():
     while True:
 
         # each loop - reads the config file in case it has changed
-        # from autowx2_conf import *  # configuration
+        from autowx2_conf import satellitesData, scriptToRunInFreeTime
 
         # recalculate table of next passes
         passTable = genPassTable(satellites, qth)
