@@ -27,6 +27,10 @@ satellitesData = {
         'freq': '137100000',
         'processWith': 'modules/noaa/noaa.sh',
         'priority': 2},
+    'METEOR-M2': {
+        'freq': '137900000',
+        'processWith': 'modules/meteor-m2/meteor.sh',
+        'priority': 1},
     'ISS': {
         #'freq': '145800000',  # FM U/v VOICE Repeater (Worldwide) and FM SSTV downlink (Worldwide) [OK]
         'freq': '143625000',  # FM VHF-1 downlink. Main Russian communications channel. Often active over Moskow. [ ]
