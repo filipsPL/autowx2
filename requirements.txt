@@ -2,4 +2,4 @@ pypredict
 matplotlib
 numpy
 Flask
-Flask-SocketIO==5.2.0
+"Flask-SocketIO<=5.2.0"
