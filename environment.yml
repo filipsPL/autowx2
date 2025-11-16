@@ -9,7 +9,6 @@ dependencies:
   - matplotlib
   - scikit-learn
   - pip
+#  - soapysdr
   - pip:
-    - Flask
-    - Flask-SocketIO
     - pypredict

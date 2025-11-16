@@ -1,5 +1,3 @@
 pypredict
 matplotlib
 numpy
-Flask
-"Flask-SocketIO<=5.2.0"

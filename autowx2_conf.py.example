@@ -148,11 +148,6 @@ includeGalleryDump1090=0    # dump1090 data
 
 
 
-#
-# port at which webserver will be listening
-#
-webInterfacePort = 5010
-
 # script tha will be used whle waiting for the next pass; set False if we just want to sleep
 # by default, this script will get the parameter of duration of the time to be run and the recent dongleShift
 # scriptToRunInFreeTime = False				# does nothing

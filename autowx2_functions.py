@@ -31,10 +31,7 @@ import matplotlib.dates
 from matplotlib.dates import DateFormatter
 import numpy as np
 
-# webserver
-from flask import render_template, Flask
-from flask_socketio import SocketIO, emit
-import codecs
+# threading
 from threading import Thread
 
 # configuration
@@ -343,11 +340,9 @@ def log(string, style=bc.CYAN):
         style,
         str(string),
         bc.ENDC)
-    # socketio.emit('log', {'data': message}, namespace='/')
-    handle_my_custom_event(escape_ansi(message) + "<br />\n")
     print(message)
 
-    # logging to file, if not Flase
+    # logging to file, if not False
     if loggingDir:
         logToFile(escape_ansi(message) + "\n", loggingDir)
 
@@ -624,50 +619,19 @@ def generatePassTableAndSaveFiles(satellites, qth, verbose=True):
 
 
 # --------------------------------------------------------------------------- #
-# --------- THE WEBSERVER --------------------------------------------------- #
+# --------- REMOVED FLASK WEBSERVER ----------------------------------------- #
 # --------------------------------------------------------------------------- #
 
-app = Flask(__name__, template_folder="var/flask/templates/", static_folder='var/flask/static')
-socketio = SocketIO(app)
+# Flask webserver has been removed. Use static web pages instead.
+# See: bin/gen-static-page.sh for static page generation
 
-def file_read(filename):
-    with codecs.open(filename, 'r', encoding='utf-8', errors='replace') as f:
-        lines = f.read()
-    linesBr = "<br />".join( lines.split("\n") )
-    return linesBr
-
-
-@app.route('/')
-def homepage():
-    logfile = logFile(loggingDir)
-    logs = file_read(logfile)
-
-    body =""
-    # log window
-    body += "<h3>Recent logs</h3><p><strong>File</strong>: %s</p><pre style='height: 400px;' id='logWindow' class='pre-scrollable small text-nowrap'>%s</pre>" % (logfile, logs)
-
-    # next pass table
-    passTable = genPassTable(satellites, qth)
-    body += "<h3>Next passes</h3><span id='nextPassWindow'>%s</span>" % ( listNextPasesHtml(passTable, 10) )
-    return render_template('index.html', title="Home page", body=body)
-
-@socketio.on('my event')
 def handle_my_custom_event(text):
-    socketio.emit('my response', { 'tekst': text } )
+    """Stub function - Flask webserver removed"""
+    pass
 
-@socketio.on('next pass table')
 def handle_next_pass_list(text):
-    socketio.emit('response next pass table', { 'tekst': text } )
-
-
-#
-# show pass table
-#
-
-@app.route('/table')
-def passTable():
-    body=file_read(htmlNextPassList)
-    return render_template('index.html', title="Pass table", body=body)
+    """Stub function - Flask webserver removed"""
+    pass
 
 
 # --------------------------------------------------------------------------- #
@@ -691,9 +655,6 @@ def mainLoop():
         # show next five passes
         log("Next five passes:")
         listNextPases(passTable, 5)
-
-        # pass table for webserver
-        handle_next_pass_list(listNextPasesHtml(passTable, 10))
 
         # get the very next pass
         satelitePass = passTable[0]

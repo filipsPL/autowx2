@@ -22,10 +22,5 @@ if __name__ == "__main__":
         log("Killing all remaining rtl_* processes...")
         justRun(["bin/kill_rtl.sh"], loggingDir)
 
-    while True:
-        t1 = Thread(target = mainLoop)
-        t1.setDaemon(True)
-        t1.start()
-        # app.run(debug=True, port=webInterfacePort)
-
-        socketio.run(app, port=webInterfacePort, debug=False)
+    # Run main loop directly (Flask webserver removed)
+    mainLoop()

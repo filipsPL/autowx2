@@ -26,7 +26,6 @@ autowx2
       - [/modules/meteor-m2](#modulesmeteor-m2)
     - [var directory](#var-directory)
 - [Static web pages](#static-web-pages)
-- [Webserver](#webserver)
 - [Working instances of autowx2](#working-instances-of-autowx2)
 - [Issues? Comments? Suggestions?](#issues-comments-suggestions)
 
@@ -268,9 +267,6 @@ Variable data.
 dongleshift.txt     - current dongle shift
 nextpass.*          - list and plot of the next passes
 tle/                - directory with tle data
-flask/              - flask webserver stuff (see flask documentation):
-   static/          - css, js
-   templates/       - html template(s)
 www/                - stuff for static webpages; templates and output data
    css/             - css, js
 ```
@@ -282,14 +278,6 @@ Modules may generate static webpages - snippets (see: noaa `noaa_gallery.sh` scr
 ![static web page](docs/www-static+shadow.jpg)
 
 The web page is generated into `/var/www/` (the default location).
-
-# Webserver
-
-autowx2 is equipped with a simple flask webserver showing what is going on - displaying current logs (with some limitations, i.e., not showing logs of external programs - solution needed) and updated pass list.
-
-![static web page](docs/www-dynamic+shadow.jpg)
-
-The default address is `http://localhost:5010/` (the port may be changed in the config file via `webInterfacePort` variable)
 
 # Working instances of autowx2
 
