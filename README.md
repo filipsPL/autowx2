@@ -43,7 +43,7 @@ This is a rewritten and fine-tuned version of tools for the automatic weather sa
 
 <!--- [![ghit.me](https://ghit.me/badge.svg?repo=filipsPL/autowx2)](https://ghit.me/repo/filipsPL/autowx2) -->
 
-[![badge-travis](https://api.travis-ci.org/filipsPL/autowx2.svg?branch=master)](https://travis-ci.org/filipsPL/autowx2) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FfilipsPL%2Fautowx2?ref=badge_shield)  [![Updates](https://pyup.io/repos/github/filipsPL/autowx2/shield.svg)](https://pyup.io/repos/github/filipsPL/autowx2/) [![release version](https://img.shields.io/github/release/filipsPL/autowx2.svg)](https://github.com/filipsPL/autowx2/releases)
+[![Updates](https://pyup.io/repos/github/filipsPL/autowx2/shield.svg)](https://pyup.io/repos/github/filipsPL/autowx2/) [![release version](https://img.shields.io/github/release/filipsPL/autowx2.svg)](https://github.com/filipsPL/autowx2/releases)
 
 **autowx2** was tested and successfully applied to schedule recordings of:
 - [x] NOAA weather satellites
