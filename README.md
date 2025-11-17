@@ -1,6 +1,10 @@
 autowx2
 ==============
 
+> [!CAUTION]
+> Please be advised that NOAA-15 and NOAA-19 have been decommissioned. NOAA-15 was decommissioned on August 19, 2025 at 20:37 UTC and NOAA-19 was decommissioned on August 13, 2025 at 16:55 UTC. For additional details, please [click here](https://www.ospo.noaa.gov/operations/poes/status.html). So, in summary, now all NOAA-11, -12, -14, -15, -16, -17, -18, -19 are decommissioned. 
+
+
 **autowx2** is a set of programs and scripts for schedule satellite and ground recordings with SDR dongle. Bundled plugins include scripts for processing weather APT images from NOAA or METEOR satellites, ISS voice communication recordings and some others.
 
 ![image](docs/NOAA19-HVCT.jpg) ![image](docs/NOAA19-therm.jpg)

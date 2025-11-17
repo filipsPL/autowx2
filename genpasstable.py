@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 #
@@ -13,7 +13,11 @@
 # https://github.com/fialhocoelho/test/blob/master/plot/gantt.py
 #
 
-from autowx2_functions import *
+# Import specific functions to improve code clarity
+from autowx2_functions import (
+    generatePassTableAndSaveFiles,
+    satellitesData, stationLat, stationLon, stationAlt
+)
 
 if __name__ == "__main__":
     satellites = list(satellitesData)

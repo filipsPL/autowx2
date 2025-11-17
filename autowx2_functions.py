@@ -39,6 +39,49 @@ from autowx2_conf import *
 
 # ---------------------------------------------------------------------------- #
 
+def validate_config():
+    """Validate configuration before starting"""
+    errors = []
+
+    # Check TLE file exists
+    if not os.path.exists(tleFileName):
+        errors.append(f"TLE file not found: {tleFileName}")
+
+    # Check satellites configuration
+    if not satellitesData:
+        errors.append("No satellites configured in satellitesData")
+
+    # Validate each satellite configuration
+    for sat, config in satellitesData.items():
+        if 'freq' not in config:
+            errors.append(f"Missing 'freq' for satellite: {sat}")
+        if 'processWith' not in config:
+            errors.append(f"Missing 'processWith' for satellite: {sat}")
+        if 'priority' not in config:
+            errors.append(f"Missing 'priority' for satellite: {sat}")
+
+        # Check if processWith script exists for non-fixed-time satellites
+        if 'fixedTime' not in config and 'processWith' in config:
+            script_path = config['processWith']
+            if not os.path.exists(script_path):
+                errors.append(f"Processing script not found for {sat}: {script_path}")
+
+    # Check logging directory
+    if loggingDir and not os.path.exists(os.path.dirname(loggingDir) if os.path.dirname(loggingDir) else '.'):
+        errors.append(f"Logging directory parent does not exist: {loggingDir}")
+
+    # Check www directory
+    if wwwDir and not os.path.exists(os.path.dirname(wwwDir) if os.path.dirname(wwwDir) else '.'):
+        errors.append(f"WWW directory parent does not exist: {wwwDir}")
+
+    # Report errors
+    if errors:
+        for error in errors:
+            log(f"✖ Configuration error: {error}", style=bc.FAIL)
+        sys.exit(1)
+    else:
+        log("✓ Configuration validated successfully", style=bc.OKGREEN)
+
 satellites = list(satellitesData)
 qth = (stationLat, stationLon, stationAlt)
 
@@ -157,8 +200,8 @@ def genPassTable(satellites, qth, howmany=20):
                 passTable[start] = [
                     satellite, int(start), int(duration), '0', '0', priority]
         else:
-            log("✖ Can't find TLE data (in keplers) nor fixed time schedule (in config) for " +
-                satellite, style=bc.FAIL)
+            log(f"✖ Can't find TLE data (in keplers) nor fixed time schedule (in config) for {satellite}",
+                style=bc.FAIL)
 
     # Sort pass table
     passTableSorted = []
@@ -169,7 +212,8 @@ def genPassTable(satellites, qth, howmany=20):
     # remove one with less priority (lower priority number).
     passTableSortedPrioritized = passTableSorted[:]
     passCount = len(passTableSorted)
-    for i in range(0, passCount - 1):   # -1 or -2 :BUG?
+    # Loop to passCount-1 to safely access i+1 without index error
+    for i in range(0, passCount - 1):
         satelliteI, startI, durationI, peakI, azimuthI, priorityI = passTableSorted[
             i]
         satelliteJ, startJ, durationJ, peakJ, azimuthJ, priorityJ = passTableSorted[
@@ -181,10 +225,10 @@ def genPassTable(satellites, qth, howmany=20):
                 # print "End pass:", satelliteI, t2human(endTimeI), "--- Start
                 # time:", satelliteJ, t2human(startJ)
                 if priorityJ < priorityI:
-                    log(" 1. discard %s, keep %s" % (satelliteI, satelliteJ))
+                    log(f" 1. discard {satelliteI}, keep {satelliteJ}")
                     passTableSortedPrioritized[i] = ''
                 elif priorityJ > priorityI:
-                    log(" 2. discard %s, keep %s" % (satelliteJ, satelliteI))
+                    log(f" 2. discard {satelliteJ}, keep {satelliteI}")
                     passTableSortedPrioritized[i + 1] = ''
 
     # let's clean the table and remove empty (removed) records
@@ -204,16 +248,15 @@ def t2humanMS(seconds):
     '''converts unix timestamp to human readable format MM:SS'''
     mm = int(seconds / 60)
     ss = seconds % 60
-    return "%02i:%02i" % (mm, ss)
+    return f"{mm:02d}:{ss:02d}"
 
 
 def printPass(satellite, start, duration, peak, azimuth, freq, processWith):
-    return "● " + bc.OKGREEN + "%10s" % (satellite) + bc.ENDC + " :: " \
-        + bc.OKGREEN + t2human(start) + bc.ENDC + " to " + bc.OKGREEN  + t2human(start + int(duration)) + bc.ENDC \
-        + ", dur: " + t2humanMS(duration) \
-        + ", max el. " + str(int(peak)) + "°" + "; azimuth: " + str(int(azimuth)) + \
-                         "° (" + azimuth2dir(azimuth) + ") f=" + str(
-                             freq) + "Hz; Decoding: " + str(processWith)
+    return (f"● {bc.OKGREEN}{satellite:>10}{bc.ENDC} :: "
+            f"{bc.OKGREEN}{t2human(start)}{bc.ENDC} to {bc.OKGREEN}{t2human(start + int(duration))}{bc.ENDC}"
+            f", dur: {t2humanMS(duration)}"
+            f", max el. {int(peak)}°; azimuth: {int(azimuth)}° ({azimuth2dir(azimuth)}) "
+            f"f={freq}Hz; Decoding: {processWith}")
 
 
 def listNextPases(passTable, howmany):
@@ -228,35 +271,78 @@ def listNextPases(passTable, howmany):
 
 
 def runForDuration(cmdline, duration, loggingDir):
-    outLogFile = logFile(loggingDir)
-    teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
+    """Run command for specified duration with output logging
 
+    Args:
+        cmdline: List of command arguments (NOT a string to prevent injection)
+        duration: Duration in seconds
+        loggingDir: Directory for log files
+    """
+    outLogFile = logFile(loggingDir)
+    teeCommand = ['tee',  '-a', outLogFile]
+
+    # Validate cmdline is a list to prevent command injection
+    if not isinstance(cmdline, list):
+        log("✖ Security error: cmdline must be a list, not string", style=bc.FAIL)
+        return
+
+    # Convert all arguments to strings and validate they don't contain shell metacharacters
     cmdline = [str(x) for x in cmdline]
+
+    # Validate first argument (executable) is safe
+    if not cmdline or not cmdline[0]:
+        log("✖ Error: Empty command", style=bc.FAIL)
+        return
+
     print(cmdline)
     try:
-        p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        _ = subprocess.Popen(teeCommand, stdin=p1.stdout)
+        # shell=False ensures no shell interpretation (prevents injection)
+        p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False)
+        _ = subprocess.Popen(teeCommand, stdin=p1.stdout, shell=False)
         time.sleep(duration)
         p1.terminate()
     except OSError as e:
-        log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
-        log("✖ OS Error: " + e.strerror, style=bc.FAIL)
+        log(f"✖ OS Error during command: {' '.join(cmdline)}", style=bc.FAIL)
+        log(f"✖ OS Error: {e.strerror}", style=bc.FAIL)
 
 
 def justRun(cmdline, loggingDir):
-    '''Just run the command as long as necesary and return the output'''
-    outLogFile = logFile(loggingDir)
-    teeCommand = ['tee',  '-a', outLogFile ] # quick and dirty hack to get log to file
+    """Run command and return output with logging
 
+    Args:
+        cmdline: List of command arguments (NOT a string to prevent injection)
+        loggingDir: Directory for log files
+
+    Returns:
+        Command output as bytes
+    """
+    outLogFile = logFile(loggingDir)
+    teeCommand = ['tee',  '-a', outLogFile]
+
+    # Validate cmdline is a list to prevent command injection
+    if not isinstance(cmdline, list):
+        log("✖ Security error: cmdline must be a list, not string", style=bc.FAIL)
+        return b""
+
+    # Convert all arguments to strings
     cmdline = [str(x) for x in cmdline]
+
+    # Validate command is not empty
+    if not cmdline or not cmdline[0]:
+        log("✖ Error: Empty command", style=bc.FAIL)
+        return b""
+
     try:
-        p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
-        p2 = subprocess.Popen(teeCommand, stdin=p1.stdout, close_fds=True) # stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        # shell=False ensures no shell interpretation (prevents injection)
+        p1 = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                             close_fds=True, shell=False)
+        p2 = subprocess.Popen(teeCommand, stdin=p1.stdout, close_fds=True, shell=False)
         result = p1.communicate()[0]
         return result
     except OSError as e:
-        log("✖ OS Error during command: " + " ".join(cmdline), style=bc.FAIL)
-        log("✖ OS Error: " + e.strerror, style=bc.FAIL)
+        log(f"✖ OS Error during command: {' '.join(cmdline)}", style=bc.FAIL)
+        log(f"✖ OS Error: {e.strerror}", style=bc.FAIL)
+        return b""
 
 
 def runTest(duration=3):
@@ -288,7 +374,7 @@ def getDefaultDongleShift(dongleShift=dongleShift):
         newdongleShift = f.read().strip()
         f.close()
 
-        if newdongleShift != '' and is_number(newdongleShift):  # WARNING and newdongleShift is numeric:
+        if newdongleShift != '' and is_number(newdongleShift):
             dongleShift = str(float(newdongleShift))
             log("Recently used dongle shift is: " + str(dongleShift) + " ppm")
         else:
@@ -333,26 +419,20 @@ def escape_ansi(line):
 
 
 def log(string, style=bc.CYAN):
-    message = "%s%s%s %s %s %s " % (
-        bc.BOLD,
-        datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M'),
-        bc.ENDC,
-        style,
-        str(string),
-        bc.ENDC)
+    timestamp = datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M')
+    message = f"{bc.BOLD}{timestamp}{bc.ENDC} {style} {string} {bc.ENDC}"
     print(message)
 
     # logging to file, if not False
     if loggingDir:
-        logToFile(escape_ansi(message) + "\n", loggingDir)
+        logToFile(f"{escape_ansi(message)}\n", loggingDir)
 
 
 def logFile(logDir):
     '''Create output logging dir, returns name of the logfile'''
     mkdir_p(logDir)
-    outfile = "%s/%s.txt" % (
-        logDir,
-        datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d'))
+    date_str = datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d')
+    outfile = f"{logDir}/{date_str}.txt"
     return outfile
 
 
@@ -619,116 +699,138 @@ def generatePassTableAndSaveFiles(satellites, qth, verbose=True):
 
 
 # --------------------------------------------------------------------------- #
-# --------- REMOVED FLASK WEBSERVER ----------------------------------------- #
-# --------------------------------------------------------------------------- #
-
-# Flask webserver has been removed. Use static web pages instead.
-# See: bin/gen-static-page.sh for static page generation
-
-def handle_my_custom_event(text):
-    """Stub function - Flask webserver removed"""
-    pass
-
-def handle_next_pass_list(text):
-    """Stub function - Flask webserver removed"""
-    pass
-
-
-# --------------------------------------------------------------------------- #
 # --------- THE MAIN LOOP --------------------------------------------------- #
 # --------------------------------------------------------------------------- #
 
+# Constants for main loop
+RECORDING_START_MARGIN = 1  # seconds before official start
+MIN_FREE_TIME_FOR_SCRIPT = 120  # minimum seconds to run free-time script
+DONGLE_TEST_TIME_THRESHOLD = 15  # minimum seconds needed for dongle test
+RECALIBRATION_THRESHOLD = 300  # seconds before recalibrating dongle
+
+def reload_config():
+    """Reload configuration from file in case it has changed"""
+    from autowx2_conf import satellitesData, scriptToRunInFreeTime
+    return satellitesData, scriptToRunInFreeTime
+
+def calculate_and_save_pass_table():
+    """Calculate pass table and save to disk"""
+    passTable = genPassTable(satellites, qth)
+    generatePassTableAndSaveFiles(satellites, qth, verbose=False)
+    return passTable
+
+def display_upcoming_passes(passTable):
+    """Display next five passes"""
+    log("Next five passes:")
+    listNextPases(passTable, 5)
+
+def get_next_pass_info(passTable, satellitesData):
+    """Extract and format information about the next satellite pass
+
+    Returns:
+        Tuple of (satellite, start, duration, peak, azimuth, freq, processWith, fileNameCore)
+    """
+    satelitePass = passTable[0]
+    satellite, start, duration, peak, azimuth = satelitePass
+    satelliteNoSpaces = satellite.replace(" ", "-")
+
+    freq = satellitesData[satellite]['freq']
+    processWith = satellitesData[satellite]['processWith']
+
+    fileNameCore = datetime.fromtimestamp(start).strftime('%Y%m%d-%H%M') + "_" + satelliteNoSpaces
+
+    log("Next pass:")
+    log(printPass(satellite, start, duration, peak, azimuth, freq, processWith))
+
+    return satellite, start, duration, peak, azimuth, freq, processWith, fileNameCore
+
+def prepare_for_recording(towait):
+    """Prepare system for recording (cleanup and dongle test)"""
+    if cleanupRtl:
+        log("Killing all remaining rtl_* processes...")
+        justRun(["bin/kill_rtl.sh"], loggingDir)
+
+    # Test if SDR dongle is available
+    if towait > DONGLE_TEST_TIME_THRESHOLD:
+        while not runTest():
+            log("Waiting for the SDR dongle...")
+            time.sleep(10)
+
+def execute_recording(satellite, start, duration, peak, azimuth, freq, processWith, fileNameCore, towait):
+    """Execute the satellite recording"""
+    log(f"!! Recording {printPass(satellite, start, duration, peak, azimuth, freq, processWith)}",
+        style=bc.WARNING)
+
+    processCmdline = [
+        processWith,
+        fileNameCore,
+        satellite,
+        start,
+        duration + towait,
+        peak,
+        azimuth,
+        freq
+    ]
+    print(justRun(processCmdline, loggingDir))
+    time.sleep(10.0)
+
+def handle_free_time(towait, dongleShift, scriptToRunInFreeTime):
+    """Handle free time before next recording
+
+    Args:
+        towait: Seconds to wait before recording
+        dongleShift: Current dongle shift value
+        scriptToRunInFreeTime: Script to run during free time (or False)
+
+    Returns:
+        Updated dongleShift value
+    """
+    # Recalibrate dongle if we have enough time
+    if towait > RECALIBRATION_THRESHOLD:
+        log("Recalibrating the dongle...")
+        dongleShift = calibrate(dongleShift)
+
+    if scriptToRunInFreeTime and towait >= MIN_FREE_TIME_FOR_SCRIPT:
+        log(f"We have still {t2humanMS(towait - 1)}s free time to the next pass. Let's do something useful!")
+        log(f"Running: {scriptToRunInFreeTime} for {t2humanMS(towait - 1)}s")
+        runForDuration(
+            [scriptToRunInFreeTime, towait - 1, dongleShift],
+            towait - 1,
+            loggingDir
+        )
+    else:
+        log(f"Sleeping for: {t2humanMS(towait - 1)}s")
+        time.sleep(towait - 1)
+
+    return dongleShift
+
 def mainLoop():
+    """Main program loop - calculate passes, wait, and execute recordings"""
     dongleShift = getDefaultDongleShift()
 
     while True:
+        # Reload configuration in case it has changed
+        satellitesData, scriptToRunInFreeTime = reload_config()
 
-        # each loop - reads the config file in case it has changed
-        from autowx2_conf import satellitesData, scriptToRunInFreeTime
+        # Calculate and display upcoming passes
+        passTable = calculate_and_save_pass_table()
+        display_upcoming_passes(passTable)
 
-        # recalculate table of next passes
-        passTable = genPassTable(satellites, qth)
+        # Get next pass information
+        satellite, start, duration, peak, azimuth, freq, processWith, fileNameCore = \
+            get_next_pass_info(passTable, satellitesData)
 
-        # save table to disk
-        generatePassTableAndSaveFiles(satellites, qth, verbose=False)
-
-        # show next five passes
-        log("Next five passes:")
-        listNextPases(passTable, 5)
-
-        # get the very next pass
-        satelitePass = passTable[0]
-        satellite, start, duration, peak, azimuth = satelitePass
-        satelliteNoSpaces = satellite.replace(" ", "-") #remove spaces from the satellite name
-
-        freq = satellitesData[satellite]['freq']
-        processWith = satellitesData[satellite]['processWith']
-
-        fileNameCore = datetime.fromtimestamp(
-            start).strftime(
-                '%Y%m%d-%H%M') + "_" + satelliteNoSpaces
-
-        log("Next pass:")
-        log(printPass(satellite, start, duration,
-            peak, azimuth, freq, processWith))
-
+        # Calculate wait time
         towait = int(start - time.time())
 
-        if cleanupRtl:
-            log("Killing all remaining rtl_* processes...")
-            justRun(["bin/kill_rtl.sh"], loggingDir)
+        # Prepare system for recording
+        prepare_for_recording(towait)
 
-        # test if SDR dongle is available
-        if towait > 15: # if we have time to perform the test?
-            while not runTest():
-                log("Waiting for the SDR dongle...")
-                time.sleep(10)
-
-        # It's a high time to record!
-        if towait <= 1 and duration > 0:
-            # here the recording happens
-            log("!! Recording " + printPass(satellite, start, duration,
-                peak, azimuth, freq, processWith), style=bc.WARNING)
-
-            processCmdline = [
-                processWith,
-                fileNameCore,
-                satellite,
-                start,
-                duration + towait,
-                peak,
-                azimuth,
-                freq]
-            print(justRun(processCmdline, loggingDir))
-            time.sleep(10.0)
-
-        # still some time before recording
+        # Execute recording or handle free time
+        if towait <= RECORDING_START_MARGIN and duration > 0:
+            execute_recording(satellite, start, duration, peak, azimuth, freq,
+                            processWith, fileNameCore, towait)
         else:
-            # recalculating waiting time
-            if towait > 300:
-                    log("Recalibrating the dongle...")
-                    dongleShift = calibrate(dongleShift)  # replace the global value
-
-            towait = int(start - time.time())
-            if scriptToRunInFreeTime:
-                if towait >= 120:  # if we have more than [some] minutes spare time, let's do something useful
-                    log("We have still %ss free time to the next pass. Let's do something useful!" %
-                        (t2humanMS(towait - 1)))
-                    log("Running: %s for %ss" %
-                        (scriptToRunInFreeTime, t2humanMS(towait - 1)))
-                    runForDuration(
-                        [scriptToRunInFreeTime,
-                         towait - 1,
-                         dongleShift],
-                        towait - 1, loggingDir)
-                                   # scrript with run time and dongle shift as
-                                   # arguments
-                else:
-                    log("Sleeping for: " + t2humanMS(towait - 1) + "s")
-                    time.sleep(towait - 1)
-            else:
-                towait = int(start - time.time())
-                log("Sleeping for: " + t2humanMS(towait - 1) + "s")
-                time.sleep(towait - 1)
+            dongleShift = handle_free_time(towait, dongleShift, scriptToRunInFreeTime)
 
 logfile = logFile(loggingDir)

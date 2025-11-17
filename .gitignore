@@ -4,6 +4,7 @@ bin/tests/*.png
 tests
 var/shifthistory.csv
 var/tle/*
+CLAUDE.md
 bin/sources/
 basedir_conf.py
 autowx2_conf.py
@@ -22,3 +23,4 @@ modules/noaa/noaa.conf
 modules/meteor-m2/meteor.conf
 *.bak
 satellites.conf
+

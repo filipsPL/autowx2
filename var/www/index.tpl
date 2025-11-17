@@ -12,13 +12,13 @@ cat <<EOF
     <title>autowx2 automated satellite receiving station $stationName :: $htmlTitle</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="$wwwRootPath/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${wwwRootPath}css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="$wwwRootPath/css/logo-nav.css" rel="stylesheet">
+    <link href="${wwwRootPath}css/logo-nav.css" rel="stylesheet">
 
 
-    <link  href="$wwwRootPath/css/fancybox/jquery.fancybox.min.css" rel="stylesheet">
+    <link  href="${wwwRootPath}css/fancybox/jquery.fancybox.min.css" rel="stylesheet">
 
   </head>
 
@@ -27,7 +27,7 @@ cat <<EOF
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="$wwwRootPath/index.html">
+        <a class="navbar-brand" href="${wwwRootPath}index.html">
           autowx2 | automatic receiving station $stationName
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,12 +36,12 @@ cat <<EOF
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="$wwwRootPath/index.html">Home
+              <a class="nav-link" href="${wwwRootPath}index.html">Home
                 <span class="sr-only">(current)</span>
               </a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="$wwwRootPath/table.html">Pass table</a>
+            <a class="nav-link" href="${wwwRootPath}table.html">Pass table</a>
           </li>
             <li class="nav-item">
               <a class="nav-link" href="https://github.com/filipsPL/autowx2">Source code</a>
@@ -71,9 +71,9 @@ cat <<EOF
     <!-- /.container -->
 
     <!-- Bootstrap core JavaScript -->
-    <script src="$wwwRootPath/css/jquery.min.js"></script>
-    <script src="$wwwRootPath/css/bootstrap.bundle.min.js"></script>
-    <script src="$wwwRootPath/css/fancybox/jquery.fancybox.min.js"></script>
+    <script src="${wwwRootPath}css/jquery.min.js"></script>
+    <script src="${wwwRootPath}css/bootstrap.bundle.min.js"></script>
+    <script src="${wwwRootPath}css/fancybox/jquery.fancybox.min.js"></script>
 
   </body>
 
